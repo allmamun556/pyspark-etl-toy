@@ -1929,4 +1929,363 @@ This operation is repeated across the entire image to produce the feature map.
 - Goodfellow, I., Bengio, Y., & Courville, A. (2016). *Deep Learning*. MIT Press.  
 - LeCun, Y., & Bengio, Y. (1995). *Convolutional networks for images, speech, and time series*.  
 
+# Correlation Matrix: Detailed Tutorial
 
+A **correlation matrix** is a table showing the correlation coefficients between many variables. Each cell in the table shows the **correlation between two variables**. This is widely used in statistics and data analysis to understand relationships between variables.
+
+---
+
+## 1. Concept
+
+The **correlation coefficient** measures the **strength and direction** of a linear relationship between two variables.  
+
+- Value ranges:  
+  - $1$: perfect positive correlation  
+  - $-1$: perfect negative correlation  
+  - $0$: no linear correlation  
+
+A **correlation matrix** is a square matrix where each entry $(i, j)$ is the correlation coefficient between variable $i$ and variable $j$.
+
+---
+
+## 2. Mathematical Definition
+
+The **Pearson correlation coefficient** between two variables $X$ and $Y$ is defined as:
+
+$$
+\rho_{X,Y} = \frac{\text{cov}(X,Y)}{\sigma_X \sigma_Y}
+$$
+
+Where:  
+- $\text{cov}(X,Y)$ is the covariance between $X$ and $Y$  
+- $\sigma_X$ and $\sigma_Y$ are the standard deviations of $X$ and $Y$  
+
+The covariance is calculated as:
+
+$$
+\text{cov}(X,Y) = \frac{1}{n-1} \sum_{i=1}^{n} (X_i - \bar{X})(Y_i - \bar{Y})
+$$
+
+Where:  
+- $n$ is the number of data points  
+- $\bar{X}$ and $\bar{Y}$ are the means of $X$ and $Y$  
+
+**Intuition:**  
+- Covariance tells us whether two variables **increase together** (positive) or **move in opposite directions** (negative).  
+- Correlation normalizes covariance to a range of $[-1,1]$ for easier interpretation.
+
+---
+
+## 3. Correlation Matrix
+
+For a dataset with $p$ variables $(X_1, X_2, ..., X_p)$, the correlation matrix $R$ is:
+
+$$
+R =
+\begin{bmatrix}
+1 & \rho_{X_1,X_2} & \cdots & \rho_{X_1,X_p} \\
+\rho_{X_2,X_1} & 1 & \cdots & \rho_{X_2,X_p} \\
+\vdots & \vdots & \ddots & \vdots \\
+\rho_{X_p,X_1} & \rho_{X_p,X_2} & \cdots & 1
+\end{bmatrix}
+$$
+
+Properties:  
+1. The diagonal elements are always $1$ (correlation of a variable with itself).  
+2. The matrix is **symmetric**: $\rho_{X_i,X_j} = \rho_{X_j,X_i}$.  
+
+---
+
+## 4. Example
+
+Suppose we have three variables with the following values:
+
+| X | Y | Z |
+|---|---|---|
+| 1 | 2 | 5 |
+| 2 | 3 | 6 |
+| 3 | 5 | 7 |
+
+1. Compute means:  
+$\bar{X} = 2$, $\bar{Y} = 3.33$, $\bar{Z} = 6$  
+
+2. Compute Pearson correlations:
+
+$$
+\rho_{X,Y} = \frac{\sum (X_i - \bar{X})(Y_i - \bar{Y})}{\sqrt{\sum (X_i - \bar{X})^2 \sum (Y_i - \bar{Y})^2}} \approx 0.981
+$$
+
+$$
+\rho_{X,Z} = \frac{\sum (X_i - \bar{X})(Z_i - \bar{Z})}{\sqrt{\sum (X_i - \bar{X})^2 \sum (Z_i - \bar{Z})^2}} \approx 0.981
+$$
+
+$$
+\rho_{Y,Z} = \frac{\sum (Y_i - \bar{Y})(Z_i - \bar{Z})}{\sqrt{\sum (Y_i - \bar{Y})^2 \sum (Z_i - \bar{Z})^2}} \approx 0.995
+$$
+
+3. Correlation matrix:
+
+$$
+R =
+\begin{bmatrix}
+1 & 0.981 & 0.981 \\
+0.981 & 1 & 0.995 \\
+0.981 & 0.995 & 1
+\end{bmatrix}
+$$
+
+---
+
+## 5. Key Takeaways
+
+- Correlation matrix **summarizes linear relationships** between multiple variables.  
+- Values close to **1 or -1** indicate strong correlation.  
+- Useful for **feature selection**, **multicollinearity detection**, and **data exploration**.  
+- Always remember: **correlation does not imply causation**.
+
+---
+
+## 6. References
+
+- Pearson, K. (1895). *Note on regression and inheritance in the case of two parents.* Proceedings of the Royal Society of London.  
+- James, G., Witten, D., Hastie, T., & Tibshirani, R. (2013). *An Introduction to Statistical Learning.* Springer.
+
+# Confusion Matrix: Detailed Tutorial
+
+A **confusion matrix** is a performance measurement tool for classification problems. It summarizes how well a classification model performs by comparing the **predicted labels** against the **true labels**.
+
+---
+
+## 1. Concept
+
+For a binary classification problem, the confusion matrix is a **2x2 table**:
+
+|                  | Predicted Positive | Predicted Negative |
+|------------------|------------------|------------------|
+| Actual Positive  | True Positive (TP) | False Negative (FN) |
+| Actual Negative  | False Positive (FP) | True Negative (TN) |
+
+Where:  
+- **TP (True Positive):** Correctly predicted positive samples  
+- **TN (True Negative):** Correctly predicted negative samples  
+- **FP (False Positive):** Incorrectly predicted as positive  
+- **FN (False Negative):** Incorrectly predicted as negative  
+
+**Intuition:**  
+- Helps visualize **where the model is making mistakes**  
+- Essential for imbalanced datasets
+
+---
+
+## 2. Mathematical Definitions of Metrics
+
+From the confusion matrix, several key performance metrics can be derived.
+
+### 2.1 Accuracy
+
+$$
+\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}
+$$
+
+- Fraction of correctly predicted samples  
+
+### 2.2 Precision (Positive Predictive Value)
+
+$$
+\text{Precision} = \frac{TP}{TP + FP}
+$$
+
+- Fraction of positive predictions that are correct  
+
+### 2.3 Recall (Sensitivity or True Positive Rate)
+
+$$
+\text{Recall} = \frac{TP}{TP + FN}
+$$
+
+- Fraction of actual positives correctly predicted  
+
+### 2.4 F1-Score
+
+$$
+F1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
+$$
+
+- Harmonic mean of precision and recall  
+- Useful when **data is imbalanced**
+
+---
+
+## 3. Example
+
+Suppose we have a model that classifies 10 samples:
+
+| Sample | True Label | Predicted Label |
+|--------|------------|----------------|
+| 1      | 1          | 1              |
+| 2      | 0          | 0              |
+| 3      | 1          | 0              |
+| 4      | 0          | 1              |
+| 5      | 1          | 1              |
+| 6      | 0          | 0              |
+| 7      | 1          | 1              |
+| 8      | 0          | 0              |
+| 9      | 1          | 1              |
+| 10     | 0          | 0              |
+
+1. Count the elements of the confusion matrix:  
+- TP = 4 (samples 1,5,7,9)  
+- TN = 4 (samples 2,6,8,10)  
+- FP = 1 (sample 4)  
+- FN = 1 (sample 3)  
+
+2. Confusion Matrix:
+
+$$
+\text{CM} =
+\begin{bmatrix}
+TP & FN \\
+FP & TN
+\end{bmatrix} =
+\begin{bmatrix}
+4 & 1 \\
+1 & 4
+\end{bmatrix}
+$$
+
+3. Compute metrics:  
+
+$$
+\text{Accuracy} = \frac{4+4}{10} = 0.8
+$$
+
+$$
+\text{Precision} = \frac{4}{4+1} = 0.8
+$$
+
+$$
+\text{Recall} = \frac{4}{4+1} = 0.8
+$$
+
+$$
+F1 = 2 \cdot \frac{0.8 \cdot 0.8}{0.8+0.8} = 0.8
+$$
+
+---
+
+## 4. Key Takeaways
+
+- A confusion matrix **summarizes classification results** in a simple table.  
+- Helps compute metrics like **accuracy, precision, recall, and F1-score**.  
+- Particularly useful for **imbalanced datasets** where accuracy alone can be misleading.  
+- Can be extended to **multi-class problems**, forming an **n x n matrix**.
+
+---
+
+## 5. References
+
+- Bishop, C. M. (2006). *Pattern Recognition and Machine Learning*. Springer.  
+- Sokolova, M., & Lapalme, G. (2009). *A systematic analysis of performance measures for classification tasks.* Information Processing & Management.
+
+# ROC and AUC: Detailed Tutorial
+
+**ROC (Receiver Operating Characteristic) curves** and **AUC (Area Under the Curve)** are important tools for evaluating the performance of classification models, especially for **binary classifiers**.
+
+---
+
+## 1. Concept
+
+- **ROC Curve:**  
+  A plot of the **True Positive Rate (TPR)** against the **False Positive Rate (FPR)** at different classification thresholds.  
+
+- **AUC:**  
+  The area under the ROC curve. Measures the model's ability to **distinguish between positive and negative classes**.  
+
+**Intuition:**  
+- ROC shows the trade-off between **sensitivity (recall)** and **1-specificity (false positive rate)**.  
+- AUC summarizes this trade-off in a single number:  
+  - **1.0:** perfect classifier  
+  - **0.5:** random guessing  
+
+---
+
+## 2. Mathematical Definitions
+
+### 2.1 True Positive Rate (TPR) / Recall / Sensitivity
+
+$$
+TPR = \frac{TP}{TP + FN}
+$$
+
+- Fraction of actual positives correctly classified.
+
+### 2.2 False Positive Rate (FPR)
+
+$$
+FPR = \frac{FP}{FP + TN}
+$$
+
+- Fraction of actual negatives incorrectly classified as positive.
+
+---
+
+## 3. ROC Curve
+
+1. For a probabilistic classifier, vary the **threshold** $t \in [0,1]$ that determines the class label:
+
+$$
+\hat{y} = 
+\begin{cases} 
+1, & \text{if } P(\text{positive}) \ge t \\
+0, & \text{if } P(\text{positive}) < t
+\end{cases}
+$$
+
+2. Compute TPR and FPR at each threshold.  
+3. Plot **TPR vs FPR**.  
+
+**Example:**  
+
+| Threshold | TPR | FPR |
+|-----------|-----|-----|
+| 0.9       | 0.2 | 0.0 |
+| 0.7       | 0.6 | 0.1 |
+| 0.5       | 0.8 | 0.2 |
+| 0.3       | 0.9 | 0.4 |
+
+Plotting these points gives the ROC curve.
+
+---
+
+## 4. AUC (Area Under the Curve)
+
+The **AUC** is the integral of TPR with respect to FPR:
+
+$$
+\text{AUC} = \int_0^1 TPR(FPR) \, dFPR
+$$
+
+- Represents the probability that a randomly chosen positive example is ranked **higher than a randomly chosen negative example**.  
+- Can be interpreted as:
+
+$$
+\text{AUC} = P(\hat{y}_{\text{positive}} > \hat{y}_{\text{negative}})
+$$
+
+- **Range:** 0.5 (random) to 1.0 (perfect).
+
+---
+
+## 5. Key Takeaways
+
+- ROC curves visualize the **trade-off between sensitivity and specificity**.  
+- AUC is a **single-number summary** of classifier performance.  
+- Especially useful for **imbalanced datasets** where accuracy can be misleading.  
+- Works with **probabilistic classifiers** and **different thresholds**.  
+
+---
+
+## 6. References
+
+- Fawcett, T. (2006). *An introduction to ROC analysis.* Pattern Recognition Letters, 27(8), 861–874.  
+- Hanley, J.A., & McNeil, B.J. (1982). *The meaning and use of the area under a ROC curve.* Radiology, 143(1), 29–36.  

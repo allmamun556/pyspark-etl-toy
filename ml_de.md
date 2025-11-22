@@ -1326,3 +1326,362 @@ X_{\text{PCA}} = X_{\text{scaled}} W
 Ich kann auch ein **Diagramm erstellen, das die Projektion von Daten auf Hauptkomponenten und den Varianzanteil zeigt**, damit die Intuition noch klarer wird.
 
 Willst du, dass ich dieses Diagramm erstelle?
+# Korrelationsmatrix: Detailliertes Tutorial
+
+Eine **Korrelationsmatrix** ist eine Tabelle, die die Korrelationskoeffizienten zwischen mehreren Variablen zeigt. Jede Zelle in der Tabelle zeigt die **Korrelation zwischen zwei Variablen**. Dies wird häufig in der Statistik und Datenanalyse verwendet, um Beziehungen zwischen Variablen zu verstehen.
+
+---
+
+## 1. Konzept
+
+Der **Korrelationskoeffizient** misst die **Stärke und Richtung** einer linearen Beziehung zwischen zwei Variablen.  
+
+- Wertebereich:  
+  - $1$: perfekte positive Korrelation  
+  - $-1$: perfekte negative Korrelation  
+  - $0$: keine lineare Korrelation  
+
+Eine **Korrelationsmatrix** ist eine quadratische Matrix, wobei jeder Eintrag $(i,j)$ der Korrelationskoeffizient zwischen Variable $i$ und Variable $j$ ist.
+
+---
+
+## 2. Mathematische Definition
+
+Der **Pearson-Korrelationskoeffizient** zwischen zwei Variablen $X$ und $Y$ ist definiert als:
+
+$$
+\rho_{X,Y} = \frac{\text{cov}(X,Y)}{\sigma_X \sigma_Y}
+$$
+
+Dabei gilt:  
+- $\text{cov}(X,Y)$ ist die Kovarianz zwischen $X$ und $Y$  
+- $\sigma_X$ und $\sigma_Y$ sind die Standardabweichungen von $X$ bzw. $Y$  
+
+Die Kovarianz berechnet sich wie folgt:
+
+$$
+\text{cov}(X,Y) = \frac{1}{n-1} \sum_{i=1}^{n} (X_i - \bar{X})(Y_i - \bar{Y})
+$$
+
+Dabei gilt:  
+- $n$ ist die Anzahl der Datenpunkte  
+- $\bar{X}$ und $\bar{Y}$ sind die Mittelwerte von $X$ und $Y$  
+
+**Intuition:**  
+- Kovarianz zeigt, ob zwei Variablen **gleichzeitig zunehmen** (positiv) oder **entgegengesetzt verlaufen** (negativ).  
+- Die Korrelation normiert die Kovarianz auf den Bereich $[-1,1]$, sodass sie leichter interpretierbar ist.
+
+---
+
+## 3. Korrelationsmatrix
+
+Für einen Datensatz mit $p$ Variablen $(X_1, X_2, ..., X_p)$ ist die Korrelationsmatrix $R$:
+
+$$
+R =
+\begin{bmatrix}
+1 & \rho_{X_1,X_2} & \cdots & \rho_{X_1,X_p} \\
+\rho_{X_2,X_1} & 1 & \cdots & \rho_{X_2,X_p} \\
+\vdots & \vdots & \ddots & \vdots \\
+\rho_{X_p,X_1} & \rho_{X_p,X_2} & \cdots & 1
+\end{bmatrix}
+$$
+
+Eigenschaften:  
+1. Die Diagonalelemente sind immer $1$ (Korrelation einer Variablen mit sich selbst).  
+2. Die Matrix ist **symmetrisch**: $\rho_{X_i,X_j} = \rho_{X_j,X_i}$.  
+
+---
+
+## 4. Beispiel
+
+Angenommen, wir haben drei Variablen mit den folgenden Werten:
+
+| X | Y | Z |
+|---|---|---|
+| 1 | 2 | 5 |
+| 2 | 3 | 6 |
+| 3 | 5 | 7 |
+
+1. Mittelwerte berechnen:  
+$\bar{X} = 2$, $\bar{Y} = 3.33$, $\bar{Z} = 6$  
+
+2. Pearson-Korrelation berechnen:
+
+$$
+\rho_{X,Y} = \frac{\sum (X_i - \bar{X})(Y_i - \bar{Y})}{\sqrt{\sum (X_i - \bar{X})^2 \sum (Y_i - \bar{Y})^2}} \approx 0.981
+$$
+
+$$
+\rho_{X,Z} = \frac{\sum (X_i - \bar{X})(Z_i - \bar{Z})}{\sqrt{\sum (X_i - \bar{X})^2 \sum (Z_i - \bar{Z})^2}} \approx 0.981
+$$
+
+$$
+\rho_{Y,Z} = \frac{\sum (Y_i - \bar{Y})(Z_i - \bar{Z})}{\sqrt{\sum (Y_i - \bar{Y})^2 \sum (Z_i - \bar{Z})^2}} \approx 0.995
+$$
+
+3. Korrelationsmatrix:
+
+$$
+R =
+\begin{bmatrix}
+1 & 0.981 & 0.981 \\
+0.981 & 1 & 0.995 \\
+0.981 & 0.995 & 1
+\end{bmatrix}
+$$
+
+---
+
+## 5. Wichtige Erkenntnisse
+
+- Die Korrelationsmatrix **fasst lineare Beziehungen** zwischen mehreren Variablen zusammen.  
+- Werte nahe **1 oder -1** deuten auf starke Korrelation hin.  
+- Nützlich für **Feature-Auswahl**, **Multikollinearitätsprüfung** und **Datenexploration**.  
+- Denken Sie immer daran: **Korrelation bedeutet nicht Kausalität**.
+
+---
+
+## 6. Referenzen
+
+- Pearson, K. (1895). *Note on regression and inheritance in the case of two parents.* Proceedings of the Royal Society of London.  
+- James, G., Witten, D., Hastie, T., & Tibshirani, R. (2013). *An Introduction to Statistical Learning.* Springer.
+
+# Konfusionsmatrix: Detailliertes Tutorial
+
+Eine **Konfusionsmatrix** ist ein Werkzeug zur Leistungsbewertung bei Klassifikationsproblemen. Sie fasst zusammen, wie gut ein Klassifikationsmodell arbeitet, indem die **vorhergesagten Labels** mit den **wahren Labels** verglichen werden.
+
+---
+
+## 1. Konzept
+
+Für ein binäres Klassifikationsproblem sieht die Konfusionsmatrix wie folgt aus:
+
+|                  | Vorhergesagt Positiv | Vorhergesagt Negativ |
+|------------------|--------------------|--------------------|
+| Tatsächlich Positiv  | True Positive (TP) | False Negative (FN) |
+| Tatsächlich Negativ  | False Positive (FP) | True Negative (TN) |
+
+Dabei gilt:  
+- **TP (True Positive):** korrekt vorhergesagte positive Proben  
+- **TN (True Negative):** korrekt vorhergesagte negative Proben  
+- **FP (False Positive):** fälschlicherweise als positiv vorhergesagt  
+- **FN (False Negative):** fälschlicherweise als negativ vorhergesagt  
+
+**Intuition:**  
+- Zeigt, **wo das Modell Fehler macht**  
+- Besonders nützlich bei **unausgewogenen Datensätzen**
+
+---
+
+## 2. Mathematische Definitionen von Kennzahlen
+
+Aus der Konfusionsmatrix lassen sich wichtige Leistungskennzahlen ableiten.
+
+### 2.1 Genauigkeit (Accuracy)
+
+$$
+\text{Genauigkeit} = \frac{TP + TN}{TP + TN + FP + FN}
+$$
+
+- Anteil korrekt vorhergesagter Proben  
+
+### 2.2 Präzision (Precision, Positivvorhersagewert)
+
+$$
+\text{Präzision} = \frac{TP}{TP + FP}
+$$
+
+- Anteil der als positiv vorhergesagten Proben, die korrekt sind  
+
+### 2.3 Sensitivität / Recall (True Positive Rate)
+
+$$
+\text{Recall} = \frac{TP}{TP + FN}
+$$
+
+- Anteil der tatsächlichen Positiven, die korrekt vorhergesagt wurden  
+
+### 2.4 F1-Score
+
+$$
+F1 = 2 \cdot \frac{\text{Präzision} \cdot \text{Recall}}{\text{Präzision} + \text{Recall}}
+$$
+
+- Harmonisches Mittel von Präzision und Recall  
+- Besonders nützlich bei **unausgewogenen Daten**
+
+---
+
+## 3. Beispiel
+
+Angenommen, wir haben ein Modell, das 10 Proben klassifiziert:
+
+| Probe | Wahres Label | Vorhergesagtes Label |
+|-------|-------------|--------------------|
+| 1     | 1           | 1                  |
+| 2     | 0           | 0                  |
+| 3     | 1           | 0                  |
+| 4     | 0           | 1                  |
+| 5     | 1           | 1                  |
+| 6     | 0           | 0                  |
+| 7     | 1           | 1                  |
+| 8     | 0           | 0                  |
+| 9     | 1           | 1                  |
+| 10    | 0           | 0                  |
+
+1. Zählen der Elemente der Konfusionsmatrix:  
+- TP = 4 (Proben 1,5,7,9)  
+- TN = 4 (Proben 2,6,8,10)  
+- FP = 1 (Probe 4)  
+- FN = 1 (Probe 3)  
+
+2. Konfusionsmatrix:
+
+$$
+\text{CM} =
+\begin{bmatrix}
+TP & FN \\
+FP & TN
+\end{bmatrix} =
+\begin{bmatrix}
+4 & 1 \\
+1 & 4
+\end{bmatrix}
+$$
+
+3. Berechnung der Kennzahlen:  
+
+$$
+\text{Genauigkeit} = \frac{4+4}{10} = 0.8
+$$
+
+$$
+\text{Präzision} = \frac{4}{4+1} = 0.8
+$$
+
+$$
+\text{Recall} = \frac{4}{4+1} = 0.8
+$$
+
+$$
+F1 = 2 \cdot \frac{0.8 \cdot 0.8}{0.8+0.8} = 0.8
+$$
+
+---
+
+## 4. Wichtige Erkenntnisse
+
+- Eine Konfusionsmatrix **fasst die Klassifikationsergebnisse** in einer einfachen Tabelle zusammen.  
+- Hilft bei der Berechnung von **Genauigkeit, Präzision, Recall und F1-Score**.  
+- Besonders nützlich bei **unausgewogenen Datensätzen**, da die Genauigkeit allein irreführend sein kann.  
+- Kann auf **Mehrklassenprobleme** erweitert werden, wodurch eine **n x n Matrix** entsteht.
+
+---
+
+## 5. Referenzen
+
+- Bishop, C. M. (2006). *Pattern Recognition and Machine Learning*. Springer.  
+- Sokolova, M., & Lapalme, G. (2009). *A systematic analysis of performance measures for classification tasks.* Information Processing & Management.
+# ROC und AUC: Detailliertes Tutorial
+
+**ROC (Receiver Operating Characteristic) Kurven** und **AUC (Area Under the Curve)** sind wichtige Werkzeuge zur Bewertung der Leistung von Klassifikationsmodellen, insbesondere für **binäre Klassifikatoren**.
+
+---
+
+## 1. Konzept
+
+- **ROC-Kurve:**  
+  Ein Diagramm von **True Positive Rate (TPR)** gegen **False Positive Rate (FPR)** für verschiedene Klassifikationsschwellen.  
+
+- **AUC:**  
+  Die Fläche unter der ROC-Kurve. Misst die Fähigkeit des Modells, **positive und negative Klassen zu unterscheiden**.  
+
+**Intuition:**  
+- ROC zeigt den Kompromiss zwischen **Sensitivität (Recall)** und **1-Spezifität (FPR)**.  
+- AUC fasst diesen Kompromiss in einer Zahl zusammen:  
+  - **1.0:** perfekter Klassifikator  
+  - **0.5:** zufällige Vorhersage  
+
+---
+
+## 2. Mathematische Definitionen
+
+### 2.1 True Positive Rate (TPR) / Recall / Sensitivität
+
+$$
+TPR = \frac{TP}{TP + FN}
+$$
+
+- Anteil der korrekt als positiv klassifizierten tatsächlichen Positiven.
+
+### 2.2 False Positive Rate (FPR)
+
+$$
+FPR = \frac{FP}{FP + TN}
+$$
+
+- Anteil der tatsächlichen Negativen, die fälschlicherweise als positiv klassifiziert wurden.
+
+---
+
+## 3. ROC-Kurve
+
+1. Für einen probabilistischen Klassifikator wird die **Schwelle** $t \in [0,1]$ variiert:
+
+$$
+\hat{y} = 
+\begin{cases} 
+1, & \text{wenn } P(\text{positiv}) \ge t \\
+0, & \text{wenn } P(\text{positiv}) < t
+\end{cases}
+$$
+
+2. Berechne TPR und FPR für jede Schwelle.  
+3. Zeichne **TPR gegen FPR**.  
+
+**Beispiel:**  
+
+| Schwelle | TPR | FPR |
+|-----------|-----|-----|
+| 0.9       | 0.2 | 0.0 |
+| 0.7       | 0.6 | 0.1 |
+| 0.5       | 0.8 | 0.2 |
+| 0.3       | 0.9 | 0.4 |
+
+Diese Punkte ergeben die ROC-Kurve.
+
+---
+
+## 4. AUC (Fläche unter der Kurve)
+
+Die **AUC** ist das Integral der TPR in Abhängigkeit von FPR:
+
+$$
+\text{AUC} = \int_0^1 TPR(FPR) \, dFPR
+$$
+
+- Stellt die Wahrscheinlichkeit dar, dass ein zufällig ausgewähltes positives Beispiel **höher bewertet wird als ein zufällig ausgewähltes negatives Beispiel**.  
+- Kann interpretiert werden als:
+
+$$
+\text{AUC} = P(\hat{y}_{\text{positiv}} > \hat{y}_{\text{negativ}})
+$$
+
+- **Bereich:** 0.5 (zufällig) bis 1.0 (perfekt).
+
+---
+
+## 5. Wichtige Erkenntnisse
+
+- ROC-Kurven visualisieren den **Kompromiss zwischen Sensitivität und Spezifität**.  
+- AUC ist eine **einzelne Zahl zur Bewertung der Modellleistung**.  
+- Besonders nützlich bei **unausgewogenen Datensätzen**, da die Genauigkeit irreführend sein kann.  
+- Funktioniert für **probabilistische Klassifikatoren** und unterschiedliche Schwellenwerte.  
+
+---
+
+## 6. Referenzen
+
+- Fawcett, T. (2006). *An introduction to ROC analysis.* Pattern Recognition Letters, 27(8), 861–874.  
+- Hanley, J.A., & McNeil, B.J. (1982). *The meaning and use of the area under a ROC curve.* Radiology, 143(1), 29–36.
