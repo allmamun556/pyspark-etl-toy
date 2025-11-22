@@ -1795,4 +1795,138 @@ $$
 $$
 y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots + \beta_p x_p + \epsilon
 $$
+# Convolutional Neural Networks (CNN): Tutorial with Mathematical Intuition
+
+Convolutional Neural Networks (CNNs) are a class of deep learning models that are particularly effective for **image and spatial data**. Unlike fully connected networks, CNNs exploit the **spatial structure** of data using convolution operations.
+
+---
+
+## 1. Concept
+
+A CNN typically consists of the following layers:
+
+1. **Convolutional layer** – extracts features using filters (kernels)  
+2. **Activation layer** – applies a non-linear function (commonly ReLU)  
+3. **Pooling layer** – reduces spatial dimensions (downsampling)  
+4. **Fully connected layer** – maps features to output (classification/regression)  
+
+The **main idea** is that the network automatically learns **feature representations** at different levels of abstraction.
+
+---
+
+## 2. Mathematical Intuition
+
+### 2.1 Convolution Operation
+
+The core of CNNs is the **convolution** operation. For a 2D input image $I$ and a kernel (filter) $K$, the convolution output $S$ is:
+
+$$
+S(i,j) = (I * K)(i,j) = \sum_m \sum_n I(i-m, j-n) K(m,n)
+$$
+
+Where:  
+- $I$ is the input image (or feature map)  
+- $K$ is the kernel (filter)  
+- $(i,j)$ is the spatial location in the output feature map $S$  
+
+**Intuition:**  
+- The kernel slides over the image and computes **weighted sums** of local regions.  
+- Different kernels learn **different features** (edges, textures, patterns).  
+
+---
+
+### 2.2 Activation Function
+
+After convolution, a **non-linear activation function** is applied. Most commonly:
+
+$$
+\text{ReLU}(x) = \max(0, x)
+$$
+
+**Intuition:**  
+- Introduces **non-linearity** into the model  
+- Allows the network to learn **complex patterns** beyond linear combinations  
+
+---
+
+### 2.3 Pooling Layer
+
+Pooling reduces the spatial size of feature maps. For **max pooling**:
+
+$$
+P(i,j) = \max_{(m,n) \in R_{i,j}} S(m,n)
+$$
+
+Where $R_{i,j}$ is the pooling region.  
+
+**Intuition:**  
+- Reduces computation  
+- Provides **spatial invariance** to small translations  
+
+---
+
+### 2.4 Fully Connected Layer
+
+After several convolution + pooling layers, the feature maps are **flattened** and passed to a fully connected layer:
+
+$$
+y = f(W x + b)
+$$
+
+Where:  
+- $x$ is the flattened feature vector  
+- $W$ and $b$ are weights and biases  
+- $f$ is an activation function (e.g., softmax for classification)
+
+**Intuition:**  
+- Maps learned features to final output labels  
+
+---
+
+## 3. CNN Forward Pass Example
+
+Suppose we have a $5 \times 5$ input image $I$ and a $3 \times 3$ kernel $K$:
+
+$$
+I = 
+\begin{bmatrix}
+1 & 2 & 0 & 1 & 3 \\
+4 & 5 & 2 & 1 & 0 \\
+1 & 0 & 3 & 2 & 1 \\
+2 & 3 & 1 & 0 & 2 \\
+0 & 1 & 2 & 3 & 1
+\end{bmatrix}, \quad
+K = 
+\begin{bmatrix}
+0 & 1 & 0 \\
+1 & -4 & 1 \\
+0 & 1 & 0
+\end{bmatrix}
+$$
+
+Convolution output at top-left corner:
+
+$$
+S(0,0) = (1*0 + 2*1 + 0*0) + (4*1 + 5*(-4) + 2*1) + (1*0 + 0*1 + 3*0) = -11
+$$
+
+This operation is repeated across the entire image to produce the feature map.
+
+---
+
+## 4. Key Takeaways
+
+- CNNs are **highly effective for images** because they exploit **local connectivity** and **shared weights**.  
+- **Convolution layers** extract local features.  
+- **Pooling layers** reduce dimensionality and improve robustness.  
+- **Activation functions** introduce non-linearity.  
+- The **fully connected layer** maps features to final outputs.  
+
+---
+
+## 5. References
+
+- Goodfellow, I., Bengio, Y., & Courville, A. (2016). *Deep Learning*. MIT Press.  
+- LeCun, Y., & Bengio, Y. (1995). *Convolutional networks for images, speech, and time series*.  
+
 
