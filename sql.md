@@ -2575,6 +2575,1637 @@ FROM Orders;
 * Useful for **ranking, cumulative metrics, comparisons, first/last values**.
 
 ---
+Absolutely — here is a **complete, detailed SQL tutorial** covering:
+
+* **WITH (CTE)**
+* **CASE expressions**
+* **COALESCE**
+* **SQL Functions (built-in + user-defined)**
+* **Full examples with explanation**
+* **Industry-style use cases**
+
+Written **clearly, step-by-step**, for real understanding.
+
+---
+
+# ✅ **SQL Tutorial: WITH (CTE), CASE, COALESCE, and SQL Functions**
+
+---
+
+# **1. WITH (CTE) — Common Table Expressions**
+
+A **CTE** is a temporary *named result set* you reference inside a query.
+
+### ✔ Why Use CTEs?
+
+* Makes complex queries readable
+* Allows you to reference data **multiple times**
+* Allows **recursive queries**
+* Replaces nested subqueries
+
+---
+
+## **1.1 Basic CTE Example**
+
+### **Problem:**
+
+Find customers who spent more than **$1000 total**.
+
+### **Data (Orders):**
+
+| OrderID | Customer | Amount |
+| ------- | -------- | ------ |
+| 1       | Alice    | 500    |
+| 2       | Alice    | 700    |
+| 3       | Bob      | 200    |
+| 4       | Bob      | 300    |
+
+---
+
+### **CTE Query**
+
+```sql
+WITH CustomerTotals AS (
+    SELECT 
+        Customer,
+        SUM(Amount) AS TotalSpent
+    FROM Orders
+    GROUP BY Customer
+)
+SELECT *
+FROM CustomerTotals
+WHERE TotalSpent > 1000;
+```
+
+### **Explanation:**
+
+* The CTE (`CustomerTotals`) calculates total spending per customer.
+* The outer query filters results.
+
+---
+
+## **1.2 Multiple CTEs**
+
+```sql
+WITH Sales AS (
+    SELECT Customer, SUM(Amount) AS TotalSales
+    FROM Orders
+    GROUP BY Customer
+),
+HighValue AS (
+    SELECT Customer, TotalSales
+    FROM Sales
+    WHERE TotalSales > 1000
+)
+SELECT * FROM HighValue;
+```
+
+---
+
+## **1.3 Recursive CTE Example**
+
+Used for hierarchical data.
+
+### Example: Generate numbers 1 to 5
+
+```sql
+WITH RECURSIVE Numbers AS (
+    SELECT 1 AS n
+    UNION ALL
+    SELECT n + 1
+    FROM Numbers
+    WHERE n < 5
+)
+SELECT * FROM Numbers;
+```
+
+---
+
+# **2. CASE Expression**
+
+`CASE` is SQL’s version of **if/else logic**.
+
+---
+
+## **2.1 Simple CASE Example**
+
+```sql
+SELECT 
+   Customer,
+   Amount,
+   CASE 
+       WHEN Amount > 500 THEN 'High'
+       WHEN Amount > 200 THEN 'Medium'
+       ELSE 'Low'
+   END AS OrderCategory
+FROM Orders;
+```
+
+### Result:
+
+| Customer | Amount | OrderCategory |
+| -------- | ------ | ------------- |
+| Alice    | 700    | High          |
+| Bob      | 200    | Low           |
+
+---
+
+## **2.2 CASE with Aggregates**
+
+Calculate revenue by category:
+
+```sql
+SELECT
+    SUM(CASE WHEN Amount > 500 THEN Amount END) AS HighOrders,
+    SUM(CASE WHEN Amount BETWEEN 200 AND 500 THEN Amount END) AS MediumOrders,
+    SUM(CASE WHEN Amount < 200 THEN Amount END) AS LowOrders
+FROM Orders;
+```
+
+---
+
+## **2.3 CASE inside ORDER BY**
+
+Sort customers by importance:
+
+```sql
+SELECT Customer, TotalSpent
+FROM CustomerTotals
+ORDER BY 
+  CASE 
+     WHEN TotalSpent > 5000 THEN 1
+     WHEN TotalSpent > 2000 THEN 2
+     ELSE 3
+  END;
+```
+
+---
+
+# **3. COALESCE — Replace NULLs**
+
+`COALESCE(a, b, c...)` returns the **first non-null** value.
+
+---
+
+## **3.1 Basic Example**
+
+```sql
+SELECT 
+    Customer,
+    COALESCE(PhoneNumber, 'No Phone Provided') AS CleanPhone
+FROM Customers;
+```
+
+---
+
+## **3.2 With Calculations**
+
+```sql
+SELECT
+    Price * COALESCE(Quantity, 1) AS Total
+FROM Items;
+```
+
+### Explanation:
+
+If `Quantity` is NULL → use **1**.
+
+---
+
+## **3.3 Multiple COALESCE Levels**
+
+```sql
+SELECT 
+    COALESCE(HomePhone, WorkPhone, MobilePhone, 'No Contact') AS BestContact
+FROM Users;
+```
+
+---
+
+# **4. SQL Functions**
+
+SQL has **built-in functions** + **user-defined functions (UDFs)**.
+
+---
+
+# **4.1 Built-in SQL Functions**
+
+---
+
+## **String Functions**
+
+```sql
+SELECT 
+   UPPER(CustomerName),
+   LOWER(CustomerName),
+   CONCAT(FirstName, ' ', LastName) AS FullName,
+   LENGTH(CustomerName)
+FROM Customers;
+```
+
+---
+
+## **Date Functions**
+
+```sql
+SELECT 
+    OrderID,
+    OrderDate,
+    YEAR(OrderDate) AS OrderYear,
+    MONTH(OrderDate) AS OrderMonth,
+    DATEADD(day, 7, OrderDate) AS DeliveryDate
+FROM Orders;
+```
+
+---
+
+## **Math Functions**
+
+```sql
+SELECT 
+   Price,
+   ROUND(Price, 2),
+   CEILING(Price),
+   FLOOR(Price)
+FROM Products;
+```
+
+---
+
+# **4.2 User-Defined Functions (UDF)**
+
+---
+
+## **4.2.1 Scalar Function (returns 1 value)**
+
+### Example: Tax calculation
+
+```sql
+CREATE FUNCTION CalculateTax (@amount DECIMAL(10,2))
+RETURNS DECIMAL(10,2)
+AS
+BEGIN
+    RETURN @amount * 0.15
+END;
+```
+
+**Use it:**
+
+```sql
+SELECT 
+    Amount,
+    dbo.CalculateTax(Amount) AS Tax
+FROM Orders;
+```
+
+---
+
+## **4.2.2 Table-Valued Function**
+
+```sql
+CREATE FUNCTION OrdersAboveAmount (@minAmount DECIMAL(10,2))
+RETURNS TABLE
+AS
+RETURN (
+    SELECT * FROM Orders WHERE Amount > @minAmount
+);
+```
+
+**Use it:**
+
+```sql
+SELECT * FROM dbo.OrdersAboveAmount(500);
+```
+
+---
+
+# **5. Combined Example — Using CTE + CASE + COALESCE + Function**
+
+### **Goal:**
+
+Create a customer spending report that:
+
+* Calculates total sales (CTE)
+* Categorizes customers (CASE)
+* Replaces missing phone numbers (COALESCE)
+* Adds a tax calculation (UDF)
+
+---
+
+## **Step 1 — Create UDF**
+
+```sql
+CREATE FUNCTION AddTax (@amount DECIMAL(10,2))
+RETURNS DECIMAL(10,2)
+AS
+BEGIN
+    RETURN @amount * 1.15;
+END;
+```
+
+---
+
+## **Step 2 — CTE**
+
+```sql
+WITH CustSales AS (
+    SELECT 
+        Customer,
+        SUM(Amount) AS TotalSpent
+    FROM Orders
+    GROUP BY Customer
+)
+SELECT 
+    c.Customer,
+    COALESCE(c.Phone, 'No Phone') AS Phone,
+    s.TotalSpent,
+    dbo.AddTax(s.TotalSpent) AS TotalWithTax,
+    CASE
+        WHEN s.TotalSpent > 5000 THEN 'VIP'
+        WHEN s.TotalSpent > 2000 THEN 'Gold'
+        WHEN s.TotalSpent > 1000 THEN 'Silver'
+        ELSE 'Bronze'
+    END AS Category
+FROM Customers c
+JOIN CustSales s ON c.Customer = s.Customer;
+```
+
+---
+
+# 🎉 **Summary Table**
+
+| Feature       | Purpose                    | Example                      |
+| ------------- | -------------------------- | ---------------------------- |
+| **CTE**       | Create reusable temp table | `WITH x AS (...) SELECT ...` |
+| **CASE**      | Conditional logic          | `CASE WHEN...`               |
+| **COALESCE**  | Replace NULLs              | `COALESCE(x, 'default')`     |
+| **Functions** | Custom logic               | `CREATE FUNCTION ...`        |
+
+---
+
+If you want, I can also create:
+
+✅ A **German version**
+✅ An **SQL practice workbook**
+✅ A **database schema** to test all examples
+
+Would you like any of these?
+
+Gerne! Hier ist das **komplette SQL-Tutorial über WITH (CTE), CASE, COALESCE und SQL-Funktionen – vollständig ins Deutsche übersetzt**, mit ausführlichen Erklärungen und praktischen Beispielen.
+
+---
+
+# 🇩🇪 **SQL-Tutorial: WITH (CTE), CASE, COALESCE und SQL-Funktionen**
+
+Dieses Tutorial behandelt:
+
+* **WITH (Common Table Expressions / CTEs)**
+* **CASE-Ausdrücke**
+* **COALESCE zum Umgang mit NULL**
+* **SQL-Funktionen (eingebaute + benutzerdefinierte Funktionen)**
+* **Vollständige Praxisbeispiele**
+
+---
+
+# **1. WITH (CTE) – Common Table Expressions**
+
+Eine **CTE** ist ein *benannter temporärer Ergebnissatz*, den man in einer Abfrage wie eine Tabelle verwenden kann.
+
+### ✔ Vorteile einer CTE:
+
+* Macht komplexe Queries viel lesbarer
+* Kann mehrfach verwendet werden
+* Unterstützt **rekursive Abfragen**
+* Ersetzt verschachtelte Subqueries
+
+---
+
+## **1.1 Einfaches CTE Beispiel**
+
+### 📌 Aufgabe:
+
+Finde Kunden, die insgesamt **mehr als 1000 €** ausgegeben haben.
+
+### Beispieldaten (Orders):
+
+| OrderID | Customer | Amount |
+| ------- | -------- | ------ |
+| 1       | Alice    | 500    |
+| 2       | Alice    | 700    |
+| 3       | Bob      | 200    |
+| 4       | Bob      | 300    |
+
+---
+
+### **CTE-Abfrage**
+
+```sql
+WITH CustomerTotals AS (
+    SELECT 
+        Customer,
+        SUM(Amount) AS TotalSpent
+    FROM Orders
+    GROUP BY Customer
+)
+SELECT *
+FROM CustomerTotals
+WHERE TotalSpent > 1000;
+```
+
+🔍 **Erklärung:**
+
+* Die CTE `CustomerTotals` berechnet zunächst die Gesamtausgaben pro Kunde.
+* Die Hauptabfrage filtert Kunden über 1000 €.
+
+---
+
+## **1.2 Mehrere CTEs**
+
+```sql
+WITH Sales AS (
+    SELECT Customer, SUM(Amount) AS TotalSales
+    FROM Orders
+    GROUP BY Customer
+),
+HighValue AS (
+    SELECT Customer, TotalSales
+    FROM Sales
+    WHERE TotalSales > 1000
+)
+SELECT * FROM HighValue;
+```
+
+---
+
+## **1.3 Rekursive CTE (Beispiel)**
+
+Beispiel: Zahlen von 1 bis 5 generieren.
+
+```sql
+WITH RECURSIVE Numbers AS (
+    SELECT 1 AS n
+    UNION ALL
+    SELECT n + 1
+    FROM Numbers
+    WHERE n < 5
+)
+SELECT * FROM Numbers;
+```
+
+---
+
+# **2. CASE-Ausdruck**
+
+`CASE` ist SQLs Version von **IF/ELSE**-Logik.
+
+---
+
+## **2.1 Einfaches CASE Beispiel**
+
+```sql
+SELECT 
+   Customer,
+   Amount,
+   CASE 
+       WHEN Amount > 500 THEN 'High'
+       WHEN Amount > 200 THEN 'Medium'
+       ELSE 'Low'
+   END AS OrderCategory
+FROM Orders;
+```
+
+### Ergebnis:
+
+| Customer | Amount | OrderCategory |
+| -------- | ------ | ------------- |
+| Alice    | 700    | High          |
+| Bob      | 200    | Low           |
+
+---
+
+## **2.2 CASE mit Aggregationen**
+
+```sql
+SELECT
+    SUM(CASE WHEN Amount > 500 THEN Amount END) AS HighOrders,
+    SUM(CASE WHEN Amount BETWEEN 200 AND 500 THEN Amount END) AS MediumOrders,
+    SUM(CASE WHEN Amount < 200 THEN Amount END) AS LowOrders
+FROM Orders;
+```
+
+---
+
+## **2.3 CASE in ORDER BY**
+
+Kunden nach Wichtigkeit sortieren:
+
+```sql
+SELECT Customer, TotalSpent
+FROM CustomerTotals
+ORDER BY 
+  CASE 
+     WHEN TotalSpent > 5000 THEN 1
+     WHEN TotalSpent > 2000 THEN 2
+     ELSE 3
+  END;
+```
+
+---
+
+# **3. COALESCE – Umgang mit NULL-Werten**
+
+`COALESCE(a, b, c...)` gibt **den ersten Nicht-NULL Wert** zurück.
+
+---
+
+## **3.1 Einfaches Beispiel**
+
+```sql
+SELECT 
+    Customer,
+    COALESCE(PhoneNumber, 'Keine Telefonnummer') AS CleanPhone
+FROM Customers;
+```
+
+---
+
+## **3.2 Beispiel in Berechnungen**
+
+```sql
+SELECT
+    Price * COALESCE(Quantity, 1) AS Total
+FROM Items;
+```
+
+Erklärung:
+Wenn `Quantity` NULL ist → verwende **1**.
+
+---
+
+## **3.3 Mehrstufiges COALESCE**
+
+```sql
+SELECT 
+    COALESCE(HomePhone, WorkPhone, MobilePhone, 'Keine Kontaktdaten') AS BestContact
+FROM Users;
+```
+
+---
+
+# **4. SQL-Funktionen**
+
+---
+
+# **4.1 Eingebaute SQL-Funktionen**
+
+---
+
+## **String-Funktionen**
+
+```sql
+SELECT 
+   UPPER(CustomerName),
+   LOWER(CustomerName),
+   CONCAT(FirstName, ' ', LastName) AS FullName,
+   LENGTH(CustomerName)
+FROM Customers;
+```
+
+---
+
+## **Datums-Funktionen**
+
+```sql
+SELECT 
+    OrderID,
+    OrderDate,
+    YEAR(OrderDate) AS OrderYear,
+    MONTH(OrderDate) AS OrderMonth,
+    DATEADD(day, 7, OrderDate) AS DeliveryDate
+FROM Orders;
+```
+
+---
+
+## **Mathematische Funktionen**
+
+```sql
+SELECT 
+   Price,
+   ROUND(Price, 2),
+   CEILING(Price),
+   FLOOR(Price)
+FROM Products;
+```
+
+---
+
+# **4.2 Benutzerdefinierte SQL-Funktionen (UDFs)**
+
+---
+
+## **4.2.1 Skalarfunktion (gibt einen einzelnen Wert zurück)**
+
+Beispiel: Steuerberechnung
+
+```sql
+CREATE FUNCTION CalculateTax (@amount DECIMAL(10,2))
+RETURNS DECIMAL(10,2)
+AS
+BEGIN
+    RETURN @amount * 0.15
+END;
+```
+
+**Verwendung:**
+
+```sql
+SELECT 
+    Amount,
+    dbo.CalculateTax(Amount) AS Tax
+FROM Orders;
+```
+
+---
+
+## **4.2.2 Table-Valued Function**
+
+```sql
+CREATE FUNCTION OrdersAboveAmount (@minAmount DECIMAL(10,2))
+RETURNS TABLE
+AS
+RETURN (
+    SELECT * FROM Orders WHERE Amount > @minAmount
+);
+```
+
+**Verwendung:**
+
+```sql
+SELECT * FROM dbo.OrdersAboveAmount(500);
+```
+
+---
+
+# **5. Kombiniertes Beispiel: CTE + CASE + COALESCE + Funktion**
+
+Ziel: Erstelle einen Kundenreport mit:
+
+* Gesamtausgaben (CTE)
+* Kundenkategorisierung (CASE)
+* Ersatz von NULL-Telefonnummern (COALESCE)
+* Steuerfunktion (UDF)
+
+---
+
+## **Schritt 1 – UDF erstellen**
+
+```sql
+CREATE FUNCTION AddTax (@amount DECIMAL(10,2))
+RETURNS DECIMAL(10,2)
+AS
+BEGIN
+    RETURN @amount * 1.15;
+END;
+```
+
+---
+
+## **Schritt 2 – CTE nutzen**
+
+```sql
+WITH CustSales AS (
+    SELECT 
+        Customer,
+        SUM(Amount) AS TotalSpent
+    FROM Orders
+    GROUP BY Customer
+)
+SELECT 
+    c.Customer,
+    COALESCE(c.Phone, 'Keine Nummer') AS Phone,
+    s.TotalSpent,
+    dbo.AddTax(s.TotalSpent) AS TotalMitSteuer,
+    CASE
+        WHEN s.TotalSpent > 5000 THEN 'VIP'
+        WHEN s.TotalSpent > 2000 THEN 'Gold'
+        WHEN s.TotalSpent > 1000 THEN 'Silber'
+        ELSE 'Bronze'
+    END AS Kategorie
+FROM Customers c
+JOIN CustSales s ON c.Customer = s.Customer;
+```
+
+---
+
+# 🎉 **Zusammenfassung**
+
+| SQL-Feature    | Zweck                                | Beispiel                 |
+| -------------- | ------------------------------------ | ------------------------ |
+| **CTE (WITH)** | Temporäre Tabelle zur Strukturierung | `WITH t AS (...)`        |
+| **CASE**       | Bedingungen                          | `CASE WHEN ...`          |
+| **COALESCE**   | NULL ersetzen                        | `COALESCE(x, 'default')` |
+| **Funktionen** | Wiederverwendbare Logik              | `CREATE FUNCTION ...`    |
+
+---
+
+
+Below is a **complete, detailed tutorial** on **SQL Database Schema Design** and **SQL Views**, written in clear English, with real-world examples.
+
+This is a **professional-level** guide suitable for beginners, intermediates, and advanced learners.
+
+---
+
+# ⭐ **SQL Database Schema Design & SQL Views — Complete Tutorial**
+
+---
+
+# **1. What Is a Database Schema?**
+
+A **database schema** defines the structure of a database.
+It describes:
+
+* **tables**
+* **columns**
+* **data types**
+* **primary keys**
+* **foreign keys**
+* **relationships**
+* **constraints**
+* **indexes**
+
+Think of the schema as the **blueprint** of your database.
+
+---
+
+# **2. Core Concepts in Schema Design**
+
+---
+
+## **2.1 Tables**
+
+A table stores data in rows and columns.
+
+Example:
+
+```sql
+CREATE TABLE Customers (
+    CustomerID INT PRIMARY KEY,
+    FirstName VARCHAR(100),
+    LastName VARCHAR(100),
+    Email VARCHAR(150),
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+---
+
+## **2.2 Data Types**
+
+Choose types carefully:
+
+| Type       | Example    |
+| ---------- | ---------- |
+| INT        | 1, 2, 3    |
+| VARCHAR(n) | “John Doe” |
+| DATE       | 2025-01-01 |
+| DECIMAL    | 10.99      |
+| BOOLEAN    | TRUE/FALSE |
+
+Proper data types improve performance and reduce storage.
+
+---
+
+## **2.3 Keys**
+
+### **Primary Key (PK)**
+
+Uniquely identifies each row.
+
+```sql
+CustomerID INT PRIMARY KEY
+```
+
+### **Foreign Key (FK)**
+
+Links a row to another table.
+
+```sql
+CustomerID INT REFERENCES Customers(CustomerID)
+```
+
+### **Composite Key**
+
+Two or more columns form the key.
+
+```sql
+PRIMARY KEY (OrderID, ProductID)
+```
+
+---
+
+## **2.4 Constraints**
+
+Constraints enforce rules.
+
+| Constraint  | Purpose                |
+| ----------- | ---------------------- |
+| PRIMARY KEY | Unique row             |
+| FOREIGN KEY | Relationship integrity |
+| UNIQUE      | No duplicates          |
+| NOT NULL    | Must have value        |
+| CHECK       | Apply conditions       |
+
+Example:
+
+```sql
+CHECK (Quantity > 0)
+```
+
+---
+
+## **2.5 Relationships**
+
+### **1-to-1**
+
+One row in Table A ↔ one row in Table B
+
+### **1-to-Many** (most common)
+
+One Customer → many Orders
+
+### **Many-to-Many**
+
+Solved by **junction table**
+Example: products in orders → OrderItems table
+
+---
+
+# **3. Normalization**
+
+Normalization is the process of organizing data to reduce duplication.
+
+---
+
+## **3.1 First Normal Form (1NF)**
+
+* No repeating groups
+* Atomic values only
+
+Bad:
+
+| Customer | PhoneNumbers |
+| -------- | ------------ |
+| Alice    | 123, 456     |
+
+Good:
+
+| Customer | Phone |
+| -------- | ----- |
+| Alice    | 123   |
+| Alice    | 456   |
+
+---
+
+## **3.2 Second Normal Form (2NF)**
+
+* In 1NF
+* All non-key attributes depend on the whole key
+
+---
+
+## **3.3 Third Normal Form (3NF)**
+
+* In 2NF
+* No transitive dependencies
+
+Bad:
+
+```
+Orders(OrderID, CustomerID, CustomerName)
+```
+
+Good:
+
+```
+Customers(CustomerID, CustomerName)
+Orders(OrderID, CustomerID)
+```
+
+---
+
+# **4. Example: Full E-Commerce Database Schema**
+
+Below is a clean, normalized schema.
+
+---
+
+## **4.1 Customers**
+
+```sql
+CREATE TABLE Customers (
+    CustomerID INT PRIMARY KEY AUTO_INCREMENT,
+    FirstName VARCHAR(100),
+    LastName VARCHAR(100),
+    Email VARCHAR(150) UNIQUE,
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+---
+
+## **4.2 Products**
+
+```sql
+CREATE TABLE Products (
+    ProductID INT PRIMARY KEY AUTO_INCREMENT,
+    ProductName VARCHAR(200),
+    Category VARCHAR(100),
+    Price DECIMAL(10,2),
+    Stock INT CHECK(Stock >= 0)
+);
+```
+
+---
+
+## **4.3 Orders**
+
+```sql
+CREATE TABLE Orders (
+    OrderID INT PRIMARY KEY AUTO_INCREMENT,
+    CustomerID INT,
+    OrderDate DATE,
+    Status VARCHAR(50),
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+);
+```
+
+---
+
+## **4.4 OrderItems** (Many-to-Many)
+
+```sql
+CREATE TABLE OrderItems (
+    OrderID INT,
+    ProductID INT,
+    Quantity INT CHECK (Quantity > 0),
+    Price DECIMAL(10,2),
+    PRIMARY KEY (OrderID, ProductID),
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
+```
+
+---
+
+## **4.5 Payments**
+
+```sql
+CREATE TABLE Payments (
+    PaymentID INT PRIMARY KEY AUTO_INCREMENT,
+    OrderID INT,
+    Amount DECIMAL(10,2),
+    PaymentDate DATETIME,
+    PaymentMethod VARCHAR(100),
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID)
+);
+```
+
+---
+
+# **5. SQL Views**
+
+A **View** is a saved SELECT query that behaves like a virtual table.
+
+### ✔ Uses of Views:
+
+* Simplify complex queries
+* Provide controlled access to data
+* Improve readability
+* Encapsulate logic
+* Mask sensitive data
+
+Views **do not store data** (except materialized views).
+
+---
+
+# **6. Creating SQL Views**
+
+---
+
+## **6.1 Simple View**
+
+```sql
+CREATE VIEW CustomerList AS
+SELECT
+    CustomerID,
+    CONCAT(FirstName, ' ', LastName) AS FullName,
+    Email
+FROM Customers;
+```
+
+Use it like a table:
+
+```sql
+SELECT * FROM CustomerList;
+```
+
+---
+
+## **6.2 View with JOINs**
+
+```sql
+CREATE VIEW OrderSummary AS
+SELECT 
+    o.OrderID,
+    c.FirstName,
+    c.LastName,
+    o.OrderDate,
+    SUM(oi.Quantity * oi.Price) AS TotalAmount
+FROM Orders o
+JOIN Customers c ON o.CustomerID = c.CustomerID
+JOIN OrderItems oi ON o.OrderID = oi.OrderID
+GROUP BY o.OrderID, c.FirstName, c.LastName, o.OrderDate;
+```
+
+Query it:
+
+```sql
+SELECT * FROM OrderSummary WHERE TotalAmount > 100;
+```
+
+---
+
+## **6.3 View With Filter Logic**
+
+Useful for applications:
+
+```sql
+CREATE VIEW ActiveOrders AS
+SELECT *
+FROM Orders
+WHERE Status = 'Active';
+```
+
+---
+
+## **6.4 View for Security (Masking Data)**
+
+```sql
+CREATE VIEW PublicCustomers AS
+SELECT
+    CustomerID,
+    CONCAT(LEFT(Email, 3), '***') AS MaskedEmail
+FROM Customers;
+```
+
+---
+
+# **7. Materialized Views (If Supported)**
+
+Materialized views **store the data**, unlike regular views.
+
+Used for:
+
+* heavy aggregations
+* expensive joins
+* analytics workloads
+
+Example (Oracle/Postgres):
+
+```sql
+CREATE MATERIALIZED VIEW SalesSummary AS
+SELECT 
+    ProductID,
+    SUM(Quantity) AS TotalQty
+FROM OrderItems
+GROUP BY ProductID;
+```
+
+---
+
+# **8. Schema Design Best Practices**
+
+---
+
+## **8.1 Use normalization to avoid duplication**
+
+But…
+
+## **8.2 Know when to denormalize**
+
+For performance in analytical systems:
+
+* add summary tables
+* aggregate data
+* caching
+
+---
+
+## **8.3 Use proper data types**
+
+Avoid:
+
+* VARCHAR(2000) for phone numbers
+* Storing dates as VARCHAR
+* Storing numeric values as text
+
+---
+
+## **8.4 Always define primary keys**
+
+Either:
+
+* auto-increment integers
+* UUIDs
+
+---
+
+## **8.5 Use foreign keys**
+
+Prevents orphan data.
+
+---
+
+## **8.6 Index important columns**
+
+Index columns used in:
+
+* WHERE
+* JOIN
+* ORDER BY
+* GROUP BY
+
+---
+
+## **8.7 Add CHECK constraints**
+
+Prevent invalid data at the database level.
+
+---
+
+## **8.8 Use naming conventions**
+
+Examples:
+
+* `tbl_Customers`
+* `dimCustomer` (data warehouse)
+* `OrderItems` instead of `oi`
+
+---
+
+# **9. Putting It All Together — Practical Example**
+
+### **Goal:**
+
+Create a report showing each customer’s total spending.
+
+---
+
+## **Step 1 — Create View**
+
+```sql
+CREATE VIEW CustomerSales AS
+SELECT
+    c.CustomerID,
+    CONCAT(c.FirstName, ' ', c.LastName) AS Customer,
+    SUM(oi.Quantity * oi.Price) AS TotalSpent
+FROM Customers c
+JOIN Orders o ON c.CustomerID = o.CustomerID
+JOIN OrderItems oi ON o.OrderID = oi.OrderID
+GROUP BY c.CustomerID, c.FirstName, c.LastName;
+```
+
+---
+
+## **Step 2 — Query the view**
+
+```sql
+SELECT *
+FROM CustomerSales
+WHERE TotalSpent > 500;
+```
+
+---
+
+# 🎉 **You now have a complete understanding of:**
+
+✔ How to design SQL database schemas
+✔ Best practices for table structure
+✔ Primary & foreign keys
+✔ Normalization
+✔ SQL Views (simple, join-based, filtered, secure)
+✔ Materialized views
+✔ Real-world e-commerce schema
+
+---
+Natürlich — hier ist das **komplette Tutorial über SQL-Datenbankschemata & SQL-Views in deutscher Sprache**, vollständig übersetzt und leicht verständlich, mit Praxisbeispielen.
+
+---
+
+# 🇩🇪 **SQL-Datenbankschema-Design & SQL-Views — Vollständiges Tutorial**
+
+---
+
+# **1. Was ist ein Datenbankschema?**
+
+Ein **Datenbankschema** beschreibt die **Struktur** einer Datenbank.
+Es definiert:
+
+* Tabellen
+* Spalten
+* Datentypen
+* Primärschlüssel
+* Fremdschlüssel
+* Beziehungen
+* Einschränkungen (Constraints)
+* Indexe
+
+Das Schema ist der **Bauplan** deiner Datenbank.
+
+---
+
+# **2. Zentrale Konzepte im Schema-Design**
+
+---
+
+## **2.1 Tabellen**
+
+Eine Tabelle speichert Daten in Zeilen und Spalten.
+
+Beispiel:
+
+```sql
+CREATE TABLE Kunden (
+    KundeID INT PRIMARY KEY,
+    Vorname VARCHAR(100),
+    Nachname VARCHAR(100),
+    Email VARCHAR(150),
+    ErstelltAm DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+---
+
+## **2.2 Datentypen**
+
+Wähle passende Datentypen:
+
+| Typ        | Beispiel         |
+| ---------- | ---------------- |
+| INT        | 1, 2, 3          |
+| VARCHAR(n) | „Max Mustermann“ |
+| DATE       | 2025-01-01       |
+| DECIMAL    | 10.99            |
+| BOOLEAN    | TRUE/FALSE       |
+
+Gute Datentypen = bessere Performance + weniger Speicher.
+
+---
+
+## **2.3 Schlüssel**
+
+### **Primärschlüssel (PK)**
+
+Eindeutiger Bezeichner einer Zeile.
+
+```sql
+KundeID INT PRIMARY KEY
+```
+
+### **Fremdschlüssel (FK)**
+
+Verknüpft Tabellen miteinander.
+
+```sql
+KundeID INT REFERENCES Kunden(KundeID)
+```
+
+### **Zusammengesetzter Schlüssel**
+
+```sql
+PRIMARY KEY (BestellID, ProduktID)
+```
+
+---
+
+## **2.4 Constraints (Einschränkungen)**
+
+| Constraint  | Beschreibung                  |
+| ----------- | ----------------------------- |
+| PRIMARY KEY | eindeutiger Schlüssel         |
+| FOREIGN KEY | referenzielle Integrität      |
+| UNIQUE      | keine Duplikate               |
+| NOT NULL    | Wert erforderlich             |
+| CHECK       | Bedingung muss erfüllt werden |
+
+Beispiel:
+
+```sql
+CHECK (Menge > 0)
+```
+
+---
+
+## **2.5 Beziehungen zwischen Tabellen**
+
+### **1:1**
+
+Ein Kunde ↔ ein Kundenprofil
+
+### **1:N (häufigste)**
+
+Ein Kundenkonto → viele Bestellungen
+
+### **N:M**
+
+Wird über eine **Zwischentabelle** gelöst
+Beispiel: Bestellungen enthalten viele Produkte
+Zwischentabelle: **BestellPositionen**
+
+---
+
+# **3. Normalisierung**
+
+Ziel: Datenredundanz vermeiden.
+
+---
+
+## **3.1 Erste Normalform (1NF)**
+
+* keine wiederholenden Gruppen
+* atomare Werte
+
+Schlecht:
+
+| Kunde | Telefonnummern |
+| ----- | -------------- |
+| Max   | 123, 456       |
+
+Gut:
+
+| Kunde | Telefonnummer |
+| ----- | ------------- |
+| Max   | 123           |
+| Max   | 456           |
+
+---
+
+## **3.2 Zweite Normalform (2NF)**
+
+* 1NF erfüllt
+* Attribute hängen vom vollständigen Primärschlüssel ab
+
+---
+
+## **3.3 Dritte Normalform (3NF)**
+
+* keine transitiven Abhängigkeiten
+
+Schlecht:
+
+```
+Bestellung(BestellID, KundeID, KundenName)
+```
+
+Gut:
+
+```
+Kunden(KundeID, KundenName)
+Bestellung(BestellID, KundeID)
+```
+
+---
+
+# **4. Beispiel: E-Commerce-Datenbankschema**
+
+---
+
+## **4.1 Kunden**
+
+```sql
+CREATE TABLE Kunden (
+    KundeID INT PRIMARY KEY AUTO_INCREMENT,
+    Vorname VARCHAR(100),
+    Nachname VARCHAR(100),
+    Email VARCHAR(150) UNIQUE,
+    ErstelltAm DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+---
+
+## **4.2 Produkte**
+
+```sql
+CREATE TABLE Produkte (
+    ProduktID INT PRIMARY KEY AUTO_INCREMENT,
+    ProduktName VARCHAR(200),
+    Kategorie VARCHAR(100),
+    Preis DECIMAL(10,2),
+    Bestand INT CHECK(Bestand >= 0)
+);
+```
+
+---
+
+## **4.3 Bestellungen**
+
+```sql
+CREATE TABLE Bestellungen (
+    BestellID INT PRIMARY KEY AUTO_INCREMENT,
+    KundeID INT,
+    Bestelldatum DATE,
+    Status VARCHAR(50),
+    FOREIGN KEY (KundeID) REFERENCES Kunden(KundeID)
+);
+```
+
+---
+
+## **4.4 BestellPositionen** (N:M)
+
+```sql
+CREATE TABLE BestellPositionen (
+    BestellID INT,
+    ProduktID INT,
+    Menge INT CHECK (Menge > 0),
+    Preis DECIMAL(10,2),
+    PRIMARY KEY (BestellID, ProduktID),
+    FOREIGN KEY (BestellID) REFERENCES Bestellungen(BestellID),
+    FOREIGN KEY (ProduktID) REFERENCES Produkte(ProduktID)
+);
+```
+
+---
+
+## **4.5 Zahlungen**
+
+```sql
+CREATE TABLE Zahlungen (
+    ZahlungID INT PRIMARY KEY AUTO_INCREMENT,
+    BestellID INT,
+    Betrag DECIMAL(10,2),
+    Zahlungsdatum DATETIME,
+    Zahlungsmethode VARCHAR(100),
+    FOREIGN KEY (BestellID) REFERENCES Bestellungen(BestellID)
+);
+```
+
+---
+
+# **5. SQL Views (Sichten)**
+
+Eine **View** ist eine gespeicherte SELECT-Abfrage, die wie eine virtuelle Tabelle wirkt.
+
+### Vorteile:
+
+✔ vereinfacht komplexe Abfragen
+✔ Sicherheitslayer (z.B. Datenmaskierung)
+✔ konsistente Reports
+✔ weniger Duplikation
+
+Views speichern **keine Daten**, außer *materialisierte Views*.
+
+---
+
+# **6. Views erstellen**
+
+---
+
+## **6.1 Einfache View**
+
+```sql
+CREATE VIEW KundenListe AS
+SELECT
+    KundeID,
+    CONCAT(Vorname, ' ', Nachname) AS Vollname,
+    Email
+FROM Kunden;
+```
+
+Aufruf:
+
+```sql
+SELECT * FROM KundenListe;
+```
+
+---
+
+## **6.2 View mit JOIN**
+
+```sql
+CREATE VIEW BestellÜbersicht AS
+SELECT
+    b.BestellID,
+    k.Vorname,
+    k.Nachname,
+    b.Bestelldatum,
+    SUM(bp.Menge * bp.Preis) AS Gesamtbetrag
+FROM Bestellungen b
+JOIN Kunden k ON b.KundeID = k.KundeID
+JOIN BestellPositionen bp ON b.BestellID = bp.BestellID
+GROUP BY b.BestellID, k.Vorname, k.Nachname, b.Bestelldatum;
+```
+
+---
+
+## **6.3 View zur Filterung**
+
+```sql
+CREATE VIEW AktiveBestellungen AS
+SELECT *
+FROM Bestellungen
+WHERE Status = 'Aktiv';
+```
+
+---
+
+## **6.4 View für Datensicherheit**
+
+```sql
+CREATE VIEW KundenÖffentlich AS
+SELECT
+    KundeID,
+    CONCAT(LEFT(Email, 3), '***') AS MaskierteEmail
+FROM Kunden;
+```
+
+---
+
+# **7. Materialisierte Views (sofern DB unterstützt)**
+
+Materialisierte Views speichern das Ergebnis auf der Festplatte.
+
+Beispiel (Postgres):
+
+```sql
+CREATE MATERIALIZED VIEW VerkaufsStatistik AS
+SELECT
+    ProduktID,
+    SUM(Menge) AS GesamtMenge
+FROM BestellPositionen
+GROUP BY ProduktID;
+```
+
+---
+
+# **8. Best Practices im Schema-Design**
+
+✔ Normalisieren — aber
+✔ für Analytik auch manchmal denormalisieren
+✔ Immer PRIMARY KEY definieren
+✔ FOREIGN KEYs nutzen
+✔ sinnvolle Datentypen wählen
+✔ Indexe auf häufig verwendete Spalten
+✔ CHECK Constraints nutzen
+✔ konsistente Namenskonventionen
+
+---
+
+# **9. Komplettes Praxisbeispiel**
+
+## Aufgabe
+
+Erstelle einen Kunden-Umsatzreport.
+
+---
+
+### **View erstellen**
+
+```sql
+CREATE VIEW KundenUmsatz AS
+SELECT
+    k.KundeID,
+    CONCAT(k.Vorname, ' ', k.Nachname) AS Kunde,
+    SUM(bp.Menge * bp.Preis) AS GesamtUmsatz
+FROM Kunden k
+JOIN Bestellungen b ON k.KundeID = b.KundeID
+JOIN BestellPositionen bp ON b.BestellID = bp.BestellID
+GROUP BY k.KundeID, k.Vorname, k.Nachname;
+```
+
+### **View abfragen**
+
+```sql
+SELECT *
+FROM KundenUmsatz
+WHERE GesamtUmsatz > 500;
+```
+
+---
+
+# 🎉 **Du hast jetzt gelernt:**
+
+✔ Datenbankschemas erstellen
+✔ Tabellen, Schlüssel & Beziehungen modellieren
+✔ Normalformen verstehen
+✔ E-Commerce-Schema aufbauen
+✔ SQL-Views erstellen
+✔ materialisierte Views nutzen
+✔ Best Practices im Datenbankdesign
+
+---
 
 
 
