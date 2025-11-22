@@ -2368,3 +2368,213 @@ EXPLAIN SELECT * FROM Customers WHERE Name = 'Alice';
 ---
 
 
+Absolutely! Let’s dive into **SQL Window Functions** with **practical examples and data** to make it clear. I’ll first explain the concept, then show examples you can run directly.
+
+---
+
+# **SQL Window Functions Tutorial**
+
+---
+
+## **1. What Are Window Functions?**
+
+**Definition:**
+Window Functions in SQL perform calculations **across a set of rows related to the current row**, while **keeping all rows** in the result. Unlike aggregate functions (`SUM`, `AVG`) that collapse rows, window functions **do not group rows**.
+
+**Use Cases:**
+
+* Ranking rows (`ROW_NUMBER`, `RANK`)
+* Cumulative totals (`SUM`, `AVG`)
+* Comparing rows (`LAG`, `LEAD`)
+* First or last value in a group (`FIRST_VALUE`, `LAST_VALUE`)
+
+**Syntax:**
+
+```sql
+FUNCTION_NAME() OVER (
+    [PARTITION BY column]  -- groups rows
+    [ORDER BY column]      -- defines order in the window
+    [ROWS BETWEEN ...]     -- defines window frame (optional)
+)
+```
+
+---
+
+## **2. Sample Data**
+
+Let’s use an **E-Commerce Orders table**:
+
+| OrderID | Customer | Product  | Quantity | Price | OrderDate  |
+| ------- | -------- | -------- | -------- | ----- | ---------- |
+| 101     | Alice    | Laptop   | 1        | 1000  | 2025-01-01 |
+| 102     | Alice    | Mouse    | 2        | 25    | 2025-01-05 |
+| 103     | Alice    | Keyboard | 1        | 50    | 2025-01-10 |
+| 104     | Bob      | Laptop   | 1        | 1000  | 2025-01-03 |
+| 105     | Bob      | Mouse    | 1        | 25    | 2025-01-06 |
+
+---
+
+## **3. ROW_NUMBER() – Number rows in a group**
+
+```sql
+SELECT 
+    Customer,
+    OrderID,
+    Product,
+    ROW_NUMBER() OVER (PARTITION BY Customer ORDER BY OrderDate) AS RowNum
+FROM Orders;
+```
+
+**Result:**
+
+| Customer | OrderID | Product  | RowNum |
+| -------- | ------- | -------- | ------ |
+| Alice    | 101     | Laptop   | 1      |
+| Alice    | 102     | Mouse    | 2      |
+| Alice    | 103     | Keyboard | 3      |
+| Bob      | 104     | Laptop   | 1      |
+| Bob      | 105     | Mouse    | 2      |
+
+**Explanation:**
+
+* Each customer’s orders are numbered by date.
+
+---
+
+## **4. RANK() – Ranking rows with gaps**
+
+```sql
+SELECT
+    Customer,
+    OrderID,
+    Price,
+    RANK() OVER (PARTITION BY Customer ORDER BY Price DESC) AS RankPrice
+FROM Orders;
+```
+
+**Result:**
+
+| Customer | OrderID | Price | RankPrice |
+| -------- | ------- | ----- | --------- |
+| Alice    | 101     | 1000  | 1         |
+| Alice    | 103     | 50    | 2         |
+| Alice    | 102     | 25    | 3         |
+| Bob      | 104     | 1000  | 1         |
+| Bob      | 105     | 25    | 2         |
+
+* Ties share the same rank, gaps appear in the numbering.
+
+---
+
+## **5. DENSE_RANK() – Ranking rows without gaps**
+
+```sql
+SELECT
+    Customer,
+    OrderID,
+    Price,
+    DENSE_RANK() OVER (PARTITION BY Customer ORDER BY Price DESC) AS DenseRank
+FROM Orders;
+```
+
+* Works like `RANK()`, but no gaps in rank numbers.
+
+---
+
+## **6. SUM() as a window function – cumulative total**
+
+```sql
+SELECT
+    Customer,
+    OrderID,
+    Price,
+    SUM(Price) OVER (PARTITION BY Customer ORDER BY OrderDate) AS CumulativeTotal
+FROM Orders;
+```
+
+**Result:**
+
+| Customer | OrderID | Price | CumulativeTotal |
+| -------- | ------- | ----- | --------------- |
+| Alice    | 101     | 1000  | 1000            |
+| Alice    | 102     | 25    | 1025            |
+| Alice    | 103     | 50    | 1075            |
+| Bob      | 104     | 1000  | 1000            |
+| Bob      | 105     | 25    | 1025            |
+
+---
+
+## **7. LAG() and LEAD() – Compare previous/next row**
+
+```sql
+SELECT
+    Customer,
+    OrderID,
+    Price,
+    LAG(Price) OVER (PARTITION BY Customer ORDER BY OrderDate) AS PreviousPrice,
+    LEAD(Price) OVER (PARTITION BY Customer ORDER BY OrderDate) AS NextPrice
+FROM Orders;
+```
+
+**Explanation:**
+
+* `LAG()` → value of previous row
+* `LEAD()` → value of next row
+* Useful to calculate differences or trends.
+
+---
+
+## **8. FIRST_VALUE() and LAST_VALUE() – First and last in a group**
+
+```sql
+SELECT
+    Customer,
+    OrderID,
+    Price,
+    FIRST_VALUE(Price) OVER (PARTITION BY Customer ORDER BY OrderDate) AS FirstOrderPrice,
+    LAST_VALUE(Price) OVER (PARTITION BY Customer ORDER BY OrderDate 
+        ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS LastOrderPrice
+FROM Orders;
+```
+
+* `ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING` ensures LAST_VALUE() considers the full partition.
+
+---
+
+## **9. Practical Use Case**
+
+**Goal:** Find each customer’s cumulative spending and previous order price.
+
+```sql
+SELECT
+    Customer,
+    OrderID,
+    Price,
+    SUM(Price) OVER (PARTITION BY Customer ORDER BY OrderDate) AS CumulativeTotal,
+    LAG(Price) OVER (PARTITION BY Customer ORDER BY OrderDate) AS PreviousOrderPrice
+FROM Orders;
+```
+
+**Result:**
+
+| Customer | OrderID | Price | CumulativeTotal | PreviousOrderPrice |
+| -------- | ------- | ----- | --------------- | ------------------ |
+| Alice    | 101     | 1000  | 1000            | NULL               |
+| Alice    | 102     | 25    | 1025            | 1000               |
+| Alice    | 103     | 50    | 1075            | 25                 |
+| Bob      | 104     | 1000  | 1000            | NULL               |
+| Bob      | 105     | 25    | 1025            | 1000               |
+
+---
+
+## ✅ **Key Points**
+
+* Window functions **do not collapse rows**.
+* Use `PARTITION BY` to define the group.
+* Use `ORDER BY` to define sequence inside the window.
+* Useful for **ranking, cumulative metrics, comparisons, first/last values**.
+
+---
+
+
+
