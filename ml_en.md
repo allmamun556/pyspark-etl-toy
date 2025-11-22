@@ -1697,9 +1697,10 @@ I can also make a **visual step-by-step diagram showing PCA projections, eigenve
 
 Do you want me to create that diagram?
 
+
 # Linear Regression: Explanation and Mathematical Intuition
 
-Linear Regression is one of the simplest and most widely used algorithms in machine learning and statistics. It is used to model the relationship between a **dependent variable** \(y\) and one or more **independent variables** \(x\).
+Linear Regression is one of the simplest and most widely used algorithms in machine learning and statistics. It is used to model the relationship between a **dependent variable** $y$ and one or more **independent variables** $x$.
 
 ---
 
@@ -1707,50 +1708,50 @@ Linear Regression is one of the simplest and most widely used algorithms in mach
 
 Linear regression assumes that the relationship between the variables can be approximated by a **straight line**:
 
-\[
+$$
 y = \beta_0 + \beta_1 x + \epsilon
-\]
+$$
 
 Where:  
-- \(y\) is the dependent variable (what we want to predict)  
-- \(x\) is the independent variable (feature)  
-- \(\beta_0\) is the intercept of the line  
-- \(\beta_1\) is the slope of the line (how much \(y\) changes with \(x\))  
-- \(\epsilon\) is the error term (difference between predicted and actual values)
+- $y$ is the dependent variable (what we want to predict)  
+- $x$ is the independent variable (feature)  
+- $\beta_0$ is the intercept of the line  
+- $\beta_1$ is the slope of the line (how much $y$ changes with $x$)  
+- $\epsilon$ is the error term (difference between predicted and actual values)
 
 ---
 
 ## 2. Mathematical Intuition
 
-The goal of linear regression is to find the **best-fitting line** that minimizes the difference between the actual values \(y_i\) and predicted values \(\hat{y}_i\). This difference is measured using the **Mean Squared Error (MSE)**:
+The goal of linear regression is to find the **best-fitting line** that minimizes the difference between the actual values $y_i$ and predicted values $\hat{y}_i$. This difference is measured using the **Mean Squared Error (MSE)**:
 
-\[
+$$
 MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
-\]
+$$
 
 Where:  
-- \(n\) is the number of data points  
-- \(\hat{y}_i = \beta_0 + \beta_1 x_i\) is the predicted value
+- $n$ is the number of data points  
+- $\hat{y}_i = \beta_0 + \beta_1 x_i$ is the predicted value
 
 ### Finding the Best-Fit Line
 
-To minimize MSE, we take the derivative with respect to \(\beta_0\) and \(\beta_1\) and set them to zero. The solutions are:
+To minimize MSE, we take the derivative with respect to $\beta_0$ and $\beta_1$ and set them to zero. The solutions are:
 
-\[
+$$
 \beta_1 = \frac{\sum_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^{n} (x_i - \bar{x})^2}
-\]
+$$
 
-\[
+$$
 \beta_0 = \bar{y} - \beta_1 \bar{x}
-\]
+$$
 
 Where:  
-- \(\bar{x}\) is the mean of all \(x_i\) values  
-- \(\bar{y}\) is the mean of all \(y_i\) values  
+- $\bar{x}$ is the mean of all $x_i$ values  
+- $\bar{y}$ is the mean of all $y_i$ values  
 
 **Intuition:**  
-- \(\beta_1\) measures how strongly \(x\) and \(y\) are related (slope).  
-- \(\beta_0\) adjusts the line to pass through the average of the data.
+- $\beta_1$ measures how strongly $x$ and $y$ are related (slope).  
+- $\beta_0$ adjusts the line to pass through the average of the data.
 
 ---
 
@@ -1765,22 +1766,22 @@ Suppose we have data points:
 | 3 | 5 |
 
 1. Calculate the means:  
-\(\bar{x} = 2\), \(\bar{y} = 3.33\)  
+$\bar{x} = 2$, $\bar{y} = 3.33$  
 
 2. Compute slope:  
-\[
+$$
 \beta_1 = \frac{(1-2)(2-3.33) + (2-2)(3-3.33) + (3-2)(5-3.33)}{(1-2)^2 + (2-2)^2 + (3-2)^2} = 1.5
-\]
+$$
 
 3. Compute intercept:  
-\[
+$$
 \beta_0 = 3.33 - 1.5 \cdot 2 = 0.33
-\]
+$$
 
 4. Final regression line:  
-\[
+$$
 \hat{y} = 0.33 + 1.5x
-\]
+$$
 
 ---
 
@@ -1788,12 +1789,10 @@ Suppose we have data points:
 
 - Linear regression models **linear relationships**.  
 - Minimizes **mean squared error** to fit the line.  
-- Coefficients (\(\beta_0, \beta_1\)) have clear geometric and statistical interpretations.  
+- Coefficients ($\beta_0, \beta_1$) have clear geometric and statistical interpretations.  
 - Can be extended to multiple variables (**Multiple Linear Regression**):  
 
-\[
+$$
 y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots + \beta_p x_p + \epsilon
-\]
-
----
+$$
 
