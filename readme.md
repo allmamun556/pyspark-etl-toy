@@ -547,3 +547,322 @@ Absolutely! I’ll explain the **differences between PySpark and Pandas** in **b
 If you want, I can also make a **side-by-side example** showing the **same operation in Pandas vs PySpark**, so you can see exactly how syntax and execution differ.
 
 Do you want me to create that example?
+
+Absolutely! Let's go **step by step** and explain your entire PySpark script **first in English**, and then in **German**. I’ll break it down part by part so it’s fully clear.
+
+---
+
+# **Full Code Explanation in English**
+
+---
+
+## **1. Import Libraries**
+
+```python
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
+import pandas as pd
+```
+
+* `SparkSession`: Entry point for working with PySpark.
+* `col`: Helps reference DataFrame columns for transformations.
+* `pandas`: Used here to create CSV files for example data.
+
+---
+
+## **2. Initialize Spark Session**
+
+```python
+spark = SparkSession.builder \
+    .appName("UpgradedToyETL") \
+    .getOrCreate()
+```
+
+* Creates a Spark session named `"UpgradedToyETL"`.
+* `getOrCreate()` starts Spark if it isn’t running, otherwise it reuses the existing session.
+
+---
+
+## **3. Create Sample Data**
+
+```python
+data1 = [
+    ("2025-11-20", "Electronics", "Laptop", 2, 1200.0),
+    ("2025-11-21", "Electronics", "Mouse", 5, 20.0),
+    ("2025-11-22", "Clothing", "T-shirt", 10, 15.0)
+]
+
+data2 = [
+    ("2025-11-23", "Clothing", "Jeans", 3, 50.0),
+    ("2025-11-24", "Electronics", "Keyboard", 1, 100.0),
+    ("2025-11-25", "Clothing", "Hat", -2, 10.0)  # invalid sale
+]
+```
+
+* Two datasets for sales with columns: `date`, `category`, `product`, `quantity`, `price`.
+* Notice that the last row in `data2` is invalid (`quantity = -2`).
+
+---
+
+## **4. Save Data as CSV Using Pandas**
+
+```python
+df1 = pd.DataFrame(data1, columns=["date", "category", "product", "quantity", "price"])
+df2 = pd.DataFrame(data2, columns=["date", "category", "product", "quantity", "price"])
+
+df1.to_csv("sales_part1.csv", index=False)
+df2.to_csv("sales_part2.csv", index=False)
+```
+
+* Convert Python lists to pandas DataFrames.
+* Save CSV files `sales_part1.csv` and `sales_part2.csv`.
+
+---
+
+## **5. Read CSV Files into Spark DataFrame**
+
+```python
+df = spark.read.option("header", True).option("inferSchema", True).csv("sales_part*.csv")
+df.show()
+```
+
+* Reads all CSV files matching `sales_part*.csv` into a Spark DataFrame.
+* `header=True`: Treats the first row as column headers.
+* `inferSchema=True`: Automatically detects the data types of columns.
+* `df.show()`: Displays the first 20 rows of the DataFrame.
+
+---
+
+## **6. Register DataFrame as SQL Temporary View**
+
+```python
+df.createOrReplaceTempView("sales")
+```
+
+* Allows running SQL queries on the DataFrame using `spark.sql()`.
+* Temporary view named `"sales"` is created.
+
+---
+
+## **7. Transformation Using Spark SQL**
+
+```python
+query = """
+SELECT 
+    category,
+    product,
+    date,
+    quantity,
+    price,
+    (quantity * price) AS revenue
+FROM sales
+WHERE quantity > 0
+AND date BETWEEN '2025-11-21' AND '2025-11-24'
+"""
+
+df_transformed = spark.sql(query)
+df_transformed.show()
+```
+
+* Selects relevant columns and calculates a new column `revenue = quantity * price`.
+* Filters out invalid sales (`quantity > 0`) and restricts dates to a specific range.
+* `df_transformed.show()`: Shows the resulting DataFrame.
+
+---
+
+## **8. Aggregation Using Spark SQL**
+
+```python
+agg_query = """
+SELECT 
+    category,
+    SUM(quantity * price) AS total_revenue
+FROM sales
+WHERE quantity > 0
+AND date BETWEEN '2025-11-21' AND '2025-11-24'
+GROUP BY category
+"""
+
+df_agg = spark.sql(agg_query)
+df_agg.show()
+```
+
+* Aggregates total revenue per category.
+* Uses `SUM(quantity * price)` and groups by `category`.
+* Only includes valid sales and the same date range.
+* `df_agg.show()`: Displays the aggregation result.
+
+---
+
+## **9. Save Transformed and Aggregated Data**
+
+```python
+df_transformed.write.mode("overwrite").csv("upgraded_transformed_sales.csv", header=True)
+df_agg.write.mode("overwrite").csv("upgraded_aggregated_sales.csv", header=True)
+```
+
+* Saves the transformed DataFrame and aggregated results as CSV files.
+* `mode("overwrite")` replaces any existing files with the same name.
+* `header=True` writes column headers in the CSV.
+
+---
+
+# ✅ **Summary in English**
+
+* The script **creates example sales data**, saves them as CSV, and loads them into PySpark.
+* It **filters and transforms the data** using SQL queries (`quantity > 0`, specific date range, revenue calculation).
+* It performs **aggregation by category** to calculate total revenue.
+* Finally, it **saves transformed and aggregated data** back to CSV files.
+
+---
+
+# **Vollständige Erklärung auf Deutsch**
+
+---
+
+## **1. Bibliotheken importieren**
+
+```python
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
+import pandas as pd
+```
+
+* `SparkSession`: Einstiegspunkt für PySpark.
+* `col`: Hilft, DataFrame-Spalten in Transformationen zu referenzieren.
+* `pandas`: Wird hier genutzt, um Beispieldaten als CSV zu speichern.
+
+---
+
+## **2. SparkSession erstellen**
+
+```python
+spark = SparkSession.builder \
+    .appName("UpgradedToyETL") \
+    .getOrCreate()
+```
+
+* Erstellt eine SparkSession mit dem Namen `"UpgradedToyETL"`.
+* `getOrCreate()` startet Spark, falls nicht aktiv, sonst wird die bestehende Session genutzt.
+
+---
+
+## **3. Beispieldaten erstellen**
+
+```python
+data1 = [...]
+data2 = [...]
+```
+
+* Zwei Datensätze mit Verkaufsinformationen: `Datum`, `Kategorie`, `Produkt`, `Menge`, `Preis`.
+* Die letzte Zeile in `data2` ist ungültig (`quantity = -2`).
+
+---
+
+## **4. CSV-Dateien speichern**
+
+```python
+df1 = pd.DataFrame(data1, columns=[...])
+df2 = pd.DataFrame(data2, columns=[...])
+
+df1.to_csv("sales_part1.csv", index=False)
+df2.to_csv("sales_part2.csv", index=False)
+```
+
+* Python-Listen werden in pandas DataFrames umgewandelt.
+* CSV-Dateien `sales_part1.csv` und `sales_part2.csv` werden erstellt.
+
+---
+
+## **5. CSV-Dateien in Spark laden**
+
+```python
+df = spark.read.option("header", True).option("inferSchema", True).csv("sales_part*.csv")
+df.show()
+```
+
+* Alle CSV-Dateien, die `sales_part*.csv` entsprechen, werden in ein Spark DataFrame geladen.
+* `header=True`: Erste Zeile enthält Spaltennamen.
+* `inferSchema=True`: Spark erkennt automatisch Datentypen.
+* `df.show()`: Zeigt die ersten 20 Zeilen.
+
+---
+
+## **6. Temporäre SQL-View erstellen**
+
+```python
+df.createOrReplaceTempView("sales")
+```
+
+* Ermöglicht SQL-Abfragen auf dem DataFrame.
+* Temporäre View `"sales"` wird erstellt.
+
+---
+
+## **7. Transformation mit Spark SQL**
+
+```python
+query = """
+SELECT category, product, date, quantity, price,
+(quantity * price) AS revenue
+FROM sales
+WHERE quantity > 0
+AND date BETWEEN '2025-11-21' AND '2025-11-24'
+"""
+df_transformed = spark.sql(query)
+df_transformed.show()
+```
+
+* Wählt relevante Spalten und berechnet `revenue = quantity * price`.
+* Filtert ungültige Verkäufe (`quantity > 0`) und einen bestimmten Datumsbereich.
+* `df_transformed.show()`: Zeigt das transformierte DataFrame.
+
+---
+
+## **8. Aggregation nach Kategorie**
+
+```python
+agg_query = """
+SELECT category, SUM(quantity * price) AS total_revenue
+FROM sales
+WHERE quantity > 0
+AND date BETWEEN '2025-11-21' AND '2025-11-24'
+GROUP BY category
+"""
+df_agg = spark.sql(agg_query)
+df_agg.show()
+```
+
+* Berechnet den **Gesamtumsatz pro Kategorie**.
+* Summiert `quantity * price` und gruppiert nach `category`.
+* Nur gültige Verkäufe und derselbe Datumsbereich werden berücksichtigt.
+* `df_agg.show()`: Zeigt das aggregierte Ergebnis.
+
+---
+
+## **9. Speichern der Daten**
+
+```python
+df_transformed.write.mode("overwrite").csv("upgraded_transformed_sales.csv", header=True)
+df_agg.write.mode("overwrite").csv("upgraded_aggregated_sales.csv", header=True)
+```
+
+* Speichert die transformierten und aggregierten Daten als CSV-Dateien.
+* `mode("overwrite")` überschreibt vorhandene Dateien.
+* `header=True` schreibt die Spaltennamen in die CSV.
+
+---
+
+## ✅ **Zusammenfassung auf Deutsch**
+
+* Das Skript **erstellt Beispieldaten**, speichert sie als CSV und lädt sie in PySpark.
+* Es **filtert und transformiert die Daten** (z. B. `quantity > 0`, Datumsbereich, Berechnung von Umsatz).
+* Führt eine **Aggregation nach Kategorie** durch, um den Gesamtumsatz zu berechnen.
+* Schließlich werden die **transformierten und aggregierten Daten** wieder als CSV-Dateien gespeichert.
+
+---
+
+If you want, I can also **draw a visual flow diagram** of this ETL process showing how the data moves from CSV → Spark → SQL transformations → output CSV. It makes it very easy to understand at a glance.
+
+Do you want me to do that?
+
