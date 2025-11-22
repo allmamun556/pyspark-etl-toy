@@ -1,8 +1,5 @@
-Absolutely! Here’s a **complete SQL tutorial in English**, with detailed explanations, examples, and best practices. I’ll cover everything from basic queries to advanced topics.
 
----
-
-# **Complete SQL Tutorial**
+# **SQL**
 
 SQL (Structured Query Language) is the standard language for **managing and querying relational databases**.
 
@@ -1849,3 +1846,304 @@ Ein **Data Cube** ist eine **mehrdimensionale Darstellung von Daten** für Analy
 Wenn du willst, kann ich auch ein **praktisches Beispiel für ein E-Commerce-Datenmodell** erstellen, das **Datenbanken, Data Lake, Delta Lake, Data Mesh und Data Cubes** kombiniert und direkt **mit SQL oder Pandas analysierbar** ist.
 
 Willst du, dass ich das erstelle?
+Absolutely! Let’s go step by step. I’ll first explain **SQL GRANT, REVOKE, COMMIT, and ROLLBACK in English**, then provide the **German version**, with practical examples to make it easy to understand.
+
+---
+
+# **SQL Tutorial – Permissions & Transactions**
+
+---
+
+## **1. GRANT – Assigning Privileges**
+
+**Definition:**
+`GRANT` is used to **give a user or role specific permissions** on a database object (table, view, schema, or database).
+
+**Common syntax:**
+
+```sql
+GRANT privilege ON object TO user;
+```
+
+* `privilege`: SELECT, INSERT, UPDATE, DELETE, ALL
+* `object`: table, view, database
+* `user`: the username or role
+
+**Example:**
+
+```sql
+-- Grant SELECT and INSERT privileges on the table Customers to user 'analyst'
+GRANT SELECT, INSERT ON Customers TO analyst;
+```
+
+**Explanation:**
+
+* The user `analyst` can now **read and insert data** into the Customers table.
+* Without `GRANT`, the user would get a “permission denied” error.
+
+---
+
+## **2. REVOKE – Removing Privileges**
+
+**Definition:**
+`REVOKE` removes previously granted privileges from a user or role.
+
+**Syntax:**
+
+```sql
+REVOKE privilege ON object FROM user;
+```
+
+**Example:**
+
+```sql
+-- Revoke INSERT privilege from user 'analyst'
+REVOKE INSERT ON Customers FROM analyst;
+```
+
+**Explanation:**
+
+* After this, `analyst` can no longer insert new rows but can still select if SELECT was granted.
+
+**Practical Use:**
+
+* If a temporary analyst or contractor should only access data for a limited period, you can **grant privileges temporarily** and revoke later.
+
+---
+
+## **3. COMMIT – Saving Changes**
+
+**Definition:**
+`COMMIT` is used in **transactions** to make all changes **permanent**.
+
+**Transactions:**
+
+* A transaction is a group of SQL statements executed as a single unit.
+* Until `COMMIT` is issued, changes are not permanent and can be undone.
+
+**Syntax:**
+
+```sql
+COMMIT;
+```
+
+**Example:**
+
+```sql
+BEGIN TRANSACTION;
+
+INSERT INTO Customers (CustomerID, Name, Email) VALUES (3, 'Charlie', 'charlie@example.com');
+UPDATE Products SET Price = Price * 1.1 WHERE Category = 'Electronics';
+
+COMMIT;
+```
+
+**Explanation:**
+
+* Both the INSERT and UPDATE statements will be **permanently saved**.
+* If the database crashes **before COMMIT**, changes are not saved.
+
+---
+
+## **4. ROLLBACK – Undo Changes**
+
+**Definition:**
+`ROLLBACK` undoes all changes in the current transaction **since the last COMMIT**.
+
+**Syntax:**
+
+```sql
+ROLLBACK;
+```
+
+**Example:**
+
+```sql
+BEGIN TRANSACTION;
+
+INSERT INTO Customers (CustomerID, Name, Email) VALUES (4, 'David', 'david@example.com');
+UPDATE Products SET Price = Price * 0.9 WHERE Category = 'Accessories';
+
+ROLLBACK;
+```
+
+**Explanation:**
+
+* No changes are saved to the database.
+* Useful if a mistake occurs in a transaction or validation fails.
+
+---
+
+## **5. Practical Scenario Combining GRANT, REVOKE, COMMIT, and ROLLBACK**
+
+1. Create users:
+
+```sql
+CREATE USER analyst IDENTIFIED BY 'password';
+```
+
+2. Grant privileges:
+
+```sql
+GRANT SELECT, INSERT ON Customers TO analyst;
+```
+
+3. Analyst tries a transaction:
+
+```sql
+BEGIN TRANSACTION;
+INSERT INTO Customers (CustomerID, Name, Email) VALUES (5, 'Eva', 'eva@example.com');
+-- Suppose they make a mistake:
+ROLLBACK;  -- undo the insert
+```
+
+4. Revoke privileges after task completion:
+
+```sql
+REVOKE INSERT ON Customers FROM analyst;
+```
+
+**Key Takeaways:**
+
+* `GRANT` & `REVOKE` → control access rights.
+* `COMMIT` → permanently save changes.
+* `ROLLBACK` → undo mistakes.
+
+---
+
+# **SQL Tutorial – Deutsch**
+
+---
+
+## **1. GRANT – Berechtigungen vergeben**
+
+**Definition:**
+`GRANT` wird verwendet, um **einem Benutzer oder einer Rolle spezifische Rechte** auf Datenbankobjekte zu geben.
+
+**Syntax:**
+
+```sql
+GRANT privilege ON object TO user;
+```
+
+**Beispiel:**
+
+```sql
+-- SELECT- und INSERT-Rechte auf Tabelle Customers an 'analyst' vergeben
+GRANT SELECT, INSERT ON Customers TO analyst;
+```
+
+**Erklärung:**
+
+* `analyst` kann nun **lesen und einfügen**.
+* Ohne GRANT: Zugriff wird verweigert.
+
+---
+
+## **2. REVOKE – Berechtigungen entziehen**
+
+**Definition:**
+`REVOKE` entfernt zuvor gewährte Rechte.
+
+**Syntax:**
+
+```sql
+REVOKE privilege ON object FROM user;
+```
+
+**Beispiel:**
+
+```sql
+-- INSERT-Recht entziehen
+REVOKE INSERT ON Customers FROM analyst;
+```
+
+**Erklärung:**
+
+* `analyst` darf nicht mehr einfügen, SELECT bleibt möglich.
+
+---
+
+## **3. COMMIT – Änderungen speichern**
+
+**Definition:**
+`COMMIT` speichert alle Änderungen einer **Transaktion dauerhaft**.
+
+**Beispiel:**
+
+```sql
+BEGIN TRANSACTION;
+
+INSERT INTO Customers (CustomerID, Name, Email) VALUES (3, 'Charlie', 'charlie@example.com');
+UPDATE Products SET Price = Price * 1.1 WHERE Category = 'Electronics';
+
+COMMIT;
+```
+
+**Erklärung:**
+
+* Beide Anweisungen werden **dauerhaft gespeichert**.
+* Vor COMMIT können Änderungen noch zurückgenommen werden.
+
+---
+
+## **4. ROLLBACK – Änderungen zurücknehmen**
+
+**Definition:**
+`ROLLBACK` macht alle Änderungen der aktuellen Transaktion seit dem letzten COMMIT **rückgängig**.
+
+**Beispiel:**
+
+```sql
+BEGIN TRANSACTION;
+
+INSERT INTO Customers (CustomerID, Name, Email) VALUES (4, 'David', 'david@example.com');
+UPDATE Products SET Price = Price * 0.9 WHERE Category = 'Accessories';
+
+ROLLBACK;
+```
+
+**Erklärung:**
+
+* Änderungen werden **nicht gespeichert**.
+* Ideal bei Fehlern oder falschen Eingaben.
+
+---
+
+## **5. Praktisches Szenario**
+
+1. Benutzer erstellen:
+
+```sql
+CREATE USER analyst IDENTIFIED BY 'password';
+```
+
+2. Rechte vergeben:
+
+```sql
+GRANT SELECT, INSERT ON Customers TO analyst;
+```
+
+3. Benutzer führt Transaktion aus:
+
+```sql
+BEGIN TRANSACTION;
+INSERT INTO Customers (CustomerID, Name, Email) VALUES (5, 'Eva', 'eva@example.com');
+-- Fehler erkannt:
+ROLLBACK;  -- alles rückgängig
+```
+
+4. Rechte wieder entziehen:
+
+```sql
+REVOKE INSERT ON Customers FROM analyst;
+```
+
+**Zusammenfassung:**
+
+* **GRANT/REVOKE:** Zugriffsrechte steuern
+* **COMMIT:** Änderungen dauerhaft speichern
+* **ROLLBACK:** Änderungen rückgängig machen
+
+---
+
