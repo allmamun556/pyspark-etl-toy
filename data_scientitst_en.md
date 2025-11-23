@@ -1,9 +1,4 @@
 
-
-# ✅ **Interview-Ready Explanation of Your Job Experience**
-
----
-
 # **1. Data Scientist — ENERTRAG SE, Berlin, Germany (Nov 2022 – Present)**
 
 **Industry:** Renewable Energy, Wind Turbines, Power Generation
