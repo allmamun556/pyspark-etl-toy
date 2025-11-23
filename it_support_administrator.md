@@ -1,8 +1,4 @@
-Absolutely — I can rewrite your CV so it fits **IT Support / IT Administrator** positions while still using your technical strengths.
-Below is a **fully transformed IT Support / System Administrator CV** based on your experience.
-You can copy/paste it directly into your document.
-
----
+**IT Support / IT Administrator** 
 
 # **ABDULLAH ALL MAMUN**
 
@@ -146,21 +142,6 @@ Bengalisch (C2)
 
 ---
 
-# ⭐ NEXT STEP
-
-If you want, I can also create:
-
-✅ A short **IT-support-focused cover letter**
-✅ A shorter **one-page version**
-✅ A **German or English version**
-✅ Formatting in **ATS-optimized** style
-
-Just tell me!
-Natürlich! Hier sind **detaillierte, leicht verständliche und interview-taugliche Erklärungen** deiner **Berufserfahrungen — auf Deutsch**, aber speziell so formuliert, dass du sie **im Vorstellungsgespräch erzählen kannst**.
-
-Ich beschreibe **jede Position**, was du getan hast, welche Systeme du genutzt hast und *wie du diese Erfahrungen im IT-Support oder als IT-Administrator darstellen kannst*.
-
----
 
 # ✅ **1. ENERTRAG SE – Datenwissenschaftler / IT-Systembetreuung**
 
@@ -389,29 +370,7 @@ Hier hast du **klassische IT-Support-Aufgaben** gemacht: Installation, Konfigura
 
 ---
 
-# ⭐ **Wenn du willst, kann ich dir auch Folgendes erstellen:**
 
-✅ **Interview-Vorbereitung mit häufigen Fragen** für
-
-* IT-Support
-* IT-Administrator
-* System Engineer
-
-✅ **Antwortbeispiele speziell basierend auf DEINER Erfahrung**
-
-✅ **Kurzversion zum Auswendiglernen** (2 Minuten Pitch)
-
-Sag mir einfach:
-**„Bitte gib mir Interviewfragen und Antworten zu IT-Support / IT-Administrator basierend auf meinem Profil.“**
-Perfekt — hier bekommst du eine **komplette, praxisorientierte Interview-Vorbereitung** für:
-
-✅ **IT-Support (1st/2nd Level)**
-✅ **IT-Administrator / Systemadministrator**
-✅ **System Engineer**
-
-Dazu erhältst du **Antwortbeispiele**, die speziell auf **deine echten Erfahrungen** (ENERTRAG, John Deere, Linux, PostgreSQL, Docker, Monitoring, Python etc.) zugeschnitten sind.
-
----
 
 # ⭐ **TEIL 1 – Häufige Fragen für IT-Support + starke Antworten**
 
@@ -632,29 +591,6 @@ Linux:
 
 ---
 
-# ⭐ Wenn du möchtest, kann ich dir zusätzlich geben:
-
-🔥 **Ein komplettes Mock-Interview (Fragen & deine Antworten)**
-🔥 **Einen 2-Minuten Self-Pitch für den Start des Gesprächs**
-🔥 **Eine vollständige deutsche oder englische Antwortsammlung als PDF**
-
-Sag mir, was du möchtest!
-Gerne! Hier bekommst du ein **komplettes, leicht verständliches, praxisorientiertes Tutorial** auf Deutsch zu den wichtigsten Netzwerkprotokollen:
-
-* **TCP/IP**
-* **DNS**
-* **DHCP**
-* **VPN**
-
-Mit **detaillierten Erklärungen**, **Flow-Diagrammen**, **Praxisbeispielen** und **Interview-Relevanz**.
-
-Ich erkläre es so, dass du es
-👉 **für den Job**,
-👉 **für dein Interview**
-👉 **und für dein technisches Verständnis**
-nutzen kannst.
-
----
 
 # ⭐ **1. TCP/IP – Das Fundament der Netzwerke**
 
