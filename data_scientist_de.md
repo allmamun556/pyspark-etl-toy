@@ -700,3 +700,610 @@ Ich bin motiviert, schnell lernfähig und arbeite sehr gut im Team.“
 ### ✔ Eine maßgeschneiderte Version für eine konkrete Stellenanzeige
 
 Sag einfach Bescheid, was du als Nächstes brauchst!
+Gerne — hier sind **drei vollständige, detaillierte und interviewreife Data-Science-Projekte auf Deutsch**, perfekt abgestimmt auf deinen ursprünglichen **Data Scientist Lebenslauf** (ENERTRAG, John Deere, ML-/DL-Projekte).
+Diese Versionen kannst du **genauso im Vorstellungsgespräch erzählen**.
+
+---
+
+# ⭐ **PROJEKT 1 — Vorhersage der Windenergieproduktion mit LSTM (Zeitreihen & Deep Learning)**
+
+**Technologien:** Python, TensorFlow/Keras, Pandas, NumPy, SQL, SCADA-Daten
+**Basierend auf:** deiner Erfahrung bei **ENERTRAG**
+
+---
+
+## ✔ **Interview-Erklärung (ausführlich & professionell)**
+
+„In diesem Projekt habe ich ein Deep-Learning-Modell entwickelt, das die Windenergieproduktion von Windturbinen basierend auf SCADA-Zeitreihendaten vorhersagt.“
+
+---
+
+## 🔹 **1. Problemstellung (Business Problem)**
+
+Windenergie ist stark schwankend, daher benötigen Netzbetreiber präzise Prognosen, um:
+
+* die Stromnetze stabil zu halten
+* Straftermeidung wegen Fehlprognosen
+* die Energieeinspeisung effizient zu planen
+
+Traditionelle Modelle reichen nicht aus — daher LSTM.
+
+---
+
+## 🔹 **2. Datenaufbereitung**
+
+Ich habe mit typischen SCADA-Sensordaten gearbeitet:
+
+* Windgeschwindigkeit
+* Windrichtung
+* Rotordrehzahl
+* Temperaturwerte
+* Aktive Leistung
+* Turbinenbetriebsmodus
+
+SCADA-Daten sind **extrem verrauscht**.
+
+Ich habe eine komplexe Preprocessing-Pipeline aufgebaut:
+
+* Resampling auf feste Zeitintervalle
+* Glätten und Entfernen von Ausreißern
+* Interpolation fehlender Werte
+* Korrektur von Sensor-Drift
+* Normalisierung aller Features
+* Sliding-Window-Generierung für LSTM
+
+---
+
+## 🔹 **3. Modelltraining (LSTM)**
+
+Ich habe verschiedene Modelle verglichen:
+
+* ARIMA (Baseline)
+* Random Forest / XGBoost
+* **LSTM & Bi-LSTM**
+
+Das beste Modell war ein **mehrschichtiges LSTM**:
+
+* 3 LSTM-Layer
+* Dropout gegen Overfitting
+* Adam Optimizer
+* RMSE und MAE als Metriken
+
+---
+
+## 🔹 **4. Ergebnis**
+
+* **15 % höhere Prognosegenauigkeit**
+* Endgültiges **RMSE = 0.12**
+* Stabile Vorhersagen für reale Betriebsentscheide
+
+---
+
+## 🔹 **5. Geschäftlicher Nutzen**
+
+* exaktere Energieeinspeiseplanung
+* geringere Strafterme
+* höhere Netzstabilität
+* Unterstützung des Dispatch-Teams
+
+Dieses Projekt zeigt deine Stärke in:
+
+* Zeitreihenanalyse
+* Deep Learning
+* industriellen ML-Anwendungen
+* End-to-End-ML-Prozessen
+
+---
+
+# ⭐ **PROJEKT 2 — Anomalieerkennung für Windturbinen (Unsupervised ML + Autoencoder)**
+
+**Technologien:** Python, TensorFlow, Scikit-learn, Clustering, statistische Verfahren
+**Basierend auf:** deiner Erfahrung bei **ENERTRAG**
+
+---
+
+## ✔ **Interview-Erklärung (strukturiert & tiefgehend)**
+
+„Ich habe ein hybrides Anomalieerkennungssystem entwickelt, das abnormalen Turbinenbetrieb erkennt, bevor Ausfälle auftreten.“
+
+---
+
+## 🔹 **1. Hintergrund / Problemstellung**
+
+Windturbinen haben regelmäßige Probleme:
+
+* Temperaturanstiege
+* Vibrationsanomalien
+* Leistungsabfall
+* Sensorfehler
+
+Anomalien früh zu erkennen bedeutet:
+
+* weniger Stillstand
+* geringere Reparaturkosten
+* bessere Wartungsplanung
+
+---
+
+## 🔹 **2. Datenvorbereitung**
+
+Ich verarbeitete mehrere Sensorkanäle:
+
+* Temperatur
+* Leistung
+* Druck
+* Wind
+* Rotor RPM
+
+Preprocessing:
+
+* Ausreißerentfernung
+* Glättung verrauschter Sensorwerte
+* Zeitfensterbildung für Zeitreihen
+* Korrelationen analysieren
+* Feature Engineering (z. B. thermische Abweichungen, Power-Curve-Fehler)
+
+---
+
+## 🔹 **3. ML-Ansatz (Hybrid-System)**
+
+Ich kombinierte **statistische Verfahren, klassische ML und Deep Learning**.
+
+### **Unsupervised ML**
+
+* K-Means
+* DBSCAN
+* Isolation Forest
+* LOF (Local Outlier Factor)
+
+### **Deep Learning (Autoencoder)**
+
+* Sequenz-Autoencoder zur Rekonstruktion
+* Rekonstruktionsfehler = Anomaliewahrscheinlichkeit
+
+### **Statistische Methoden**
+
+* Rolling Z-Score
+* Moving Window Variance
+* Control Charts
+
+---
+
+## 🔹 **4. Ergebnisse**
+
+Das System konnte:
+
+* Temperaturspitzen früh vorhersagen
+* Leistungsabweichungen erkennen
+* Sensorfehler automatisch melden
+
+Validierung erfolgte über:
+
+* historische Ausfalllogs
+* Wartungsberichte
+* bekannte Störfälle
+
+---
+
+## 🔹 **5. Wert für das Unternehmen**
+
+* **40 % weniger Turbinenausfälle**
+* Früherkennung kritischer Fehler
+* Reduzierte Wartungskosten
+* Verbesserte Zuverlässigkeit des Netzbetriebs
+
+Dieses Projekt zeigt deine Fähigkeiten in:
+
+* Unüberwachtem ML
+* Deep Learning für Anomalieerkennung
+* SCADA-Datenanalyse
+* Qualitätssteigerung in Industrie-ML
+
+---
+
+# ⭐ **PROJEKT 3 — Ernteertragsvorhersage mit Satellitenbildern (Geospatial Deep Learning)**
+
+**Technologien:** TensorFlow/Keras, GeoPandas, Rasterdaten, ArcGIS, PostgreSQL
+**Basierend auf:** deiner Erfahrung bei **John Deere**
+
+---
+
+## ✔ **Interview-Erklärung (professionell & praxisnah)**
+
+„Bei John Deere habe ich ein ML-Modell entwickelt, das Ernteerträge basierend auf Satellitenbildern und Erntedaten vorhersagt.“
+
+---
+
+## 🔹 **1. Problemstellung**
+
+Landwirte brauchen genaue Prognosen, um:
+
+* Dünge- und Bewässerungspläne zu optimieren
+* Kosten zu reduzieren
+* Erträge besser zu planen
+
+Geodaten liefern Informationen über den Zustand von Pflanzen (Vegetationsindex, Biomasse usw.).
+
+---
+
+## 🔹 **2. Datenerhebung & -aufbereitung**
+
+Ich habe kombiniert:
+
+* Satellitenbilder (Rasterdaten: NDVI, EVI, RGB)
+* GPS-basierte Erntemessungen
+* Feldgrenzen (Shapefiles)
+* Boden- und Höheninformationen
+
+Mit **GeoPandas + ArcGIS** habe ich:
+
+* Raster in Felder geschnitten
+* pixelbasierte Features berechnet
+* Vegetationsindices extrahiert
+* geospatial joins durchgeführt
+
+---
+
+## 🔹 **3. Modellentwicklung**
+
+Ich habe ein **CNN-basiertes Modell** entwickelt.
+
+### **Architektur:**
+
+* Convolutional Layers zur Extraktion visueller Muster
+* Dense Layers zur Kombination von Umweltfaktoren
+* Regression Layer für den Ertrag
+
+Verglichene Modelle:
+
+* Random Forest
+* XGBoost
+* Linear Regression
+
+CNN erzielte die besten Ergebnisse.
+
+---
+
+## 🔹 **4. Ergebnisse**
+
+* **RMSE = 0.89**
+* Identifikation schwach wachsender Felder
+* Präzise Prognosen für Ernteplanung
+
+---
+
+## 🔹 **5. Nutzen**
+
+* Weniger manuelle Feldkontrollen
+* Frühzeitige Erkennung von Trockenstress
+* Höhere Planungssicherheit für Landwirte
+
+Dieses Projekt zeigt deine Stärken in:
+
+* Bildverarbeitung
+* Geodatenanalyse
+* Deep Learning im Real-World-Kontext
+* ML-Einsatz in der Landwirtschaft
+
+---
+
+# 🎯 **Zusammenfassung — 3 starke Data-Science-Projekte für dein Interview**
+
+| Projekt                          | Bereich                      | Technologien                      |
+| -------------------------------- | ---------------------------- | --------------------------------- |
+| **LSTM Wind Energy Forecasting** | Zeitreihen, DL, Industrie    | TensorFlow, Keras, SCADA          |
+| **Turbine Anomaly Detection**    | Unsupervised ML, Autoencoder | Python, Clustering, Deep Learning |
+| **Crop Yield Prediction**        | Geospatial, DL, Rasterdaten  | CNN, GeoPandas, ArcGIS            |
+
+---
+
+# 🔥 Wenn du willst, kann ich dir auch erstellen:
+
+### ✔ kurze (30 Sekunden) Version für jedes Projekt
+
+### ✔ technische Deep-Dive-Version
+
+### ✔ typische Rückfragen + idealen Antworten
+
+### ✔ ein komplettes Mock-Interview für Data Scientist
+
+Sag einfach Bescheid!
+Natürlich — hier sind **drei vollständige, professionelle und interviewreife BI-/Data-Analyst-Projekte auf Deutsch**, basierend auf deinem Lebenslauf.
+Diese Erklärungen kannst du **genau so** im Vorstellungsgespräch verwenden.
+
+---
+
+# ⭐ **PROJEKT 1 — Interaktives Power BI Dashboard zur SCADA-Leistungsüberwachung**
+
+**Technologien:** Power BI, SQL, Python, InfluxDB, DAX, Excel
+**Basierend auf:** deiner Rolle bei ENERTRAG
+
+---
+
+## ✔ **Interview-Erklärung (klar, strukturiert, professionell)**
+
+„In diesem Projekt habe ich ein interaktives Power-BI-Dashboard entwickelt, um die Leistung von Windenergieanlagen in Echtzeit zu überwachen. Ziel war es, den Ingenieuren und dem Management eine schnelle und datenbasierte Entscheidungsgrundlage zu geben.“
+
+---
+
+## 🔹 **1. Datensammlung & -vorbereitung**
+
+Ich arbeitete mit großen Mengen an SCADA-Zeitreihendaten, die aus:
+
+* InfluxDB
+* MS SQL Server
+* API-Datenquellen
+* Excel/CSV
+
+stammten.
+
+Meine Aufgaben:
+
+* Bereinigung fehlerhafter oder fehlender Sensorwerte
+* Einheitliche Zeitstempel
+* Aggregation der Zeitserien
+* SQL-Joins für Standort- und Turbinendaten
+* Erstellung eines sinnvollen Datenmodells (Star Schema)
+
+Ich definierte außerdem wichtige KPIs:
+
+* Energieertrag
+* Verfügbarkeit
+* Temperaturverhalten
+* Effizienzkennzahlen (Wind → Leistung)
+
+---
+
+## 🔹 **2. DAX & Datenmodellierung**
+
+Ich entwickelte:
+
+* komplexe DAX-Measures
+* Zeitintelligenz-Berechnungen (Rolling Averages, YoY, MoM)
+* berechnete Spalten
+* KPI-Logiken für Anomalien
+* ein optimiertes Datenmodell für schnelles Rendering
+
+---
+
+## 🔹 **3. Dashboard-Aufbau**
+
+Das Dashboard bestand aus:
+
+* **Echtzeit-Monitoring Seite**
+* **Historische Analyse**
+* **Standort-/Turbinenvergleich**
+* **Anomalie-Übersicht**
+* **Wetter-vs-Leistung Analyse**
+
+Funktionen:
+
+* Drill-Down
+* Slicer (Datum, Turbine, Standort)
+* Bookmarks
+* Benachrichtigungslogik
+* Automatische Datenaktualisierung
+
+---
+
+## 🔹 **4. Geschäftlicher Nutzen**
+
+* Von **15+ Stakeholdern** täglich genutzt
+* Schnellere Identifikation von Fehlverhalten
+* Effizientere Wartungsentscheidungen
+* Vollständig automatisierte Berichte
+
+---
+
+## ⭐ **Warum dieses Projekt stark im Interview ist**
+
+Es zeigt deine Fähigkeiten in:
+
+* Power BI
+* SQL & Datenmodellierung
+* KPI-Definition
+* Visual Analytics
+* Zusammenarbeit mit Business-Stakeholdern
+
+---
+
+# ⭐ **PROJEKT 2 — ETL-Pipeline für Wetterdaten (API → Python → PostgreSQL → BI)**
+
+**Technologien:** Python, API-Integration, PostgreSQL, SQL, ETL, Airflow (optional), Tableau/Power BI
+**Basierend auf:** deinem Wetter-ETL Projekt
+
+---
+
+## ✔ **Interview-Erklärung**
+
+„Ich habe eine automatisierte ETL-Pipeline entwickelt, die Wetterdaten aus einer API extrahiert, bereinigt, transformiert und in eine PostgreSQL-Datenbank lädt. Diese Daten werden anschließend für Forecasting- und BI-Analysen genutzt.“
+
+---
+
+## 🔹 **1. Extraction (API-Abruf)**
+
+Mit Python rief ich stündlich Wetterdaten wie:
+
+* Temperatur
+* Luftfeuchtigkeit
+* Windgeschwindigkeit
+* Luftdruck
+* Niederschlag
+
+ab.
+
+Ich implementierte:
+
+* API-Authentifizierung
+* Fehler- und Ausnahmebehandlung
+* automatisierte Retry-Strategien
+* Logging
+
+---
+
+## 🔹 **2. Transformation**
+
+Datenbereinigung:
+
+* Umgang mit fehlenden Werten
+* Konvertieren von Einheiten (z. B. m/s → km/h)
+* Outlier Detection
+* Strukturierung in ein relationales Schema
+* Erstellung zusätzlicher Features (z. B. Heat Index)
+
+---
+
+## 🔹 **3. Load in PostgreSQL**
+
+Ich habe:
+
+* Tabellen für Fakt- und Dimensionsebene erstellt
+* Indizes zur Beschleunigung von Abfragen gebaut
+* Partitionslogik für Zeitreihen integriert
+* Daten konsistent geladen (Upsert-Prozesse)
+
+---
+
+## 🔹 **4. Automatisierung (optional: Airflow)**
+
+Ein Airflow-DAG bestand aus:
+
+* Datenabruf
+* Transformation
+* Datenvalidierung
+* Laden
+* Benachrichtigungen bei Fehlern
+
+---
+
+## 🔹 **5. BI-Nutzung**
+
+Die Daten wurden später genutzt für:
+
+* Wetter- vs. Energie-Leistungsanalyse
+* Dashboards (Power BI / Tableau)
+* Zeitreihenmodelle / Forecasting
+
+---
+
+## ⭐ **Geschäftlicher Mehrwert**
+
+* Zuverlässige Wetterdaten für Energie-Analysen
+* Höhere Forecasting-Genauigkeit
+* Eliminierung manueller Arbeit
+* Stabile und wiederholbare ETL-Prozesse
+
+---
+
+# ⭐ **PROJEKT 3 — Spotify Nutzungsverhalten Dashboard (ETL + Analytics + Visualisierung)**
+
+**Technologien:** Python, SQL, Tableau/Power BI, Spotify API, OAuth 2.0
+**Basierend auf:** deinem Spotify Dashboard Projekt
+
+---
+
+## ✔ **Interview-Erklärung**
+
+„Dieses Projekt zeigt meine Fähigkeit, ETL-Prozesse, API-Integration und Datenvisualisierung zu kombinieren. Ich habe ein Dashboard entwickelt, das das Hörverhalten von Spotify-Nutzern analysiert und visuell aufbereitet.“
+
+---
+
+## 🔹 **1. Datenextraktion über die Spotify API**
+
+Mit OAuth 2.0 authentifizierte ich den Nutzer und extrahierte:
+
+* zuletzt gespielte Songs
+* Song-Eigenschaften (Tempo, Lautstärke, Energielevel)
+* Genre-Informationen
+* Hörzeiten (Timestamp)
+* Künstler und Alben
+
+Ich implementierte:
+
+* Token-Refresh
+* Pagination
+* Fehlerbehandlung
+
+---
+
+## 🔹 **2. Transformation**
+
+In Python habe ich:
+
+* Duplikate entfernt
+* Zeitstempel normalisiert
+* Künstler → Genre Mappings erstellt
+* KPIs entwickelt, z. B.:
+
+  * meistgehörte Genres
+  * Peak Listening Times
+  * Anzahl Sessions pro Tag
+  * Musikpräferenz nach Stimmung (Audio Features)
+
+---
+
+## 🔹 **3. Laden in PostgreSQL / CSV**
+
+Ich habe ein Schema erstellt mit:
+
+* fact_listening
+* dim_track
+* dim_artist
+* dim_time
+
+---
+
+## 🔹 **4. Dashboard-Erstellung**
+
+In Power BI oder Tableau:
+
+* Balkendiagramme
+* Heatmaps (Hörzeiten pro Wochentag)
+* Genre-Trends
+* Top Artists/Tracks
+* Eine „Listening Personality“ Analyse
+
+---
+
+## ⭐ **Mehrwert**
+
+* Sehr gutes Showcase-Projekt
+* Kombiniert Datenanalyse + Storytelling
+* Demonstriert API-Integration, ETL, Visualisierung
+* Perfekt für BI-/Analytics-Interviews
+
+---
+
+# 🎯 **Damit hast du jetzt 3 perfekte Projekte für jedes BI/Data-Analyst Interview**
+
+### ✔ Power BI SCADA Performance Dashboard
+
+### ✔ Wetterdaten-ETL-Pipeline (API → SQL → BI)
+
+### ✔ Spotify User Behaviour Dashboard
+
+Alle drei Projekte zeigen:
+
+* Business Intelligence
+* SQL
+* Datenmodellierung
+* ETL
+* Dashboarding
+* KPI-Analyse
+* Stakeholder-Mehrwert
+
+---
+
+# 🔥 Wenn du möchtest, kann ich dir zusätzlich liefern:
+
+### ✔ 30-Sekunden Kurzversionen pro Projekt
+
+### ✔ Typische Interviewfragen + perfekte Antworten
+
+### ✔ „Tell me about yourself“ (BI/Analyst Version)
+
+### ✔ SQL Interviewfragen mit Musterantworten
+
+### ✔ Ein komplettes Übungs-Mock-Interview
+
+Sag mir einfach Bescheid!

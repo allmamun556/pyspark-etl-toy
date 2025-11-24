@@ -248,13 +248,6 @@ Z. B. "Ab sofort" oder Datum.
 
 ---
 
----
-
-Alles klar — hier bekommst du **vollständige, realistische und professionell formulierte Beispielantworten für *alle* HR-Fragen**, perfekt zugeschnitten auf **dein Profil** und **die Stelle als (Junior) Consultant Process Intelligence bei CONET**.
-
-Ich habe die Antworten so geschrieben, dass du sie direkt für das Interview nutzen kannst.
-
----
 
 # ✅ **1. Persönliche & Motivationsfragen – Beispielantworten**
 

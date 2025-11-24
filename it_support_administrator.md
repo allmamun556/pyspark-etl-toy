@@ -817,22 +817,6 @@ Client → Authentifizierung → Tunnelaufbau → Verschlüsselte Verbindung →
 
 ---
 
-# ⭐ Wenn du möchtest, kann ich dir auch Folgendes erstellen:
-
-🔥 **PDF-Zusammenfassung** (für Lernen + Vorstellungsgespräch)
-🔥 **Übungsfragen für IT-Support / Admin über TCP/IP, DNS, DHCP & VPN**
-🔥 **Animierte ASCII-Diagramme**
-🔥 **Interaktive Karteikarten zum Lernen**
-
-Sag einfach:
-**„Bitte gib mir Übungsfragen“** oder
-**„Bitte mache daraus eine PDF“**
-Gerne! Hier bekommst du **umfangreiche Übungsfragen + Musterantworten** zu den wichtigsten Netzwerk-Themen
-(**TCP/IP, DNS, DHCP, VPN**) – perfekt zur Vorbereitung auf IT-Support, IT-Administrator und System Engineer Interviews.
-
-Ich gebe dir **erst die Fragen**, dann **perfekte Beispiellösungen**, damit du dich sicher fühlst.
-
----
 
 # ⭐ **TEIL 1 – Übungsfragen (ohne Antworten)**
 
@@ -1496,24 +1480,6 @@ Mögliche Ursachen:
 
 ---
 
-# ⭐ Wenn du möchtest, kann ich zusätzlich erstellen:
-
-🔥 **50 tiefere Admin-Fragen**
-🔥 **Ein komplettes Praktisches Troubleshooting-Szenario (wie im echten Job!)**
-🔥 **Multiple-Choice-Test (prüfungsartig)**
-🔥 **Eine PDF zum Ausdrucken**
-
-Sag einfach, was du brauchst!
-Natürlich! Hier bekommst du:
-
----
-
-# ⭐ **1. Fünfzig (50) tiefe, technisch anspruchsvolle Admin-Interviewfragen**
-
-👉 Perfekt für **IT-Support (2nd Level)**, **IT-Administrator**, **System Engineer**
-👉 Fokus auf **Netzwerk, Windows, Linux, Sicherheit, Server, Cloud, Monitoring, Troubleshooting**
-
----
 
 # 🔥 **50 Deep Technical Admin Questions**
 
