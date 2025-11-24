@@ -1,208 +1,144 @@
 Understood.
-Since your GitHub is **not rendering LaTeX** (this happens when GitHub math rendering is not enabled OR the environment does not support it), then the **ONLY format that works 100% everywhere** is:
+You want **pure double-dollar LaTeX blocks**, with **no Markdown fences**, **no backticks**, and **no formatting that breaks on copy**.
 
-# ✅ **Plain-Text Math (No LaTeX, No Dollar Signs, No Fenced Blocks)**
+✔ Only this format:
 
-✔ Always works
-✔ Copy-paste safe
-✔ Visible everywhere
-✔ No rendering issues
+```
+$$
+<equation>
+$$
+```
 
-So I will now rewrite **Linear Regression** using **pure text equations** that will **never break** on GitHub, VSCode, or any Markdown viewer.
+✔ AND when you use the GitHub “copy” button, it should **copy exactly the double-dollar block**.
+
+Below is the **Linear Regression tutorial** written ONLY using **double-dollar LaTeX** (no wrappers, no indenting that breaks the copy).
 
 ---
 
-# 📘 **Linear Regression — Plain Mathematical Explanation (GitHub Safe)**
+# ✅ **Linear Regression With Double-Dollar LaTeX Blocks**
 
-Below is the **fully compatible version**.
+## ⭐ Simple Linear Regression
 
----
-
-# 1️⃣ **Simple Linear Regression Equation**
-
-```
-y_hat = m*x + b
-```
-
-Where:
-
-* y_hat = predicted value
-* x = input
-* m = slope
-* b = intercept
+$$
+\hat{y} = mx + b
+$$
 
 ---
 
-# 2️⃣ **Mean Squared Error (Cost Function)**
+## ⭐ Cost Function (Mean Squared Error)
 
-```
-J(m, b) = (1 / (2n)) * Σ (y_hat(i) – y(i))^2
-```
-
-Where:
-
-* n = number of samples
-* Σ = sum over all samples
-* y_hat(i) = predicted output
-* y(i) = actual output
+$$
+J(m,b) = \frac{1}{2n} \sum_{i=1}^{n} (\hat{y}^{(i)} - y^{(i)})^2
+$$
 
 ---
 
-# 3️⃣ **Gradient Descent Update Rules**
+## ⭐ Gradient Descent Update Rules
 
 Slope update:
-
-```
-m = m – alpha * (1/n) * Σ( (y_hat(i) – y(i)) * x(i) )
-```
+$$
+m := m - \alpha \frac{\partial J}{\partial m}
+$$
 
 Intercept update:
-
-```
-b = b – alpha * (1/n) * Σ( (y_hat(i) – y(i)) )
-```
-
-Where:
-
-* alpha = learning rate
+$$
+b := b - \alpha \frac{\partial J}{\partial b}
+$$
 
 ---
 
-# 4️⃣ **Normal Equation (Closed-Form Solution)**
+## ⭐ Gradients
 
-(Plain-text version — copy/paste works everywhere)
+Derivative with respect to ( m ):
 
-```
-w = inverse( X^T * X ) * X^T * y
-```
+$$
+\frac{\partial J}{\partial m}
+= \frac{1}{n} \sum_{i=1}^{n} (\hat{y}^{(i)} - y^{(i)}) x_i
+$$
 
-Where:
+Derivative with respect to ( b ):
 
-* X = feature matrix
-* X^T = transpose of X
-* y = target vector
+$$
+\frac{\partial J}{\partial b}
+= \frac{1}{n} \sum_{i=1}^{n} (\hat{y}^{(i)} - y^{(i)})
+$$
 
 ---
 
-# 5️⃣ **Worked Example (Step by Step)**
+## ⭐ Closed-Form Solution (Normal Equation)
 
-Dataset:
+$$
+w = (X^{T}X)^{-1} X^{T} y
+$$
 
-| x (hours) | y (score) |
-| --------- | --------- |
-| 1         | 2         |
-| 2         | 4         |
-| 3         | 5         |
-| 4         | 4         |
-| 5         | 5         |
+---
 
-Means:
+## ⭐ Slope and Intercept Example
 
-```
-mean_x = 3
-mean_y = 4
-```
+Slope:
 
-Slope m formula:
-
-```
-m = Σ( (x(i)-mean_x) * (y(i)-mean_y) ) / Σ( (x(i)-mean_x)^2 )
-```
-
-After plugging in numbers:
-
-```
-m = 0.7
-```
+$$
+m =
+\frac{
+\sum_{i=1}^{n}
+(x_i - \bar{x})(y_i - \bar{y})
+}{
+\sum_{i=1}^{n}
+(x_i - \bar{x})^2
+}
+$$
 
 Intercept:
 
-```
-b = mean_y – m*mean_x
-b = 4 – (0.7 * 3) = 1.9
-```
+$$
+b = \bar{y} - m\bar{x}
+$$
 
-Final model:
+Final model example:
 
-```
-y_hat = 0.7*x + 1.9
-```
+$$
+\hat{y} = 0.7x + 1.9
+$$
 
-Prediction (x = 6):
+Prediction:
 
-```
-y_hat = 0.7*6 + 1.9 = 6.1
-```
+$$
+\hat{y} = 0.7 \cdot 6 + 1.9 = 6.1
+$$
 
 ---
 
-# 6️⃣ **Multiple Linear Regression**
+## ⭐ Multiple Linear Regression
 
-Model:
+Equation:
 
-```
-y_hat = w1*x1 + w2*x2 + ... + wn*xn + b
-```
+$$
+\hat{y} = w_1x_1 + w_2x_2 + \dots + w_nx_n + b
+$$
 
 Vector form:
 
-```
-y_hat = X * w + b
-```
+$$
+\hat{y} = Xw + b
+$$
 
 ---
 
-# 7️⃣ **When to Use Linear Regression**
+# 🎉 **ALL equations above are pure double-dollar LaTeX.**
 
-Use it when:
-
-* Relationship between x and y is approximately linear
-* Data does not have strong outliers
-* You need a simple and interpretable model
-* You want fast training
+If you copy using GitHub’s "copy" button, it will paste EXACTLY in this format.
 
 ---
 
-# 8️⃣ **When NOT to Use Linear Regression**
+If this works, I can now rewrite:
 
-Avoid it when:
+✔ ANN formulas
+✔ CNN formulas
+✔ RNN + LSTM equations
+✔ Autoencoder formulas
+✔ Logistic Regression
+✔ Backpropagation equations
 
-* Data is non-linear
-* Too many categorical variables
-* Many outliers
-* Features are highly correlated
-* Problem is classification (use logistic regression instead)
+**ALL in the same perfect double-dollar block format.**
 
----
-
-# 🎉 Summary (Copy/paste safe)
-
-```
-Simple Linear Regression:
-    y_hat = m*x + b
-
-Cost Function:
-    J = (1/(2n)) * Σ(y_hat - y)^2
-
-Gradient Descent:
-    m = m – alpha*(1/n)*Σ( (y_hat - y)*x )
-    b = b – alpha*(1/n)*Σ( y_hat - y )
-
-Normal Equation:
-    w = inverse( X^T * X ) * X^T * y
-```
-
----
-
-# 🔥 **THIS VERSION WILL WORK ON ALL GITHUB MARKDOWN FILES.**
-
-No LaTeX. No dollar signs. No fenced math blocks. No rendering issues.
-
----
-
-If you want:
-
-✅ A GitHub-ready `.md` file
-✅ Linear Regression with charts
-✅ Python implementation (NumPy + sklearn)
-Just tell me!
+Just tell me what you want next.
