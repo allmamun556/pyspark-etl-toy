@@ -497,3 +497,1361 @@ If you want, I can also explain:
 * How CPU utilization behaves
 
 Just tell me!
+
+
+Here’s a clear explanation of what your code is doing **step by step**, followed by an explanation of **single threading vs. single processing**.
+
+---
+
+# ✅ **What Your Code Does**
+
+## **1. Imports and parameters**
+
+```python
+from time import sleep, perf_counter
+```
+
+* `perf_counter()` gives a very precise timer → used to measure execution time.
+* `sleep()` pauses the program for a moment.
+
+```python
+num_iterations = 12*10**7
+num_tasks = 1
+```
+
+* The program will run a loop **120,000,000 times**.
+* `num_tasks = 1` → only one task runs.
+
+---
+
+## **2. Prints header**
+
+This is just to explain later console output.
+
+---
+
+## **3. Defines a task**
+
+```python
+def task(id):
+    result = 0
+    print(f'T={perf_counter() - start_time: 8.3f}s : START {id}')
+    for _ in range(num_iterations):
+        result += 1
+    print(f'T={perf_counter() - start_time: 8.3f}s : END {id}')
+    return result
+```
+
+### What happens inside `task()`?
+
+* It prints a **start message** with a timestamp.
+* Runs a heavy CPU loop:
+
+  * counts from 0 to 120 million (very expensive).
+* Prints an **end message** when finished.
+* Returns the computed number (though unused later).
+
+---
+
+## **4. Records start time**
+
+```python
+start_time = perf_counter()
+```
+
+---
+
+## **5. Executes tasks in order**
+
+```python
+for n in range(1, 1 + num_tasks):
+    task(n)
+    sleep(0.1)
+```
+
+Since `num_tasks = 1`, it runs only:
+
+* `task(1)`
+* then sleeps for 0.1 seconds.
+
+If you set `num_tasks = 3`, tasks would execute **one by one**, never in parallel:
+
+```
+task 1 → sleep 0.1 → task 2 → sleep 0.1 → task 3 …
+```
+
+---
+
+## **6. Calculates and prints total runtime**
+
+```python
+end_time = perf_counter()
+print(f'It took {end_time- start_time: 0.3f} second(s) to complete.')
+```
+
+---
+
+# 📌 **Summary of What Is Happening**
+
+* A timer starts.
+* The program runs a CPU-heavy loop (counting to 120 million).
+* The task prints when it starts and ends.
+* After finishing, it reports the total time.
+
+This is a good demonstration of "how long one expensive CPU task takes."
+
+---
+
+# 🧠 **Single Threading vs. Single Processing**
+
+These two terms are often confused. Here’s the difference:
+
+---
+
+# 🔹 **1. Single Processing (Single Process)**
+
+A **process**:
+
+* is an independent program
+* has its own memory space
+* contains one or more threads
+
+### Single process = only one program running.
+
+### Your program is using **one process**.
+
+---
+
+# 🔹 **2. Single Threading (Single Thread)**
+
+A **thread**:
+
+* is the smallest unit of execution inside a process
+
+### Single-threaded = can only do one thing at a time.
+
+Python's default is **single-threaded** (especially for CPU-bound tasks due to the GIL).
+
+### Your program is **single-threaded**:
+
+* It executes `task(n)` → finishes → then moves on
+* It cannot run two tasks at the same time
+
+---
+
+# 🆚 **Difference in simple terms**
+
+| Concept              | Meaning                             | Your Program                     |
+| -------------------- | ----------------------------------- | -------------------------------- |
+| **Single Process**   | Only one program running            | ✔️ One running process           |
+| **Single Thread**    | Only one execution path             | ✔️ One thread computing the loop |
+| **Multi-threading**  | Multiple threads inside one process | ❌ Not used                       |
+| **Multi-processing** | Multiple processes running at once  | ❌ Not used                       |
+
+---
+
+# 🧩 **Why this matters?**
+
+### In **single-threading**, your long loop blocks EVERYTHING:
+
+* only one task runs at a time
+* the CPU cannot do another Python thread in parallel
+
+### In **multi-processing**, each process gets its own CPU core
+
+You could run:
+
+* task 1 on core 1
+* task 2 on core 2
+* task 3 on core 3
+
+This **speeds up CPU-heavy workloads** dramatically.
+
+---
+
+# If you want, I can:
+
+✅ rewrite this code using **multi-threading**
+or
+✅ rewrite it using **multi-processing** to make it much faster
+
+Just tell me!
+Sure! Here is a **clear, simple, step-by-step explanation** of your multiprocessing code — what happens, why it works, and what each part does.
+
+---
+
+# ✅ **High-Level Explanation**
+
+This program:
+
+* creates one or more **separate processes**
+* each process runs a heavy CPU loop (counting to 120 million)
+* processes run **in parallel**, using multiple CPU cores
+* the program measures how long everything takes
+
+This is a demonstration of **multiprocessing**.
+
+---
+
+# ✅ **Step-by-Step Breakdown**
+
+## **1. Imports**
+
+```python
+from time import sleep, perf_counter
+import multiprocessing
+```
+
+* `perf_counter()` → precise timer
+* `sleep()` → small pause
+* `multiprocessing` → to create multiple independent processes
+
+---
+
+# **2. Program parameters**
+
+```python
+num_iterations = 12*10**7
+num_tasks = 1
+```
+
+* Each task will count to **120,000,000** (very CPU expensive)
+* `num_tasks = 1` → only one process will be created
+  (If you change this to 2 or 4, it will run multiple tasks in parallel)
+
+---
+
+# **3. Header information**
+
+```python
+print('=======================================\n\n')
+```
+
+Just printing a separator.
+
+---
+
+# **4. Define the task**
+
+```python
+def task():
+    result = 0
+    for _ in range(num_iterations):
+        result += 1
+    return result
+```
+
+This function is the heavy workload:
+
+* A loop with **120 million** iterations
+* It adds 1 to `result` each time
+* CPU-bound work → perfect for multiprocessing
+* Notice:
+
+  * No printing inside the task
+  * Each process will run this function independently
+
+---
+
+# **5. Start of the main program**
+
+```python
+if __name__ == '__main__':
+```
+
+This is required on Windows/macOS to avoid unwanted process duplication.
+
+---
+
+# **6. Measure start time**
+
+```python
+start_time = perf_counter()
+```
+
+Used later to calculate total runtime.
+
+---
+
+# **7. Create process objects**
+
+```python
+procs = []
+for n in range(1, 1 + num_tasks):
+    p = multiprocessing.Process(target = task)
+    procs.append(p)
+```
+
+### What happens here?
+
+* Loop creates `num_tasks` number of processes
+* Each process will run the function `task()`
+* Nothing is executed yet — the processes are **created but not started**
+* They are stored in a list `procs`
+
+Example (if num_tasks=3):
+
+```
+Process 1 created
+Process 2 created
+Process 3 created
+```
+
+---
+
+# **8. Start each process**
+
+```python
+for p in procs:
+    p.start()
+    print(f'T={perf_counter() - start_time: 8.3f}s : New process started')
+    sleep(0.1)
+```
+
+### What this does:
+
+* `p.start()` launches the process
+* Now each process runs **task() in parallel**
+* The parent program prints a message
+* `sleep(0.1)` adds a small delay so messages don’t overlap
+
+If `num_tasks = 4`, then all 4 tasks start within ~0.4 seconds.
+
+⚠️ Important:
+Each process is running a separate Python interpreter using **another CPU core**.
+
+---
+
+# **9. Wait for all processes to finish**
+
+```python
+for p in procs:
+    p.join()
+    print(f'T={perf_counter() - start_time: 8.3f}s : Process completed')
+```
+
+`p.join()` → the parent process **waits** until child `p` finishes.
+
+This ensures:
+
+* all processes complete their work before continuing
+* you don’t calculate total time too early
+
+A "Process completed" message prints for each.
+
+---
+
+# **10. Measure end time**
+
+```python
+end_time = perf_counter()
+```
+
+---
+
+# **11. Print total duration**
+
+```python
+print(f'It took {end_time- start_time: 0.3f} second(s) to complete.')
+```
+
+This gives the full runtime from:
+
+* creation
+* starting
+* processing
+* completion
+
+---
+
+# 🎯 **What Is Happening Overall?**
+
+1. You create `num_tasks` processes
+2. Each process runs the heavy CPU loop **at the same time**
+3. This uses multiple CPU cores
+4. Program waits for all processes
+5. Reports the total time
+
+This is **much faster** than single-threaded execution for CPU-bound tasks.
+
+---
+
+# 📌 **If you like, I can also explain:**
+
+* Why multiprocessing is faster than multithreading in Python
+* How to modify this code to use all CPU cores automatically
+* How to collect results from each process
+* How to speed it up further with multiprocessing pools
+
+Just tell me!
+Sure — here are the **three explanations** you asked for, written clearly and simply, with examples.
+
+---
+
+# ✅ 1. **Why multiprocessing is faster than multithreading in Python**
+
+### **Python Threads have a big limitation: the GIL**
+
+Python has something called the **GIL (Global Interpreter Lock)**.
+The GIL allows **only one thread to execute Python bytecode at a time**, even on a multi-core CPU.
+
+So if you run:
+
+* 4 threads
+* Each doing heavy CPU work
+
+→ **only 1 thread runs at a time**, so the program is NOT faster.
+Threads must “take turns” because of the GIL.
+
+### 🔥 CPU-bound tasks → multiprocessing is much faster
+
+**Multiprocessing** starts **separate processes**, each with its **own GIL** and **its own Python interpreter**.
+
+So:
+
+* CPU core 1 runs process 1
+* CPU core 2 runs process 2
+* CPU core 3 runs process 3
+* CPU core 4 runs process 4
+
+All at the SAME TIME.
+This gives true parallelism.
+
+👉 **Multiprocessing uses all CPU cores**
+👉 **Multithreading cannot run Python CPU code in parallel because of the GIL**
+
+---
+
+# ✅ 2. **How to modify your code to use ALL CPU cores automatically**
+
+You can detect the number of CPU cores:
+
+```python
+multiprocessing.cpu_count()
+```
+
+Then replace your `num_tasks` by the number of CPU cores:
+
+### ✔ Improved version:
+
+```python
+num_tasks = multiprocessing.cpu_count()
+print("Using", num_tasks, "CPU cores")
+```
+
+### Full example integrated into your script:
+
+```python
+num_tasks = multiprocessing.cpu_count()
+```
+
+This will:
+
+* run 1 process per CPU core
+* maximize speed
+* fully load the CPU
+
+---
+
+# ✅ 3. **How to collect results from each process**
+
+Processes do not share memory, so you cannot simply `return` values.
+
+To collect results, we use:
+
+* **Queue**
+  or
+* **Pipe**
+  or
+* **Manager()**
+  or
+* **Pool** (the easiest)
+
+---
+
+# 🔥 The easiest way: use **multiprocessing Pool**
+
+Example:
+
+```python
+from multiprocessing import Pool, cpu_count
+from time import perf_counter
+
+num_iterations = 12 * 10**7
+
+def task(_):
+    result = 0
+    for _ in range(num_iterations):
+        result += 1
+    return result
+
+if __name__ == '__main__':
+    start = perf_counter()
+
+    with Pool(cpu_count()) as p:
+        results = p.map(task, range(cpu_count()))
+
+    print("Results:", results)
+    print("Time:", perf_counter() - start)
+```
+
+### What happens here:
+
+* Creates a pool of processes equal to CPU count
+* Runs the task in parallel
+* `results` becomes a list of results from each process
+
+Example:
+
+```
+Results: [120000000, 120000000, 120000000, 120000000]
+```
+
+---
+
+# ⭐ A version similar to *your* code using Queue
+
+Here is your style, but with results collected:
+
+```python
+from time import perf_counter
+import multiprocessing
+
+num_iterations = 12 * 10**7
+
+def task(q):
+    result = 0
+    for _ in range(num_iterations):
+        result += 1
+    q.put(result)  # send result back to parent
+
+if __name__ == '__main__':
+    
+    start = perf_counter()
+    num_tasks = multiprocessing.cpu_count()
+    q = multiprocessing.Queue()
+
+    procs = []
+    for _ in range(num_tasks):
+        p = multiprocessing.Process(target=task, args=(q,))
+        procs.append(p)
+
+    for p in procs:
+        p.start()
+
+    for p in procs:
+        p.join()
+
+    # collect results
+    results = [q.get() for _ in range(num_tasks)]
+    
+    print("Results:", results)
+    print("Time:", perf_counter() - start)
+```
+
+### Explanation:
+
+* The parent creates a `Queue`
+* Each process puts its result into the queue
+* The parent reads all results after processes finish
+* They are stored in `results`
+
+---
+
+# ✅ Summary
+
+### **Why multiprocessing is faster**
+
+* Threads share one GIL → only one runs CPU code at a time
+* Processes have separate GILs → true parallel execution on all cores
+
+### **Use all CPU cores**
+
+```python
+num_tasks = multiprocessing.cpu_count()
+```
+
+### **Collect results**
+
+Use:
+
+* `multiprocessing.Queue()`
+* or `Pool.map()` (simplest)
+
+---
+
+If you want, I can also show:
+🔥 how to measure per-process runtime
+🔥 how to visualize CPU usage
+🔥 how to rewrite everything to `concurrent.futures` (cleaner)
+🔥 how to compare multithreading vs multiprocessing with graphs
+
+Just tell me!
+
+Here’s a **clear, simple, and practical explanation** of the differences between **multithreading** and **multiprocessing**, especially in **Python**.
+
+---
+
+# ✅ **1. The Core Difference**
+
+### **Multithreading**
+
+* **Multiple threads** inside **one process**
+* All threads **share the same memory**
+* In Python, threads cannot run CPU code in parallel because of the **GIL**
+
+### **Multiprocessing**
+
+* **Multiple processes**, each with its own memory, its own Python interpreter
+* Each process can run **truly in parallel** on multiple CPU cores
+* Not limited by the GIL
+
+---
+
+# 🔥 **2. The Python GIL (Global Interpreter Lock)**
+
+This is the key reason why the two behave very differently:
+
+### **Python Multithreading**
+
+* Only **one thread executes Python bytecode at a time**
+* Even with 8 CPU cores, a CPU-heavy thread still runs **one-at-a-time**
+* So it does NOT speed up CPU tasks
+
+### **Python Multiprocessing**
+
+* Every process gets its **own GIL**
+* All CPU cores can run simultaneously
+* Perfect for CPU-bound work like:
+
+  * math loops
+  * image processing
+  * machine learning
+  * data analysis
+  * cryptography
+
+---
+
+# 🧠 **3. When to Use What**
+
+## **Use Multithreading for I/O-bound tasks**
+
+I/O-bound means the program mostly *waits* for something:
+
+* network requests
+* file read/write
+* waiting for database
+* waiting for API responses
+* sleep timers
+
+Threads are useful because while one thread waits, another can run.
+
+➡ **Multithreading ≠ faster CPU**
+➡ But multithreading = great for tasks that spend time waiting.
+
+---
+
+## **Use Multiprocessing for CPU-bound tasks**
+
+CPU-bound = the program spends most time doing calculations:
+
+* number crunching
+* loops
+* simulations
+* ML model training
+* image/video processing
+
+Multiprocessing uses **all CPU cores**.
+
+➡ **Multiprocessing = true parallelism**
+➡ Much faster for high CPU work.
+
+---
+
+# 🧩 **4. Memory Differences**
+
+| Feature       | Multithreading     | Multiprocessing                              |
+| ------------- | ------------------ | -------------------------------------------- |
+| Memory        | Shared             | Separate (isolated)                          |
+| Sync needed?  | Yes, locks needed  | Usually no                                   |
+| Communication | Easy (same memory) | Harder (queues/pipes)                        |
+| Start-up cost | Very small         | Higher (creating a new process is expensive) |
+
+---
+
+# ⚙️ **5. Performance Differences**
+
+| Workload Type    | Best Choice         | Why                             |
+| ---------------- | ------------------- | ------------------------------- |
+| CPU-bound        | **Multiprocessing** | Uses multiple cores, avoids GIL |
+| I/O-bound        | **Multithreading**  | Threads run while others wait   |
+| Heavy ML         | Multiprocessing     | Real parallelism                |
+| Network requests | Multithreading      | Many connections → many threads |
+| GUI              | Multithreading      | Keep UI responsive              |
+| Very large data  | Multiprocessing     | Each process has its own memory |
+
+---
+
+# 📦 **6. Example of Performance Difference**
+
+### CPU-heavy loop (like your 120M loop)
+
+| Method          | Speed                                           |
+| --------------- | ----------------------------------------------- |
+| Single thread   | ❌ Slow                                          |
+| Multithreading  | ❌ Same speed (GIL blocks parallelism)           |
+| Multiprocessing | ✅ MUCH faster (all CPU cores work at same time) |
+
+---
+
+# 🎯 **7. Short Summary**
+
+### **Multithreading**
+
+* Many threads
+* One process
+* Shared memory
+* Limited by GIL
+* Great for I/O tasks
+* Not good for heavy CPU work
+
+### **Multiprocessing**
+
+* Many processes
+* Each has its own memory and GIL
+* Can run truly in parallel
+* Perfect for CPU-heavy work
+* More memory usage, slower to start
+
+---
+
+# If you want, I can also show you:
+
+✔ a diagram comparing them
+✔ code examples of both
+✔ performance benchmark on your specific code
+✔ a real-world example (web scraping vs image processing)
+
+Just tell me!
+Great — you pasted the output of **`lscpu`**, which tells you the full hardware details of your CPU.
+Let me explain exactly what the important parts mean, in simple and clear language.
+
+---
+
+# ✅ **What your CPU information means**
+
+Your key lines are:
+
+```
+CPU(s):                   8
+Thread(s) per core:       2
+Core(s) per socket:       4
+Socket(s):                1
+```
+
+Let’s decode this:
+
+---
+
+# 🔥 **1. Physical CPU cores**
+
+```
+Core(s) per socket: 4
+```
+
+➡️ **You have 4 physical CPU cores**
+
+This is the true number of “real” CPU units that can run tasks simultaneously.
+
+---
+
+# 🔥 **2. Logical CPUs (Hyper-Threading)**
+
+```
+Thread(s) per core: 2
+CPU(s):             8
+```
+
+Each physical core has **2 threads** → this is Intel Hyper-Threading.
+
+So:
+
+* 4 physical cores
+* × 2 threads each
+* = **8 logical CPUs**
+
+That’s why Python `multiprocessing.cpu_count()` returns **8**.
+
+Logical CPUs can handle two instruction streams, but they **share** the physical resources.
+
+---
+
+# 🔥 **3. CPU Model**
+
+```
+Intel(R) Core(TM) i7-10510U CPU @ 1.80GHz
+```
+
+This is a **10th-generation Intel mobile CPU** (Comet Lake).
+
+---
+
+# 🔥 **4. CPU Speed**
+
+```
+CPU max MHz:    4900.0000
+CPU min MHz:    400.0000
+```
+
+This means:
+
+* Base speed ~1.8 GHz
+* Turbo Boost up to **4.9 GHz** (single core)
+
+Your CPU can boost very high for short intensive tasks.
+
+---
+
+# 🔥 **5. Cache sizes**
+
+```
+L1: small and fast  
+L2: medium  
+L3: large shared cache  
+```
+
+Your CPU has:
+
+* L1d: 128 KB
+* L1i: 128 KB
+* L2: 1 MB
+* L3: 8 MB
+
+This affects performance when many processes run at once (cache sharing → slower).
+
+---
+
+# 🔥 **6. Virtualization**
+
+```
+Virtualization: VT-x
+```
+
+Means your CPU supports virtual machines (VirtualBox, VMware, KVM), and guest OS can run efficiently.
+
+---
+
+# 🔥 **7. NUMA**
+
+Not relevant to your case — your laptop has:
+
+```
+NUMA node(s): 1
+```
+
+Meaning all memory is uniform, not multi-socket like servers.
+
+---
+
+# 🔥 **8. CPU Vulnerabilities**
+
+This part lists various security mitigations (Spectre, Meltdown, etc.).
+Nothing you need for multiprocessing experiments.
+
+---
+
+# 📌 **So what does this mean for your multiprocessing experiment?**
+
+This is the important part:
+
+### ✔ You have **4 physical cores**
+
+### ✔ You have **8 logical CPUs** (Hyper-Threading)
+
+For CPU-heavy tasks (like your big loop):
+
+### 🔥 Best performance will be at:
+
+➡ **4 processes** (equal to physical cores)
+
+Because:
+
+* physical cores give true hardware parallelism
+* logical threads share execution units → adding more processes stops helping
+
+So your speedup results will probably look like:
+
+| num_tasks | Expected time          | Notes                         |
+| --------- | ---------------------- | ----------------------------- |
+| 1         | slowest                | single process                |
+| 2         | faster                 | 2 cores working               |
+| 4         | **fastest**            | all physical cores working    |
+| 6         | maybe slightly slower  | Hyper-threading adds overhead |
+| 8         | usually no improvement | CPU overloaded                |
+
+Meaning:
+
+* **4 processes = optimal performance**
+* **8 processes ≠ twice as fast** → No, because 8 logical CPUs still only run on 4 physical cores.
+
+This is exactly what your instructor wants you to observe and explain.
+
+---
+
+# 🎯 If you want, I can help you write:
+
+✔ The full experiment report
+✔ A results table template
+✔ A discussion section that explains why the speedup stops after 4 processes
+✔ A good answer to submit as your assignment
+
+Just tell me!
+Below is a **complete, detailed, step-by-step solution** to your *Threading Lock (9P)* assignment, including:
+
+✅ Full code for part (a)
+✅ Full code for part (b) (with lock)
+✅ Explanation of race conditions
+✅ Explanation of how locks fix the problem
+✅ What results you should expect
+
+---
+
+# ⭐ **Part (a) — Program WITHOUT threading lock**
+
+The assignment asks you to:
+
+* Create a global counter variable
+* Start **two threads**
+* One thread adds **10**
+* The other thread adds **20**
+* Both modify the SAME global variable
+* A short delay is added to increase race conditions
+* Run multiple times and observe inconsistent results
+
+---
+
+# ✔ **Code for Part (a): multi_threading_race.py**
+
+```python
+#!/usr/bin/env python3
+
+from time import sleep
+import threading
+
+# global counter variable (shared resource)
+global_counter = 0
+
+# the function that each thread runs
+def add_value(increment):
+    global global_counter
+
+    # read global value into local variable
+    local_value = global_counter
+
+    # add increment
+    local_value += increment
+
+    # wait -> increases chance of race condition
+    sleep(0.1)
+
+    # write back result to global variable
+    global_counter = local_value
+
+    print(f"Thread adding {increment}: counter now = {global_counter}")
+
+# create threads
+t1 = threading.Thread(target=add_value, args=(10,))
+t2 = threading.Thread(target=add_value, args=(20,))
+
+# start threads
+t1.start()
+t2.start()
+
+# wait for threads to finish
+t1.join()
+t2.join()
+
+print(f"\nFinal global counter = {global_counter}")
+```
+
+---
+
+# ✔ **Explanation (Part a)**
+
+### ❗ **Why the result is WRONG most of the time**
+
+Both threads do:
+
+1. Read global_counter into a **local copy**
+2. Add their increment (10 or 20)
+3. Sleep (so the other thread can run)
+4. Write to global_counter
+
+### Race condition example:
+
+Thread A reads:
+
+```
+global_counter = 0
+local_value = 0
+```
+
+Thread B reads at the same time:
+
+```
+global_counter = 0
+local_value = 0
+```
+
+Thread A adds 10 → local_value=10
+Thread B adds 20 → local_value=20
+
+Whichever thread writes last overwrites the other:
+
+Possible wrong results:
+
+* 20
+* 10
+* 30 (correct, but only by luck!)
+
+### ✔ **Expected outputs (examples)**
+
+Run the script many times, you will see results like:
+
+```
+Thread adding 10: counter now = 10
+Thread adding 20: counter now = 20
+
+Final global counter = 20
+```
+
+or:
+
+```
+Thread adding 20: counter now = 20
+Thread adding 10: counter now = 10
+
+Final global counter = 10
+```
+
+Sometimes correct:
+
+```
+Thread adding 10: counter = 10
+Thread adding 20: counter = 30
+
+Final global counter = 30
+```
+
+### ❗ Why inconsistent?
+
+Because BOTH threads access `global_counter` at the same time → **race condition**.
+
+---
+
+# ⭐ **Part (b) — Program WITH threading lock**
+
+Now you must fix the race condition by using:
+
+✔ `Lock()`
+✔ lock.acquire()
+✔ lock.release()
+
+We protect the **critical section**:
+
+* reading global counter
+* modifying it
+* writing it back
+
+---
+
+# ✔ **Code for Part (b): multi_threading_lock.py**
+
+```python
+#!/usr/bin/env python3
+
+from time import sleep
+import threading
+
+# global counter variable
+global_counter = 0
+
+# create a lock object
+lock = threading.Lock()
+
+def add_value(increment):
+    global global_counter
+
+    # enter exclusive section
+    lock.acquire()
+
+    # critical section
+    local_value = global_counter
+    local_value += increment
+    sleep(0.1)
+    global_counter = local_value
+
+    print(f"Thread adding {increment}: counter now = {global_counter}")
+
+    # leave exclusive section
+    lock.release()
+
+# create threads
+t1 = threading.Thread(target=add_value, args=(10,))
+t2 = threading.Thread(target=add_value, args=(20,))
+
+# start threads
+t1.start()
+t2.start()
+
+# wait for threads to finish
+t1.join()
+t2.join()
+
+print(f"\nFinal global counter = {global_counter}")
+```
+
+---
+
+# ✔ **Explanation (Part b)**
+
+### ✔ What changes?
+
+Only **one thread at a time** is allowed to enter:
+
+```python
+lock.acquire()
+    # read global
+    # add increment
+    # write global
+lock.release()
+```
+
+So thread operations cannot interleave anymore.
+
+### ✔ Expected output always:
+
+```
+Thread adding 10: counter now = 10
+Thread adding 20: counter now = 30
+
+Final global counter = 30
+```
+
+or:
+
+```
+Thread adding 20: counter now = 20
+Thread adding 10: counter now = 30
+
+Final global counter = 30
+```
+
+But **ALWAYS 30** at the end.
+
+---
+
+# ⭐ **Comparison: Without Lock vs With Lock**
+
+| Feature         | Without Lock              | With Lock      |
+| --------------- | ------------------------- | -------------- |
+| Thread-safe     | ❌ No                      | ✔ Yes          |
+| Results         | inconsistent, often wrong | always correct |
+| Race conditions | Yes                       | Prevented      |
+| Final counter   | 10, 20, or 30             | Always 30      |
+
+---
+
+# ⭐ **Final explanations you can write in your lab report**
+
+### ❗ Without Lock
+
+The two threads read and modify the shared global variable at the same time.
+Because operations are not atomic, the global variable is overwritten by whichever thread writes last → **race condition**.
+
+### ✔ With Lock
+
+Only one thread at a time may update the shared counter.
+The critical section is protected, so no interleaving occurs → **no race condition**.
+
+---
+
+If you want, I can also:
+
+✅ Generate a PDF lab report
+✅ Make diagrams showing race conditions
+✅ Provide a more academic explanation
+
+Just tell me!
+Sure — here is a **clear, simple, and complete explanation** of what a **threading lock** is, why it is needed, and how it works, with examples you can use in your assignment.
+
+---
+
+# ⭐ **What is a Threading Lock?**
+
+A **threading lock** (also called a **mutex**, mutual exclusion lock) is a synchronization tool used in multithreading to ensure that **only one thread at a time** can access a **shared resource**.
+
+Examples of shared resources:
+
+* a global counter variable
+* a shared list
+* a shared file
+* a bank account balance
+* database access
+
+Whenever two or more threads try to modify the same resource at the same time, a **race condition** can occur.
+
+A *threading lock prevents race conditions*.
+
+---
+
+# ⭐ Why do we need a Lock?
+
+Because threads run **concurrently**, often interrupting each other in the middle of operations.
+
+Suppose:
+
+* Thread A wants to add 10 to a shared variable
+* Thread B wants to add 20 to the same variable
+
+Both do:
+
+1. Read global value into a local variable
+2. Add increment
+3. Write back result
+
+If thread switching happens in the middle, the operations can interleave like this:
+
+### ❗ Race Condition Example
+
+```
+global_counter = 0
+
+Thread A reads global value → localA = 0
+Thread B reads global value → localB = 0
+Thread A adds 10 → localA = 10
+Thread B adds 20 → localB = 20
+Thread B writes global_counter = 20
+Thread A writes global_counter = 10
+```
+
+**Final result = 10**
+(correct should be 30)
+
+This happens because reading, modifying, and writing are NOT atomic operations.
+
+---
+
+# ⭐ What does a Lock do?
+
+A lock makes sure that **only one thread** can enter a specific code area at a time.
+
+This protected area is called the **critical section**.
+
+### ✔ The logic of a Lock:
+
+```
+Thread wants to enter critical section:
+    If lock is free → thread acquires it and enters
+    If lock is locked → thread waits (blocks)
+```
+
+When the thread finishes, it **releases** the lock so another thread can proceed.
+
+---
+
+# ⭐ Lock usage in Python
+
+You import it like this:
+
+```python
+from threading import Lock
+```
+
+You create a lock object:
+
+```python
+lock = Lock()
+```
+
+Then you use:
+
+```python
+lock.acquire()   # lock the door
+# critical section (safe)
+lock.release()   # unlock the door
+```
+
+---
+
+# ⭐ Example: Without Lock (unsafe)
+
+```python
+global_counter = 0
+
+def add_value(x):
+    global global_counter
+    local = global_counter
+    local += x
+    sleep(0.1)
+    global_counter = local
+```
+
+Two threads modifying the same variable → **race condition**.
+
+---
+
+# ⭐ Example: With Lock (safe)
+
+```python
+global_counter = 0
+lock = Lock()
+
+def add_value(x):
+    global global_counter
+
+    lock.acquire()      # only one thread allowed inside
+    local = global_counter
+    local += x
+    sleep(0.1)
+    global_counter = local
+    lock.release()      # free the lock for other threads
+```
+
+Now:
+
+* Thread A cannot enter the critical section until Thread B exits
+* No two threads read/modify/write at the same time
+* Final result is always correct
+
+---
+
+# ⭐ Real-world analogy
+
+Imagine a **bathroom with one key**:
+
+* If a person has the key → they enter the bathroom
+* Nobody else can enter until the key is returned
+* This prevents two people from using the bathroom at the same time
+
+The **bathroom = critical section**
+The **key = lock**
+The **person = thread**
+
+Without the key system → chaos!
+
+---
+
+# ⭐ Summary (in lab-report style)
+
+A **threading lock** is a synchronization mechanism used to prevent multiple threads from accessing and modifying a shared resource at the same time. Without a lock, threads may interfere with each other’s operations, causing **race conditions**, where the final outcome depends on unpredictable timing. A lock ensures **mutual exclusion**, allowing only one thread at a time to execute the critical section of code. This guarantees consistent and correct results when working with shared data structures.
+
+---
+
+If you want, I can also:
+
+✅ Write this explanation in academic style
+✅ Create a diagram of how locks work
+✅ Insert this explanation into your lab report
+
+Just tell me!
