@@ -1855,3 +1855,498 @@ If you want, I can also:
 ✅ Insert this explanation into your lab report
 
 Just tell me!
+Absolutely — here is a **very clear, step-by-step explanation** of how your code works. I explain everything from start to finish so you fully understand it.
+
+---
+
+# ⭐ Complete Explanation of the Code
+
+Here is your code again (for reference while explaining):
+
+```python
+from time import sleep
+import threading
+
+# global counter variable (shared resource)
+global_counter = 0
+
+def add_value(increment):
+    global global_counter
+
+    local_value = global_counter
+    local_value += increment
+    sleep(0.1)
+    global_counter = local_value
+
+    print(f"Thread adding {increment}: counter now = {global_counter}")
+
+t1 = threading.Thread(target=add_value, args=(10,))
+t2 = threading.Thread(target=add_value, args=(20,))
+
+t1.start()
+t2.start()
+
+t1.join()
+t2.join()
+
+print(f"\nFinal global counter = {global_counter}")
+```
+
+---
+
+# ⭐ 1. Importing Modules
+
+```python
+from time import sleep
+import threading
+```
+
+### ✔ What this does:
+
+* `sleep` → lets you pause execution to force a race condition
+* `threading` → allows you to create and run threads concurrently
+
+---
+
+# ⭐ 2. Creating a Global Variable
+
+```python
+global_counter = 0
+```
+
+### ✔ This variable is shared by BOTH threads.
+
+Both threads will:
+
+* read it
+* modify it
+* write a new value
+
+This is where the **race condition** happens.
+
+---
+
+# ⭐ 3. The Function Run by the Threads
+
+```python
+def add_value(increment):
+    global global_counter
+
+    local_value = global_counter
+    local_value += increment
+    sleep(0.1)
+    global_counter = local_value
+
+    print(f"Thread adding {increment}: counter now = {global_counter}")
+```
+
+Let’s break it down line by line:
+
+---
+
+## 🔹 Step 1: `global global_counter`
+
+This tells Python:
+
+> “Inside this function, use the global variable named global_counter.”
+
+---
+
+## 🔹 Step 2: Read the global variable
+
+```python
+local_value = global_counter
+```
+
+Copies the current value into a **local** variable.
+
+---
+
+## 🔹 Step 3: Add the increment (10 or 20)
+
+```python
+local_value += increment
+```
+
+Now local_value has:
+
+* either `global_counter + 10`
+* or `global_counter + 20`
+
+---
+
+## 🔹 Step 4: Sleep to force interleaving
+
+```python
+sleep(0.1)
+```
+
+This pause **increases the chance** that the other thread will run in the middle.
+
+This produces the race condition on purpose.
+
+---
+
+## 🔹 Step 5: Write back to global variable
+
+```python
+global_counter = local_value
+```
+
+This overwrites the global value.
+
+**Important:**
+Both threads can do this at the same time, leading to incorrect results.
+
+---
+
+## 🔹 Step 6: Print the current counter
+
+```python
+print(f"Thread adding {increment}: counter now = {global_counter}")
+```
+
+This prints the result that the thread wrote.
+
+---
+
+# ⭐ 4. Creating Two Threads
+
+```python
+t1 = threading.Thread(target=add_value, args=(10,))
+t2 = threading.Thread(target=add_value, args=(20,))
+```
+
+### ✔ t1 will run `add_value(10)`
+
+### ✔ t2 will run `add_value(20)`
+
+They will both modify **the same global variable**.
+
+---
+
+# ⭐ 5. Starting Threads
+
+```python
+t1.start()
+t2.start()
+```
+
+### ✔ Both threads start running **almost at the same time**.
+
+They now run in **parallel**, switching back and forth unpredictably.
+
+This is why the final result is inconsistent.
+
+---
+
+# ⭐ 6. Waiting for Threads to Finish
+
+```python
+t1.join()
+t2.join()
+```
+
+`join()` tells the main program:
+
+> “Do not continue until this thread has finished running.”
+
+So the final print happens **after both threads end**.
+
+---
+
+# ⭐ 7. Final Output
+
+```python
+print(f"\nFinal global counter = {global_counter}")
+```
+
+This prints the final value of `global_counter`.
+
+---
+
+# ⭐ Why the Result is Wrong (Most of the Time)
+
+Expected correct result:
+
+```
+0 + 10 + 20 = 30
+```
+
+Actual results may be:
+
+* 20
+* 10
+* 30
+* unpredictable
+
+### ✔ This is because BOTH threads:
+
+1. read the same initial value (`0`)
+2. add their increment
+3. sleep
+4. overwrite each other’s result
+
+This is a **race condition**.
+
+Example race:
+
+```
+Thread 1 reads global_counter = 0
+Thread 2 reads global_counter = 0
+Thread 1 writes 10
+Thread 2 writes 20   ← overwrites Thread 1
+```
+
+Final result: **20**
+Incorrect, because one update was lost.
+
+---
+
+# ⭐ Summary — How the Code Works
+
+1. Two threads are created.
+2. Both modify a shared global variable.
+3. Both add a different value (10 and 20).
+4. Because of `sleep(0.1)` they interfere with each other.
+5. The final result is inconsistent because of a **race condition**.
+6. This example demonstrates **why you need threading locks**.
+
+---
+
+If you want, I can now:
+
+✅ explain the version **with Lock**
+✅ rewrite this explanation in academic style
+✅ make diagrams of race conditions
+Just tell me!Of course — here is a **clear, simple, step-by-step explanation** of how your **threading lock version** works and why it fixes the race condition.
+
+This explanation is suitable for your lab report.
+
+---
+
+# ⭐ Full Explanation of the Code (With Lock)
+
+Here is the code again for reference:
+
+```python
+from time import sleep
+import threading
+
+global_counter = 0
+lock = threading.Lock()
+
+def add_value(increment):
+    global global_counter
+    lock.acquire()
+
+    local_value = global_counter
+    local_value += increment
+    sleep(0.1)
+    global_counter = local_value
+
+    print(f"Thread adding {increment}: counter now = {global_counter}")
+
+    lock.release()
+
+t1 = threading.Thread(target=add_value, args=(10,))
+t2 = threading.Thread(target=add_value, args=(20,))
+
+t1.start()
+t2.start()
+
+t1.join()
+t2.join()
+
+print(f"\nFinal global counter = {global_counter}")
+```
+
+---
+
+# ⭐ 1. Importing modules
+
+```python
+from time import sleep
+import threading
+```
+
+* `sleep()` → simulates a delay (helps show concurrency problems)
+* `threading` → allows us to create threads and synchronization objects
+
+---
+
+# ⭐ 2. Create the shared global variable
+
+```python
+global_counter = 0
+```
+
+This variable will be modified by both threads.
+It is the **shared resource**.
+
+---
+
+# ⭐ 3. Create a Lock
+
+```python
+lock = threading.Lock()
+```
+
+A Lock ensures that **only one thread** can execute certain lines of code at the same time.
+
+This is what prevents the race condition.
+
+---
+
+# ⭐ 4. The function run by each thread
+
+```python
+def add_value(increment):
+    global global_counter
+```
+
+The function takes one argument (`increment`), either 10 or 20.
+
+`global global_counter` means the function will modify the global variable.
+
+---
+
+# ⭐ 5. Acquire the lock (enter critical section)
+
+```python
+lock.acquire()
+```
+
+This line means:
+
+> **If the lock is free, take it.
+> If the lock is already taken, wait until it is available.**
+
+Only ONE thread can get past this point at a time.
+
+This is the most important line in the program.
+
+---
+
+# ⭐ 6. Critical section (protected code)
+
+```python
+local_value = global_counter
+local_value += increment
+sleep(0.1)
+global_counter = local_value
+```
+
+This block:
+
+1. reads the global variable
+2. adds to it
+3. waits 0.1 sec
+4. writes the result back
+
+Because the Lock is held:
+
+* No other thread can run this part simultaneously
+* The global counter cannot be overwritten
+
+This prevents the race condition completely.
+
+---
+
+# ⭐ 7. Print the result
+
+```python
+print(f"Thread adding {increment}: counter now = {global_counter}")
+```
+
+This shows what each thread wrote.
+
+---
+
+# ⭐ 8. Release the lock (exit critical section)
+
+```python
+lock.release()
+```
+
+This allows the **other** thread to enter the critical section.
+
+Without releasing, the other thread would wait forever.
+
+---
+
+# ⭐ 9. Create the threads
+
+```python
+t1 = threading.Thread(target=add_value, args=(10,))
+t2 = threading.Thread(target=add_value, args=(20,))
+```
+
+* `t1` will add 10
+* `t2` will add 20
+
+---
+
+# ⭐ 10. Start the threads
+
+```python
+t1.start()
+t2.start()
+```
+
+Threads now start running—one will acquire the lock first.
+
+---
+
+# ⭐ 11. Wait for both threads to finish
+
+```python
+t1.join()
+t2.join()
+```
+
+`join()` blocks the main program until the thread is finished.
+
+---
+
+# ⭐ 12. Print the final counter
+
+```python
+print(f"\nFinal global counter = {global_counter}")
+```
+
+The output **will ALWAYS be 30**.
+
+Why?
+
+Because the lock ensures:
+
+```
+Thread 1 can't interrupt Thread 2 inside the critical section.
+Thread 2 can't interrupt Thread 1 inside the critical section.
+```
+
+---
+
+# ⭐ Summary (Short Version for Your Report)
+
+✔ This code uses a **threading Lock** to prevent race conditions
+✔ Only one thread at a time can read/modify/write the shared variable
+✔ The critical section is protected by:
+
+```
+lock.acquire()
+   ... modify shared variable ...
+lock.release()
+```
+
+✔ This ensures the final result is **always correct** (30)
+✔ Without the lock, threads interfere and results become inconsistent
+
+---
+
+If you want, I can also:
+
+✅ draw a diagram showing thread blocking and lock flow
+✅ rewrite this explanation in “university report” style
+Just tell me!
