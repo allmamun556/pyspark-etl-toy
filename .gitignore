@@ -21,6 +21,8 @@ Thumbs.db
 
 # Ignore data
 *.csv
+*.parquet
+*.pdf
 *.xlsx
 *.json
 data/   
