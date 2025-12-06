@@ -5,8 +5,8 @@ from time import sleep, perf_counter
 import multiprocessing
 
 # program parameters
-num_iterations = 12*10**7 # iterations of a compute task = x * 10^7
-num_tasks = 1 # number of tasks to be executed
+num_iterations = 15*10**7 # iterations of a compute task = x * 10^7
+num_tasks = 2# number of tasks to be executed
 
 # print header
 print('=======================================\n\n')

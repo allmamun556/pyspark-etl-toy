@@ -4,7 +4,7 @@
 from time import sleep, perf_counter
 
 # program parameters
-sleep_time = 5 # duration of a task
+sleep_time = 1 # duration of a task
 num_tasks = 10 # number of tasks to be executed
 
 # print header
