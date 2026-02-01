@@ -1,351 +1,771 @@
 
-### **📘 STORY**
+## **GESCHICHTE: VERTRAUEN, HILFE UND EIN ZUHAUSE**
 
-Im **MODUL 1: WEM KANN ICH TRAUEN? (Who can I trust?)** beginnt meine Geschichte mit dem Thema **Vertrauen schenken / gewinnen (to give trust / to gain trust)**. Es ist oft schwer, **jdm. etw. anvertrauen (to entrust something to someone)**, zum Beispiel **(Wem vertrauen Sie Ihre Wohnungsschlüssel an?) (Whom do you entrust your apartment keys to?)**. Bevor man jemandem vertraut, muss man **etw. abwägen (to weigh something)**, besonders wenn es um **zwischenmenschlich (interpersonal)**e Beziehungen geht, die oft **schwer fassbar (hard to grasp)** sind, also **(~ schwer zu verstehen) (hard to understand)**. Manchmal entscheidet man sich dennoch, **sich in die Hände von anderen begeben (to put oneself in the hands of others)**, so wie Eltern es tun, wenn sie **das Neugeborene (the newborn)**, also **(~ der Säugling / das Baby) (the infant / the baby)**, beschützen wollen.
+### **MODUL 1 – WEM KANN ICH TRAUEN?**
 
-Im Leben muss man oft **überleben (to survive)**, besonders wenn Erfahrungen **jdn. prägen (to shape someone)**. Manche Menschen **heranwachsen (to grow up)** – **(wächst heran, wuchs heran, ist herangewachsen) (grows up)** – in schwierigen Situationen, die ihre Persönlichkeit formen. Dabei spielt **die Geborgenheit (Sg.) (sense of security)** eine große Rolle. Gute Freunde können **jdn. bestärken (to encourage someone)**, indem sie helfen, **etw. anpacken (to tackle something)**. Manchmal muss man **sich etw. stellen (to face something)** und **sich schwertun mit (+ Dat.) (to struggle with)** Problemen, die **massiv (hier: stark) (severe / strong)** sind. In solchen Momenten ist es wichtig, dass Menschen **jdn. beschützen (to protect someone)** und dass man lernt, **sich jdm. öffnen (to open up to someone)**.
+Im Leben ist es entscheidend, **Vertrauen zu schenken** (to give trust) und Vertrauen zu **gewinnen** (to gain trust).
+Doch nicht jedem kann man **jemandem oder etwas anvertrauen** (to entrust someone or something), denn die Frage *„**Wem vertrauen Sie Ihre Wohnungsschlüssel an?** (Who would you trust with your apartment keys?)“* ist zutiefst **zwischenmenschlich** (interpersonal) und oft **schwer fassbar** (hard to grasp), also **schwer zu verstehen** (difficult to understand).
+Bevor man sich entscheidet, sollte man **etwas abwägen** (to weigh something up) und sich nicht unbedacht **in die Hände von anderen begeben** (to put oneself in someone else’s hands).
 
-In **MODUL 2: HILFE IN DER NOT (Help in times of need)** geht es um Menschen, die **erfrieren (to freeze)** – **(erfriert, erfror, ist erfroren) (freezes to death)** – wenn sie **obdachlos (homeless)** sind, also **(~ wohnungslos) (without housing)**. Zum Glück gibt es Menschen, die **ein offenes Ohr haben (to be willing to listen)**. Eine wichtige Rolle spielt **die Einrichtung, -en (the institution)**, die **etw. im Auge behalten (to keep an eye on something)**. Viele Menschen sind **bedürftig (in need)**, und Helfer **jdm. unter die Arme greifen (to help someone)**, besonders **der/die Betroffene, -n (the affected person)**. Sozialarbeiter **jdn. versorgen mit (+ Dat.) (to provide someone with)** Hilfe, wie **der Streetworker, - / die Streetworkerin, -nen (street worker)**, die **das Gespräch suchen (to seek conversation)**. Sie **sich etw. zur Aufgabe machen (to take something as their mission)**, Probleme zu lösen und **etw. bewältigen (to cope with something)**. Organisationen **etw. gewährleisten (to guarantee something)** – **(~ garantieren) (to ensure)** – und **messen (misst, maß, hat gemessen) (to measure)** den Erfolg ihrer Hilfe.
+Schon **das Neugeborene** (the newborn), also **der Säugling / das Baby** (the infant / the baby), muss lernen zu **überleben** (to survive).
+Es wird von Menschen **geprägt** (shaped), darf **heranwachsen** (grow up) und erfährt idealerweise **Geborgenheit** (a sense of security).
+Erwachsene können andere **bestärken** (to encourage), Herausforderungen **anpacken** (to tackle), sich **sich etwas stellen** (to face something) und sich **schwer tun mit** etwas (+ Dativ) (to struggle with something).
+Manchmal braucht es **massiv** (strongly)es Vertrauen, um jemanden zu **beschützen** (to protect) und **sich jemandem zu öffnen** (to open up to someone).
 
-In **MODUL 3: UNSER HAUS!? (Our house!?)** geht es um Wohnen und Gemeinschaft. Manche Menschen träumen vom **das Eigenheim, -e (own home)**, andere leben in **die Genossenschaft, -en (housing cooperative)**, also **(die Geno, -s) (short form)**. Wichtig ist **der Wohnraum (Sg.) (living space)**, der **verhältnismäßig (proportionate)** verteilt sein sollte. **Die Gemeinde, -n (the municipality)** plant oft zusammen mit **die Immobilie, -n (the property)**, um **höchstmöglich (as much as possible)** fair zu sein. Dabei spielt **der Eigenbedarf, -e (personal need)** eine Rolle, genauso wie **die Kündigungsfrist, -en (notice period)**. Viele Menschen wünschen sich Wohnraum **in öffentlicher Hand (publicly owned)**, damit alle sicher leben können.
+---
 
-## **📘 STORY**
+### **MODUL 2 – HILFE IN DER NOT**
 
-Im **WORTSCHATZ (vocabulary)**-Teil unserer Geschichte geht es zuerst um Wohnen und Verantwortung. In vielen Städten versuchen Behörden, Wohnungen **entziehen (entzieht, entzog, hat entzogen) (to withdraw)** und **(etw. dem Markt entziehen) (to remove something from the market)**, wenn Wohnraum zu **spekulativ (speculative)** genutzt wird. Dafür gibt es klare **die Regularien (Pl.) (the regulations)**, die sicherstellen sollen, dass Menschen ein **das lebenslange Wohnrecht (lifelong right to live)** behalten können. Trotzdem handeln manche Investoren sehr **gewinnorientiert (profit-oriented)**, statt sozial zu denken.
+In einer Krise können Menschen **erfrieren** (to freeze), **obdachlos** (homeless) werden oder plötzlich **ein offenes Ohr haben** (to lend an ear).
+Dann braucht es **die Einrichtung** (the institution), die **etwas im Auge behält** (to keep an eye on something), um **bedürftige** (needy) Personen zu unterstützen.
+Oft muss man jemandem **unter die Arme greifen** (to help someone), insbesondere **den oder die Betroffene** (the affected person).
 
-Um Wohnen für alle möglich zu machen, versuchen Städte **etw. niedrig halten (to keep something low)**, zum Beispiel die **laufende Kosten (ongoing costs)**. Oft müssen sie **etw. abdecken durch (to cover something through)** Einnahmen, etwa **(Kosten durch Mieten abdecken) (to cover costs through rent)**. Wohnraum ist sehr **begehrt (in high demand)**, während andere Gebäude **unterbelegt (under-occupied)** bleiben. Dabei spielt **der Anteil, -e (the share)** von öffentlichem Eigentum eine wichtige Rolle für ein faires Zusammenleben.
+Soziale Hilfe bedeutet auch, jemanden **mit etwas zu versorgen** (+ Dativ) (to provide someone with something).
+Dabei spielen **der Streetworker** (street worker) und **die Streetworkerin** (female street worker) eine zentrale Rolle.
+Sie **suchen das Gespräch** (seek conversation), **machen sich etwas zur Aufgabe** (make something their task), **bewältigen** (cope with) schwierige Situationen und **gewährleisten** (guarantee) Unterstützung.
+Dabei müssen sie Hilfe stets **messen** (to measure), also einschätzen, was wirklich gebraucht wird.
 
-In **MODUL 4: DRÜBER REDEN (talking it through)** geht es dann um Kommunikation zwischen Menschen. Ein Gespräch hat manchmal **die Pointe, -n (the point / punchline)**, besonders wenn jemand sehr **meinungsäußernd (expressing opinions)** und vielleicht sogar **überspitzt (exaggerated)** spricht. Konflikte können sich **aufstauen (to build up)**, denn **(Wut staut sich auf) (anger builds up)**, bis sie plötzlich **ins Spiel kommen (come into play)**. In solchen Momenten beginnen Menschen zu **fluchen (to swear)**, statt ruhig zu bleiben.
+---
 
-Wenn es zu einer **die Streitigkeit, -en (the dispute)** kommt, helfen oft **der Mediator, -en (the mediator)** oder **die Mediatorin, -nen (female mediator)**. Auch **der Streitschlichter, - (the arbitrator)** oder **die Streitschlichterin, -nen (female arbitrator)** werden eingeschaltet, wenn Konflikte lange **schwelen (to smolder)**, weil **(Konflikte schwelen vor sich hin) (conflicts keep simmering)**. Oft ist **die Neugier (Sg.) (curiosity)** der erste Schritt, um den anderen besser zu verstehen.
+### **MODUL 3 – UNSER HAUS!?**
 
-Manche beginnen zu **diskutieren (to argue)**, was leider **(in Gewalt ausarten) (can escalate into violence)** kann, wenn kein **der Gesprächsversuch, -e (attempt at conversation)** unternommen wird. Ziel ist es immer, einen Konflikt zu **schlichten (to resolve)**, also **(einen Streit schlichten) (to settle a dispute)**. Häufig liegt die Ursache in **die Meinungsverschiedenheit, -en (difference of opinion)**, die nur durch **unparteiisch (impartial)**es Verhalten gelöst werden kann.
+Der Wunsch nach **dem Eigenheim** (one’s own home) ist für viele Menschen zentral.
+Manche entscheiden sich für **die Genossenschaft** (housing cooperative), andere suchen **Wohnraum** (living space), der **verhältnismäßig** (reasonable) bezahlbar ist.
+Hier spielt **die Gemeinde** (municipality) eine wichtige Rolle.
 
-Ein gutes Gespräch ist **würdigend (respectful)**, **wertschätzend (appreciative)** und **einfühlsam (empathetic)**. Ein Vermittler bleibt **verschwiegen (discreet)** und lässt alle Seiten ihre Sicht **schildern (to describe)**, bis eine Lösung für alle **annehmbar (acceptable)** ist. So wird Zusammenleben möglich – fair, ruhig und menschlich.
+Auch **die Immobilie** (real estate) muss fair verwaltet werden, möglichst **höchstmöglich** (as much as possible) sozial.
+Wenn **Eigenbedarf** (personal need) angemeldet wird, gelten klare **Kündigungsfristen** (notice periods), insbesondere wenn Wohnraum **in öffentlicher Hand** (publicly owned) ist.
 
 
-## 📗 **STORY**
+## **GESCHICHTE: ZUSAMMENLEBEN, KONFLIKTE UND VERANTWORTUNG**
 
-In **MODUL 1: ERNEUERBAR (renewable)** beginnt unsere Geschichte mit dem Thema Energie und Umwelt. Die **die Energiegewinnung, -en (energy generation)** spielt eine zentrale Rolle für die Zukunft unseres Planeten. Immer mehr Länder setzen auf **erneuerbare Energien (Pl.) (renewable energies)**, um den **der Ausstoß (Sg.) (emission)** von schädlichen Stoffen zu verringern. Besonders problematisch ist **das Treibhausgas, -e (greenhouse gas)**, das durch die Nutzung von **fossile Ressourcen (Pl.) (fossil resources)** entsteht und das Klima belastet.
+In angespannten gesellschaftlichen Situationen kann der Staat Ressourcen **entziehen** *(to withdraw)*, etwa wenn man sie **dem Markt entzieht** *(to remove from the market)*, was häufig als **spekulativ** *(speculative)* kritisiert wird.
+Internationale **Regularien** *(regulations, plural)* sollen verhindern, dass das **lebenslange Wohnrecht** *(lifelong right to housing)* gefährdet wird, insbesondere wenn Investoren rein **gewinnorientiert** *(profit-oriented)* handeln.
+Gleichzeitig ist es politisches Ziel, **etwas niedrig zu halten** *(to keep something low)*, etwa **laufende Kosten** *(ongoing costs)*, die man idealerweise **abdeckt durch** *(covers through)* Einnahmen, zum Beispiel indem man **Kosten durch Mieten abdeckt** *(covers costs through rents)*.
+Wohnraum ist **begehrt** *(highly sought-after)*, doch viele Behauptungen bleiben **unterbelegt** *(insufficiently supported)*, obwohl jeder **Anteil** *(share)* an Verantwortung zählt.
 
-Eine nachhaltige Alternative sind natürliche Energiequellen wie **die Geothermie (Sg.) (geothermal energy)**, also **(~ Erdwärme) (earth heat)**, oder **die Solarenergie (Sg.) (solar energy)**, auch bekannt als **(~ Sonnenenergie) (sun energy)**. Ebenso wichtig sind **die Windenergie (Sg.) (wind energy)** und **die Wasserkraft (Sg.) (hydropower)**. Auch **das Biogas, -e (biogas)** trägt zur Energieversorgung bei, da sich natürliche Stoffe **sich regenerieren (to regenerate)** und so langfristig nutzbar bleiben.
+### **MODUL 4 – DRÜBER REDEN**
 
-In **MODUL 2: AG NACHHALTIGKEIT (sustainability working group)** geht es um Zusammenarbeit und Verantwortung. In **die Arbeitsgruppe, -n (working group)**, auch **(~ die AG, -s) (short form for working group)** genannt, diskutieren Menschen über **die Nachhaltigkeit (Sg.) (sustainability)**. Der **der Aushang, -e (notice/poster)** informiert über neue Projekte, bei denen viele ihre Ideen **einbringen (bringt ein, brachte ein, hat eingebracht) (to contribute)**, zum Beispiel **(einen Vorschlag einbringen) (to make a suggestion)**.
+Im Zusammenleben ist es wichtig, Probleme offen anzusprechen und **die Pointe** *(the key point)* nicht zu verfehlen.
+Ein **meinungsäußernd** *(opinion-expressing)*es Gespräch kann schnell **überspitzt** *(exaggerated)* wirken, wenn Emotionen **aufstauen** *(to build up)* und plötzlich **ins Spiel kommen** *(come into play)*.
+Manche reagieren dann mit **Fluchen** *(swearing)*, was Konflikte weiter verschärft.
 
-Ein zentrales Thema ist **das Anliegen, - (the concern/request)**, etwa **(Wir wenden uns mit einem Anliegen an Sie) (we address you with a concern)**. Fachleute **verweisen auf (+ Akk.) (to refer to)** Studien **(verweist, verwies, hat verwiesen)**, die **bekanntlich (as is well known)** zeigen, wie wichtig nachhaltiges Handeln ist. Viele haben die Problematik bereits **mitbekommen (bekommt mit, bekam mit, hat mitbekommen) (to notice / to realize)**, denn **(Ihr habt das sicher mitbekommen.) (You surely noticed that.)**
+Kommt es zur Eskalation, können Streitigkeiten **ausarten** *(to escalate)*, sogar **in Gewalt ausarten** *(to escalate into violence)*.
+Ein konstruktiver **Gesprächsversuch** *(attempt at dialogue)* ist dann entscheidend, um einen Konflikt zu **schlichten** *(to resolve)*.
+Dabei helfen **der Mediator** *(male mediator)* oder **die Mediatorin** *(female mediator)*, die sich professionell mit **Streitigkeit** *(dispute)* befassen und trotz persönlicher **Neugier** *(curiosity)* neutral bleiben.
 
-Die Mitglieder der AG **unbedingt finden (to find absolutely necessary)** Veränderungen **unerlässlich sein (to be indispensable)**. **Das Muss (Sg.) (the must / necessity)**, also **(Das ist ein Muss.) (That is a must.)**, wird häufig betont. **Idealerweise (ideally)** zeigen alle **die Bereitschaft (Sg.) (willingness)**, also **(Bereitschaft signalisieren) (to signal willingness)**, sich zu engagieren. Entscheidungen werden frühzeitig **ankündigen (to announce)** und **zeitnah (promptly)** umgesetzt, denn **(Wir werden Sie zeitnah informieren.) (We will inform you promptly.)**
+Auch **der Streitschlichter** *(male arbitrator)* oder **die Streitschlichterin** *(female arbitrator)* kann vermitteln, besonders wenn Konflikte **schwelen** *(smolder)* und **vor sich hinschwelen** *(continue simmering)*.
+Unterschiedliche Positionen führen zu **Meinungsverschiedenheiten** *(differences of opinion)*, doch eine Lösung muss **unparteiisch** *(impartial)*, **würdigend** *(respectful)* und **wertschätzend** *(appreciative)* sein.
+Nur wer **einfühlsam** *(empathetic)* zuhört, nicht **verschwiegen** *(secretive)* bleibt und die Situation sachlich **schildert** *(describes)*, kann zu einer **annehmbaren** *(acceptable)* Lösung beitragen.
 
-Dabei erkennt man schnell **der Handlungsbedarf (Sg.) (need for action)**, zum Beispiel **(Wir sehen hier Handlungsbedarf.) (We see a need for action here.)**. Trotzdem gibt es auch **die Unklarheit, -en (uncertainty)**, die durch offene Kommunikation reduziert werden muss.
 
-In **MODUL 3: ALLES AUS PLASTIK? (everything made of plastic?)** richtet sich der Blick auf Konsum und Umwelt. Ein wichtiges Ziel ist **die Reduktion, -en (reduction)** von Plastikmüll. Der **der Ausbau (Sg.) (expansion)** nachhaltiger Materialien ist entscheidend, besonders wenn Produkte **abbaubar (biodegradable)** sind, wie **(Das Material ist vollständig abbaubar.) (The material is completely biodegradable.)**
+## **GESCHICHTE: ERNEUERBARE ENERGIEN, NACHHALTIGKEIT UND ZUKUNFT**
 
-Moderne Technologien können Mikroplastik **(herausfiltern (aus den Abfällen herausfiltern)) (to filter out (from waste))**, besonders wenn neue Verfahren **neuartig (innovative)** sind. Unter **unter natürlichen Bedingungen (under natural conditions)** zeigen diese Lösungen ihr volles Potenzial und helfen, Umwelt und Zukunft zu schützen.
+### **MODUL 1 – ERNEUERBAR**
 
-## 📙 **STORY**
+Die **Energiegewinnung** (energy generation) steht heute im Zentrum gesellschaftlicher Debatten.
+Der Übergang zu **erneuerbaren Energien** (renewable energies) ist notwendig, um den **Ausstoß** (emission) von **Treibhausgasen** (greenhouse gases) zu verringern und den Verbrauch **fossiler Ressourcen** (fossil resources) zu reduzieren.
+Besonders relevant sind dabei **die Geothermie** (geothermal energy), also **Erdwärme** (earth heat), **die Solarenergie** (solar energy), also **Sonnenenergie** (energy from the sun), **die Windenergie** (wind energy) und **die Wasserkraft** (hydropower).
+Auch **das Biogas** (biogas) spielt eine wichtige Rolle, da sich natürliche Systeme langfristig **regenerieren** (to regenerate) können.
 
-Im **WORTSCHATZ (vocabulary)** unserer Geschichte geht es zuerst um Organisation, Umwelt und Zusammenarbeit. Viele Projekte erhalten **die Förderung, -en (funding / support)**, besonders wenn sie nachhaltig sind, zum Beispiel **(Förderungen erhalten) (to receive funding)**. Veränderungen müssen **umgehend (immediately)** umgesetzt werden, denn Materialien **zerfallen (zerfällt, zerfiel, ist zerfallen) (to decompose)**, wie man sieht, wenn **(Das Material zerfällt in der Natur.) (The material decomposes in nature.)**. Deshalb ist es wichtig, dass sich alle Beteiligten **sich abstimmen (to coordinate with each other)**, denn **(Wir müssen uns gemeinsam abstimmen.) (We must coordinate together.)**
+---
 
-In **MODUL 4: GESCHICHTE AUS DER ZUKUNFT (story from the future)** wird erzählt, wie Menschen über Generationen hinweg denken. Unsere **die Ahnen (Pl.) (the ancestors)**, also **(~ die Vorfahren) (the forefathers)**, haben die Welt geprägt, und jeder **der Nachkomme, -n (descendant)** trägt Verantwortung. Alles hat **die Wurzel, -n (the root)**, also **(~ der Ursprung) (the origin)**, und vieles war **ursprünglich (original / originally)** einfach. Doch Fortschritt ist oft **erschöpfend (exhausting)**, also **(~ anstrengend) (strenuous)**, und irgendwann kann man **erschöpft sein (to be exhausted)**, also **(~ verbraucht sein) (to be worn out)**.
+### **MODUL 2 – AG NACHHALTIGKEIT**
 
-Nicht alles ist immer **vorhanden sein (to be available)**, deshalb müssen Menschen Ressourcen klug nutzen und **investieren in (+ Akk.) (to invest in)**, zum Beispiel **(~ Geld in etw. stecken) (to put money into something)**. Zukunftsprojekte sollen **plausibel klingen (to sound plausible)**, damit sie akzeptiert werden. Manche Entscheidungen werden **etwas kurzsichtig betrachten (to view something shortsightedly)**, obwohl nachhaltige Lösungen **einen Mehrwert zeigen / haben (to show / have added value)**.
+In einer **Arbeitsgruppe** (working group), kurz **AG** (working group), wurde intensiv über **Nachhaltigkeit** (sustainability) diskutiert.
+Der **Aushang** (notice) informierte alle Beteiligten darüber, dass neue Ideen **eingebracht** (to be submitted) werden sollten, da **das Anliegen** (the request / concern) der Gruppe klar formuliert war: *„**Wir wenden uns mit einem Anliegen an Sie** (we address you with a request).“*
+Dabei wurde ausdrücklich **auf etwas verwiesen** (+ Akk.) (to refer to something), was allen bereits **bekanntlich** (as is well known) war und was viele auch **mitbekommen** (to notice / to be aware of) hatten.
 
-Im Alltag spielen **das Hier und Jetzt (Sg.) (the here and now)** und **die Ferne (Sg.) (the distance / the future)** gleichzeitig eine Rolle. Menschen möchten **im Einklang mit der Natur leben (to live in harmony with nature)**. Dafür braucht man **das Sensorsystem, -e (sensor system)** und **die Datenauswertung, -en (data analysis)**, um Entwicklungen zu verstehen und gezielt **Nachforschungen anstellen (to conduct research)** zu können.
+Die Mitglieder erklärten, dass sie bestimmte Maßnahmen **unabdingbar finden** (to consider indispensable) und dass nachhaltiges Handeln **unerlässlich ist** (is indispensable).
+Es wurde betont, dass **das Muss** (necessity) bestehe – *„**Das ist ein Muss** (this is a must)“* –, und dass **idealerweise** (ideally) eine klare **Bereitschaft** (willingness) signalisiert werden müsse.
+Die Leitung kündigte an, die nächsten Schritte **anzukündigen** (to announce) und alle Beteiligten **zeitnah zu informieren** (to inform promptly).
+Zugleich erkannte man einen akuten **Handlungsbedarf** (need for action), da noch viel **Unklarheit** (uncertainty) bestand.
 
-Unter **Weitere Wörter, die für mich wichtig sind (additional words that are important to me)** fällt besonders das Thema Zusammenarbeit. Beim Projekt **Umweltschutz und Energie (environmental protection and energy)** heißt es oft: **Arbeiten Sie zu zweit. (Work in pairs.)** Man soll **Wählen Sie einen der Begriffe (Choose one of the terms)** und **notieren Sie zehn Nomen auf einen Zettel (write down ten nouns on a note)**. Danach soll man **Tauschen Sie dann die Zettel (exchange the notes)** und **formulieren Sie mit jedem Nomen einen Satz (form a sentence with each noun)**.
+---
 
-Beim Thema **Umweltschutz (environmental protection)** spielt **das Recycling (recycling)** eine zentrale Rolle, denn **Durch Recycling können Wertstoffe wiederverwendet werden. (Through recycling, valuable materials can be reused.)** Beim Thema **Energie (energy)** entstehen neue Ideen, die unsere Zukunft nachhaltig sichern können.
+### **MODUL 3 – ALLES AUS PLASTIK?**
 
+Ein weiteres Thema war **die Reduktion** (reduction) von Plastik sowie **der Ausbau** (expansion) umweltfreundlicher Alternativen.
+Ziel war es, Materialien zu verwenden, die **abbaubar** (biodegradable) sind – *„**Das Material ist vollständig abbaubar** (the material is completely biodegradable).“*
+Fachleute erklärten, dass man Mikroplastik aus Abfällen **herausfiltern** (to filter out) könne, insbesondere wenn **neuartige** (innovative) Verfahren **unter natürlichen Bedingungen** (under natural conditions) eingesetzt würden.
 
-## 📘 **STORY**
 
-Im Bereich **WORTSCHATZ (vocabulary)** beginnt unsere Geschichte mit gesellschaftlicher Verantwortung und nachhaltigem Handeln. Viele Umweltprojekte erhalten **die Förderung, -en (funding / support)**, besonders wenn sie langfristig gedacht sind, etwa wenn Organisationen **(Förderungen erhalten) (to receive funding)**. Maßnahmen müssen oft **umgehend (immediately)** umgesetzt werden, da Materialien **zerfallen (zerfällt, zerfiel, ist zerfallen) (to decompose)**, wie man sieht, wenn **(Das Material zerfällt in der Natur.) (The material decomposes in nature.)**. Deshalb ist Zusammenarbeit entscheidend, und alle Beteiligten müssen **sich abstimmen (to coordinate with each other)**, denn **(Wir müssen uns gemeinsam abstimmen.) (We must coordinate together.)**
+## **GESCHICHTE: VERANTWORTUNG FÜR ZUKUNFT, NATUR UND MENSCHHEIT**
 
-In **MODUL 4: GESCHICHTE AUS DER ZUKUNFT (story from the future)** blicken Menschen zurück und nach vorne zugleich. Unsere **die Ahnen (Pl.) (the ancestors)**, also **(~ die Vorfahren) (the forefathers)**, haben die Grundlage für unsere Welt geschaffen. Jeder **der Nachkomme, -n (descendant)** trägt Verantwortung für kommende Generationen. Alles hat seine **die Wurzel, -n (the root)**, also **(~ der Ursprung) (the origin)**, und vieles war **ursprünglich (original / originally)** im Einklang mit der Natur. Doch Fortschritt ist oft **erschöpfend (exhausting)**, also **(~ anstrengend) (strenuous)**, und Menschen können **erschöpft sein (to be exhausted)**, also **(~ verbraucht sein) (to be worn out)**.
+In der Gegenwart spielt **die Förderung** *(funding / support)* eine zentrale Rolle, denn viele Projekte können nur umgesetzt werden, wenn sie **Förderungen erhalten** *(to receive funding)*.
+Angesichts globaler Herausforderungen ist es notwendig, **umgehend** *(immediately)* zu handeln, da vieles sonst **zerfällt** *(to decay)* – so wie ein Stoff, der **in der Natur zerfällt** *(decays in nature)*.
+Damit nachhaltige Lösungen greifen, müssen sich alle Beteiligten **abstimmen** *(to coordinate)*, denn: *„**Wir müssen uns gemeinsam abstimmen** *(we must coordinate together)*.“*
 
-Nicht immer ist alles **vorhanden sein (to be available)**, weshalb kluge Entscheidungen nötig sind. Viele Gemeinschaften beginnen, gezielt zu **investieren in (+ Akk.) (to invest in)** neue Technologien, etwa **(~ Geld in etw. stecken) (to put money into something)**. Zukunftskonzepte müssen **plausibel klingen (to sound plausible)**, auch wenn manche sie zuerst **etwas kurzsichtig betrachten (to view something shortsightedly)**. Langfristig können nachhaltige Lösungen jedoch **einen Mehrwert zeigen / haben (to show / have added value)**.
+### **MODUL 4 – GESCHICHTE AUS DER ZUKUNFT**
 
-Im Alltag bewegen sich Menschen zwischen **das Hier und Jetzt (Sg.) (the here and now)** und **die Ferne (Sg.) (the distance / the future)**. Viele möchten bewusst **im Einklang mit der Natur leben (to live in harmony with nature)**. Dafür nutzt man moderne Technik wie **das Sensorsystem, -e (sensor system)** und **die Datenauswertung, -en (data analysis)**, um Entwicklungen zu verstehen und gezielt **Nachforschungen anstellen (to conduct research)** zu können.
+In einer Zukunft, die von den **Ahnen** *(ancestors)* geprägt wurde, übernehmen die **Nachkommen** *(descendants)* Verantwortung für ihre **Wurzeln** *(roots / origins)*.
+Was einst **ursprünglich** *(originally)* als Vision begann, wurde zu einem **erschöpfenden** *(exhausting)* Prozess, der viele Menschen **erschöpft sein** *(to be worn out)* ließ.
+Doch trotz knapper Ressourcen war Hoffnung **vorhanden** *(present)*, weil Regierungen begannen, gezielt **in neue Technologien zu investieren** *(to invest in)*.
+Diese Entscheidungen mussten **plausibel klingen** *(sound plausible)*, um gesellschaftliche Akzeptanz zu finden.
 
-Unter **Weitere Wörter, die für mich wichtig sind (additional words that are important to me)** fällt besonders das gemeinsame Lernen. Beim Thema **Umweltschutz und Energie (environmental protection and energy)** heißt es oft: **Arbeiten Sie zu zweit. (Work in pairs.)** Die Aufgabe lautet: **Wählen Sie einen der Begriffe (Choose one of the terms)** und **notieren Sie zehn Nomen auf einen Zettel (write down ten nouns on a note)**. Danach soll man **Tauschen Sie dann die Zettel (exchange the notes)** und **formulieren Sie mit jedem Nomen einen Satz (form a sentence with each noun)**.
+Viele Fehler entstanden, weil man Entwicklungen **kurzsichtig betrachtete** *(viewed something short-sightedly)*, anstatt ihren **Mehrwert** *(added value)* zu erkennen.
+Dabei geht es nicht nur um **das Hier und Jetzt** *(the here and now)*, sondern auch um **die Ferne** *(the distant future)*.
+Ein Leben **im Einklang mit der Natur** *(in harmony with nature)* wurde zum Leitbild, unterstützt durch ein modernes **Sonnensystem** *(solar system)*, systematische **Datenauswertung** *(data analysis)* und intensive **Nachforschungen anstellen** *(to conduct research)*.
 
-Beim Bereich **Umweltschutz (environmental protection)** ist **das Recycling (recycling)** besonders wichtig, denn **Durch Recycling können Wertstoffe wiederverwendet werden. (Through recycling, valuable materials can be reused.)** Beim Thema **Energie (energy)** entstehen dadurch neue Ideen, die unsere gemeinsame Zukunft sichern.
+### **WEITERE ASPEKTE**
 
-## 📘 **STORY**
+Besonders wichtig wurde **das Recycling** *(recycling)*, denn **durch Recycling können Wertstoffe wiederverwendet werden** *(through recycling, valuable materials can be reused)*.
+Auch **Energie** *(energy)* spielte eine entscheidende Rolle, da nachhaltige Energiesysteme langfristig Stabilität sichern.
 
-In **MODUL 1: MEIN BERUF UND ICH (my profession and I)** beginnt die Geschichte einer Person, deren Arbeit stark von **die Sorgfalt (Sg.) (care)** geprägt ist. Sie arbeitet sehr **sorgfältig (carefully)**, weil **die Verlässlichkeit (Sg.) (reliability)** in ihrem Beruf **berufsbedingt (job-related)** unverzichtbar ist. Ihr **das Verhaltensmuster, - (behavior pattern)** hat sich über Jahre entwickelt, da sie gelernt hat, **etwas bewältigen (to cope with / to accomplish)**, also **(~ etwas schaffen) (to manage something)**. Im **der / ein wahre(r) Kern (true core)** ihrer Persönlichkeit steht eine prägende **die Anekdote, -n (anecdote)** aus der Ausbildung. Sie achtet stets auf **der Vorrat, -¨e (supply)**, sowohl im Büro als auch privat.
 
-Als **der Selbstversorger, - (self-sufficient person)**, beziehungsweise **die Selbstversorgerin, -nen (female self-sufficient person)**, lebt sie bewusst und reflektiert ihre **die Mentalität, -en (mentality)** regelmäßig. Im Berufsalltag wird sie oft **jdn. konfrontieren mit (+ Dat.) (to confront someone with)** schwierigen Fragen. Dabei zeigt sich ihr **das Persönlichkeitsmerkmal, -e (personality trait)**, also **(~ die Charaktereigenschaft) (character trait)**, besonders deutlich. Sie arbeitet sehr zielorientiert, was man an ihrer **die Zielstrebigkeit, -en (determination)** erkennt. Ihr **das Führungsverhalten, - (leadership behavior)** ist **ausgeprägt sein (to be pronounced)**, was auch in **die Studie, -n (study)** sichtbar wird. Ihre Leistung ist nicht **(un)auffällig ((in)conspicuous)**, sondern klar strukturiert, auch wenn manche Entscheidungen **einseitig (one-sided)** wirken.
+## **GESCHICHTE: MEIN BERUF, MEINE MOTIVATION UND MEIN TRAUMJOB**
 
-Oft stützt sie sich auf **der Fachbericht, -e (expert report)**, um Argumente nicht **anzweifeln (to doubt)** zu lassen. Ihre Arbeit ist **übergenau (extremely precise)**, manchmal sogar **langwierig (time-consuming)**, aber immer gut **fundiert (well-founded)**.
+### **MODUL 1 – MEIN BERUF UND ICH**
 
-In **MODUL 2: ICH MÖCHTE DIESEN JOB (I want this job)** beschreibt sie ihre Motivation. In Gesprächen versucht sie, gezielt zu **punkten (to score points)**, denn Engagement **etwas wird / ist gern gesehen (something is appreciated)**. Sie weiß, wie man **sich einen Vorteil verschaffen (to gain an advantage)** kann, auch wenn der Weg **aufwändig (complex / demanding)** ist. Ihre Projekte sind nicht immer **spektakulär (spectacular)**, aber oft **originell (original)**. Sie weiß, dass **etw. geht immer (something is always possible)**, denn **(eine neutrale Umgebung geht immer) (a neutral environment always works)**. Besonders wichtig ist ihr **die Facette, -n (facet)** ihrer Persönlichkeit.
+In meinem beruflichen Alltag ist **die Sorgfalt** *(care)* von zentraler Bedeutung, denn nur wer **sorgfältig** *(careful)* arbeitet, zeigt echte **Verlässlichkeit** *(reliability)*.
+Viele meiner Aufgaben sind **berufsbedingt** *(job-related)* anspruchsvoll und erfordern ein stabiles **Verhaltensmuster** *(behavior pattern)*, um Herausforderungen erfolgreich **zu bewältigen** *(to cope with / accomplish)*.
+Im **wahren Kern** *(true core)* meiner Arbeit steckt oft eine persönliche **Anekdote** *(anecdote)* aus der **Vorart** *(early stage / preliminary phase)* meiner Karriere, als ich noch **Selbstversorger** *(self-sufficient person)* war oder als **Selbstversorgerin** *(female self-sufficient person)* meinen Alltag organisierte.
+Diese Erfahrungen prägten meine **Mentalität** *(mentality)* nachhaltig, insbesondere wenn ich jemanden **mit etwas konfrontieren musste** *(to confront someone with something, + dative)*.
 
-Ihre Arbeitsweise ist **dynamisch (dynamic)**, nicht **verwackelt (shaky)**, sondern **detailreich (rich in detail)**. Sie achtet auf **die Kameraeinstellung, -en (camera angle)**, wenn sie Präsentationen vorbereitet. Dabei muss sie sich aktiv **sich einbringen (to contribute actively)**, denn **(bringt sich ein, brachte sich ein, hat sich eingebracht)** zeigt Einsatz. Neue Aufgaben **reizen (es reizt mich) (to appeal to / to excite)** sie, besonders wenn sie ihre **die Selbstpräsentation, -en (self-presentation)** verbessern kann.
+Ein entscheidendes **Persönlichkeitsmerkmal** *(personality trait / character trait)* ist dabei meine **Zielstrebigkeit** *(determination)*, die mein **Führungsverhalten** *(leadership behavior)* positiv beeinflusst.
+Sie ist oft **ausgeprägt** *(pronounced)*, was auch durch eine wissenschaftliche **Studie** *(study)* bestätigt wurde.
+Diese Erkenntnis war keineswegs **unauffällig** *(inconspicuous)*, sondern zeigte deutlich, dass **einseitige** *(one-sided)* Bewertungen problematisch sein können.
+Ein differenzierter **Fachbericht** *(expert report)* darf nicht leichtfertig **angezweifelt** *(questioned)* werden, sondern muss **übergenau** *(extremely precise)*, wenn auch **langwierig** *(lengthy)*, jedoch stets **fundiert** *(well-founded)* sein.
 
-In **MODUL 3: TRAUMJOB? (dream job?)** denkt sie über ihre Zukunft nach. Ihre **die Berufung, -en (vocation)** ist es, Wissen weiterzugeben und Werte zu vermitteln. Sie möchte **etw. vermitteln (to convey something)**, um anderen ein **ein erfülltes Leben (a fulfilled life)** zu ermöglichen. Ein solcher Beruf ist **erfüllend (fulfilling)**, wie **(ein erfüllender Beruf) (a fulfilling profession)** zeigt. Am Ende möchte sie **sich selbst verwirklichen (to realize oneself)** und Arbeit mit Sinn verbinden.
+---
 
+### **MODUL 2 – ICH MÖCHTE DIESEN JOB**
 
-## 📘 **STORY**
+In Bewerbungsgesprächen werden oft bestimmte Aspekte **gepunktet** *(highlighted)*, insbesondere wenn etwas **gern gesehen** *(welcome)* ist.
+Dabei versuche ich stets, mir **einen Vorteil zu verschaffen** *(to gain an advantage)*, auch wenn der Prozess **aufwändig** *(labor-intensive)* ist.
+Ein Projekt kann **spektakulär** *(spectacular)* oder **originell** *(original)* wirken, doch **etwas geht immer** *(there is always something that works)* – selbst in einer neutralen Umgebung.
+Gerade **die Facette** *(facet)* eines Problems entscheidet oft über Erfolg oder Misserfolg.
 
-Zu Beginn unserer Geschichte geht es um Verantwortung im Arbeitsleben. Viele Entscheidungen werden **etw. auf den Prüfstand stellen (to put something to the test)**, also **(~ etw. hinterfragen) (to question something)**, bevor man handelt. Wer Verantwortung übernimmt, muss **sich etw. aneignen (to acquire something)** und **sich über etw. im Klaren sein (to be clear about something)**, also **(~ etw. genau wissen) (to know something exactly)**. Jede berufliche Rolle muss bestimmte Inhalte **beinhalten (to include)**, und niemand sollte unüberlegt einen neuen Job **hinschmeißen (einen Job hinschmeißen) (to quit a job abruptly)**.
+Meine Arbeitsweise ist **dynamisch** *(dynamic)*, manchmal **verwackelt** *(shaky)*, aber stets **detailreich** *(rich in detail)*.
+Besonders wichtig ist mir **die Kameraeinstellung** *(camera angle)* im übertragenen Sinne, also der richtige Blickwinkel.
+Ich versuche, **mich einzubringen** *(to contribute)*, denn genau das **reizt mich** *(appeals to me)*.
+Dabei spielt **die Selbstpräsentation** *(self-presentation)* eine zentrale Rolle.
 
-In wirtschaftlich schwierigen Zeiten kann ein Unternehmen gezwungen sein, **einen Kassensturz machen (to take stock / review finances)**. Dabei nimmt man alles **im Hinblick auf (+ Akk.) (with regard to)** zukünftige Entwicklungen unter die Lupe. Gute Leistungen sollen **Anerkennung verdienen (to deserve recognition)**, besonders wenn **der Personalmangel (Sg.) (staff shortage)** den Arbeitsalltag erschwert. Gerade **der Quereinstieg, -e (career change)** wird gefördert, um verschiedene Kompetenzen zu **vereinen (to combine)**.
+---
 
-In **MODUL 4: IST DAS GERECHT? (is that fair?)** steht die soziale Frage im Mittelpunkt. Für viele sollte **eine Selbstverständlichkeit sein (to be a matter of course)**, dass Arbeitsbedingungen fair gestaltet werden. Unterschiede im Einkommen sind oft **erheblich (significant)**, besonders im **der Niedriglohnsektor, -en (low-wage sector)**. Dabei spielt **die Erwerbstätigkeit (Sg.) (employment)** eine zentrale Rolle, da sie eng mit **die Verdienstmöglichkeit, -en (earning opportunity)** verbunden ist.
+### **MODUL 3 – TRAUMJOB?**
 
-Gleichzeitig muss Arbeit **zugänglich sein (to be accessible)**, damit alle Menschen teilnehmen können. Entscheidungen brauchen **der Verstand, ¨e (reason / intellect)**, um soziale Gruppen nicht **unterrepräsentiert (underrepresented)** zu lassen. Oft sind Probleme **geschlechtsspezifisch (gender-specific)**, besonders wenn Einkommen **brutto (≠ netto) (gross (≠ net))** betrachtet wird. Für Familien ist **die Ganztagsbetreuung (Sg.) (full-day childcare)** entscheidend, um Beruf und Privatleben zu vereinbaren.
+Letztlich sehe ich meinen beruflichen Weg als **Berufung** *(vocation)*.
+Ich möchte nicht nur Fähigkeiten **vermitteln** *(to convey / pass on)*, sondern auch **ein erfülltes Leben** *(a fulfilled life)* führen.
+Ein solcher Weg ist **erfüllend** *(fulfilling)*, weil man sich dabei **selbst verwirklicht** *(self-actualize)*.
 
-Unter **Weitere Wörter, die für mich wichtig sind (additional words that are important to me)** fällt auch Teamarbeit. In einer Übung heißt es: **Nennen Sie so viele Wörter zum Thema Arbeit und Beruf wie möglich. (Name as many words as possible on the topic of work and profession.)** Die Aufgabe lautet: **Arbeiten Sie zu dritt. (Work in groups of three.)** **A beginnt mit einem Wort (A starts with one word)**, **B sucht zum letzten Buchstaben ein neues Wort (B finds a new word using the last letter)**, und **etc. (etcetera)**. Danach soll man **Zählen Sie mit, welche Gruppe hat am Ende die meisten Wörter. (Count along to see which group has the most words.)**
 
-Im Austausch hört man dann Aussagen wie **die Nachricht (the message)**, **T … Hm … das Team! (T … hm … the team!)**, oder einfach **m … (m …)**, während gemeinsam nachgedacht wird.
+## **GESCHICHTE: ARBEIT, GERECHTIGKEIT UND VERANTWORTUNG**
 
+Im beruflichen Alltag ist es wichtig, Entscheidungen **auf den Prüfstand zu stellen** *(to put to the test)* und sie kritisch **zu hinterfragen** *(to question)*.
+Wer sich neue Kompetenzen **aneignet** *(to acquire)*, sollte sich **über etwas im Klaren sein** *(to be fully aware of something)*, denn jede Tätigkeit kann bestimmte Anforderungen **beinhalten** *(to include)*.
+Manchmal neigen Menschen dazu, **einen Job hinzuschmeißen** *(to quit a job abruptly)*, was jedoch langfristige Konsequenzen haben kann.
 
-## 📘 **STORY**
+Unternehmen müssen wirtschaftlich handeln, um keinen **Kassensturz zu machen** *(to have a financial collapse)*, und sollten **im Hinblick auf** *(with regard to)* nachhaltige Entwicklung handeln.
+Leistungen, die Mitarbeitende erbringen, sollen **Anerkennung verdienen** *(to deserve recognition)*, besonders in Zeiten von **Personalmangel** *(staff shortage)*.
+Dabei bietet der **Quereinstieg** *(career change)* neue Chancen, um Kompetenzen zu **vereinen** *(to combine)*.
 
-In **MODUL 1: EINE FRAGE DES GESCHMACKS (a matter of taste)** beginnt die Geschichte mit Wahrnehmung und persönlicher Entwicklung. Jeder Mensch entwickelt **der Geschmackssinn, -e (sense of taste)** im Laufe der Zeit, und Dinge **schmecken (to taste)** für jeden anders. **Im Laufe des Lebens (in the course of life)** verändert sich **der Bitterstoff, -e (bitter substance)** ebenso wie andere Geschmacksnuancen. Menschen lernen, Eindrücke bewusst **wahrnehmen (nimmt wahr, nahm wahr, hat wahrgenommen) (to perceive)**. Viele Vorlieben sind **vorhersehbar (predictable)**, also **(~ vorhersehbare Ergebnisse) (predictable results)**, weil sie **zufolge (as a result of)** Erziehung und Erfahrung entstehen. **Sämtlich (~ alle) (all)** Eindrücke werden durch **das Umfeld (Sg.) (environment)** beeinflusst, da **der Rezeptor, -en (receptor)** im Körper auf Reize **beruhen auf (+ Dat.) (to be based on)**, also **(~ liegen an) (to be due to)** biologische Prozesse. Manche Menschen **für etw. stehen (to stand for something)**, also **(~ etw. vertreten) (to represent something)**, wenn sie ihren Geschmack verteidigen.
+### **MODUL 4 – IST DAS GERECHT?**
 
-In **MODUL 2: KUNST AM BAU (art in construction)** rückt Architektur in den Mittelpunkt. **Der Bauherr, -en (client / builder)** und **die Bauherrin, -nen (female client / builder)** planen gemeinsam **der Bau, -ten (construction)** eines Projekts. Dabei übernehmen sie **die Verpflichtung, -en (obligation)**, also **(Verpflichtungen übernehmen) (to take on obligations)**. Oft braucht es **die Förderung, -en (funding)**, um Kunst zu ermöglichen. Künstler schaffen **die Skulptur, -en (sculpture)**, finanziert durch **die Spendengelder (Pl.) (donations)**, also **(Finanzierung durch Spendengelder) (financing through donations)**. Wichtig ist es, alle Beteiligten **jdn. einbeziehen (bezieht ein, bezog ein, hat einbezogen) (to involve someone)**, damit Kunst Teil des öffentlichen Raums wird.
+Für viele Beschäftigte ist **Selbstverständlichkeit** *(something taken for granted)* kein gegebenes Gut mehr, denn die Belastungen sind oft **erheblich** *(considerable)*.
+Besonders im **Niedriglohnsektor** *(low-wage sector)* ist **Erwerbstätigkeit** *(employment)* zwar vorhanden, doch die **Verdienstmöglichkeit** *(earning potential)* bleibt begrenzt.
+Zwar sollte Arbeit **zugänglich sein** *(to be accessible)*, doch fehlt es häufig an gesellschaftlichem **Verstand** *(understanding / sense)* für strukturelle Probleme.
 
-In **MODUL 3: DIE WELT IST EINE KNOLLE (the world is a lump)** wird Sprache kritisch betrachtet. **Die Knolle, -n (tuber / lump)** dient als Metapher, während **die Glosse, -n (satirical commentary)** gesellschaftliche Themen beleuchtet. Texte sind oft **satirisch (satirical)**, voller **der Sarkasmus (Sg.) (sarcasm)** und **der Sprachwitz (Sg.) (linguistic wit)**. Diese Texte sind **gegenwärtig (current)**, liefern **die Beilage, -n (side dish / supplement)** zur Realität und können Leser **aufschrecken (to startle)**. Viele Probleme erscheinen **unlösbar (unsolvable)**, besonders wenn **die Hungersnot, -e (famine)** herrscht. Gesellschaften müssen **ankämpfen gegen (+ Akk.) (to fight against)** Ungerechtigkeit und Leid.
+Bestimmte Gruppen sind **unterrepräsentiert** *(underrepresented)*, vor allem wenn Arbeitsbedingungen **geschlechtsspezifisch** *(gender-specific)* benachteiligen.
+Hinzu kommt, dass Einkommen oft nur **brutto** *(gross)* statt **netto** *(net)* betrachtet werden, was die reale Lebenssituation verzerrt.
+Gerade für Familien ist **Ganztagsbetreuung** *(full-day childcare)* entscheidend, um Beruf und Privatleben vereinbaren zu können.
 
-Manchmal muss der Staat eingreifen und Maßnahmen **verordnen (to decree)**, besonders beim **der Anbau (Sg.) (cultivation)** von Lebensmitteln. Politische Entscheidungen werden **bewachen (to guard / monitor)** und wirken oft nur **scheinbar (~ angeblich) (apparently)** sinnvoll. Lösungen müssen **sättigen (to satiate)**, **einsetzbar (usable)** und langfristig tragfähig sein. Ein **der Stellvertreter, - (representative)** oder **die Stellvertreterin, -nen (female representative)** fungiert als **(~ Repräsentant/in) (representative)**. **Von nun an (from now on)** sollen Systeme besser **funktionieren (to function)**.
 
-Grenzen können **einreißen (reißt ein, riss ein, hat eingerissen) (to tear down)**, also **(Grenzen einreißen) (to tear down borders)**, wie es **einst (once)** geschah, als Visionen größer waren. Ziel bleibt **der Einheitsbrei (Sg.) (uniformity / bland uniformity)** zu vermeiden und Vielfalt zu bewahren.
+## **GESCHICHTE: GESCHMACK, KUNST UND EINE SATIRISCHE GEGENWART**
 
+### **MODUL 1 – EINE FRAGE DES GESCHMACKS**
 
-## 📘 **STORY**
+Der **Geschmackssinn** *(sense of taste)* entwickelt sich **im Laufe des Lebens** *(over the course of life)* und bestimmt, wie Dinge **schmecken** *(to taste)*.
+Ein **Bitterstoff** *(bitter substance)* wird oft anders bewertet, je nachdem, wie man ihn **wahrnimmt** *(to perceive)*; viele Menschen **nehmen wahr** *(perceive)*, andere **nahmen wahr** *(perceived)*, und manche haben ihn bewusst **wahrgenommen** *(have perceived)*.
+Solche Reaktionen sind nur bedingt **vorhersehbar** *(predictable)*, denn Geschmack ist kein rein rationales Phänomen.
 
-In **MODUL 4: WITZIG, ODER? (funny, or?)** dreht sich die Geschichte um Humor, Sprache und Macht. **Der Humorist, -en (humorist)** und **die Humoristin, -nen (female humorist)** gelten als **humoristisch (humorous)**, weil sie gesellschaftliche Themen aus einem bestimmten **das Milieu, -s (social environment)** betrachten. Dabei hinterfragen sie **die Normvorstellung, -en (social norm)** und setzen Humor nicht als **der Selbstzweck (Sg.) (end in itself)** ein, sondern reflektieren oft **bildungsbürgerlich (educated middle-class)** geprägte Perspektiven. Manche Aussagen können **jdn. vor den Kopf stoßen (stößt, stieß, hat gestoßen) (to offend someone)**, auch wenn sie scheinbar **ordinär (crude / plain)** formuliert sind.
+Entscheidend ist dabei das **Umfeld** *(environment)*, in dem **sämtliche** *(all)* Eindrücke zusammenwirken.
+Der **Rezeptor** *(receptor)* im Körper reagiert auf Reize, die **auf etwas beruhen** *(to be based on something, + dative)*, und persönliche Bewertungen **stehen für etwas** *(stand for something / represent something)*.
+Veränderungen entstehen häufig **zufolge** *(as a result of)* sozialer Prägung und individueller Erfahrung.
 
-Humor ist eng mit **die Gesellschaftsschicht, -en (social class)** verbunden und entfaltet sich häufig im **der Diskurs, -e (discourse)**. Dabei entsteht **die Mehrdeutigkeit, -en (ambiguity)**, die zum Nachdenken anregt, aber auch **die Verdrängung, -en (suppression)** fördern kann. Bestimmte Themen werden bewusst **tabuisieren (to taboo)**, um Machtverhältnisse zu schützen. Ungleichheiten lassen sich jedoch nicht ewig **aufrechterhalten (erhält aufrecht, erhielt aufrecht, hat aufrechterhalten) (to maintain)**, zum Beispiel **(eine Ungerechtigkeit aufrechterhalten) (to maintain an injustice)**.
+---
 
-Im Zentrum vieler Diskussionen steht **das Machtverhältnis, -se (power relationship)**, das durch **der Tabubruch, -¨e (breaking a taboo)** sichtbar wird. Humor kann Grenzen **beschneiden (beschneidet, beschnitt, hat beschnitten) (to restrict)**, etwa wenn **(die Freiheit beschneiden) (to restrict freedom)** thematisiert wird. Manche Menschen sehen die Welt **etw. schwarz-weiß sehen (to see something in black and white)**, während andere die Rolle **die Spracherziehung (Sg.) (language education)** betonen. Entscheidungen erscheinen **gewiss (= bestimmt) (certain)**, wenn Sprache gezielt genutzt wird, um Macht zu **instrumentalisieren (to instrumentalize)**.
+### **MODUL 2 – KUNST AM BAU**
 
-Oft versucht man, Ereignisse **etw. einordnen (to classify something)**, besonders wenn **das Vertrauensverhältnis, -se (relationship of trust)** gefährdet ist. Gegensätzliche Meinungen können **sich zusammenreißen (to pull oneself together)**, um eine größere **die Reichweite, -n (reach / impact)** zu erzielen. Manche Probleme werden bewusst **etw. ausblenden (-ignorieren, absichtlich nicht sehen) (to ignore deliberately)**, wodurch neue **die Doppeldeutigkeit, -en (double meaning)** entsteht. Aussagen wirken dann **vermeintlich (supposedly)** harmlos, obwohl sie tiefere Bedeutungen tragen.
+Beim Bau öffentlicher Gebäude tragen **der Bauherr** *(developer)* und **die Bauherrin** *(female developer)* Verantwortung für **den Bau** *(construction)* selbst sowie für kulturelle Aspekte.
+Mit jeder **Verpflichtung** *(obligation)*, also den übernommenen **Verpflichtungen** *(commitments)*, geht auch eine gesellschaftliche **Forderung** *(demand)* einher.
+Oft entsteht Kunst **am Bau** in Form einer **Skulptur** *(sculpture)*, deren Umsetzung durch **Spendengelder** *(donations)* ermöglicht wird.
 
-Unter **Weitere Wörter, die für mich wichtig sind (additional words that are important to me)** fällt besonders der spielerische Umgang mit Sprache. In einer Übung heißt es: **Wer ist schneller? (Who is faster?)** Dabei soll man **Arbeiten Sie zu zweit (Work in pairs)** und **schreiben Sie Wörter aus der Liste zu dem Wort, wie im Beispiel. (write words from the list related to the word, as in the example.)** **Die Gewinner / Die Gewinnerin (the winner / female winner)** **bekommt 1 Punkt (gets 1 point)**. Danach soll man **Wählen Sie dann ein neues Wort (choose a new word)**. Am Ende fragt man: **Wer hat am Ende die meisten Punkte? (Who has the most points at the end?)**
+Dabei werden Bürgerinnen und Bürger aktiv **einbezogen** *(to be involved)*, denn Kunst soll Teil des Alltags sein und nicht nur dekorative Funktion erfüllen.
+Gerade bei öffentlichen Projekten ist Transparenz unerlässlich, um Vertrauen zu schaffen.
 
-Als Beispiel taucht das Wort **Reichweite (reach)** auf, und Buchstaben wie **G E S C H M A C K (taste)** werden spielerisch ergänzt, um Sprache, Humor und Bedeutung miteinander zu verbinden.
+---
 
+### **MODUL 3 – DIE WELT IST EINE KNOLLE**
 
-## 📘 **STORY**
+Die Welt erscheint manchen wie **eine Knolle** *(a tuber)*: rau, unregelmäßig und schwer zu durchschauen.
+Politische **Glossen** *(satirical commentaries)* sind oft **satirisch** *(satirical)*, geprägt von **Sarkasmus** *(sarcasm)* und beißendem **Sprachwitz** *(verbal wit)*, der aktuelle Missstände **gegenwärtig** *(present-day)* sichtbar macht.
+Manche **Beilage** *(side dish)* wirkt harmlos, kann aber beim Lesen **aufschrecken** *(to startle)*.
 
-In **MODUL 1: WAS DÜRFEN VORGESETZTE? (what are supervisors allowed to do?)** beginnt die Geschichte mit dem Arbeitsalltag und Machtverhältnissen. Viele Beschäftigte nutzen **der Dienstaccount, -s (work account)** und fühlen sich manchmal **etw. ausgesetzt sein (to be exposed to something)**, etwa durch **die Sachlage, -n (situation / state of affairs)**. Vorgesetzte können Verhalten **etw. einschätzen (to assess something)**, was für Mitarbeitende oft **erstaunlich (surprising)** wirkt. Dennoch müssen Führungskräfte ihre Macht **etw. unterschätzen (to underestimate something)** vermeiden, da **die Fürsorgepflicht (Sg.) (duty of care)** gilt. Niemand darf **jdn. schikanieren (to harass someone)** oder **die Schikane, -n (harassment)** rechtfertigen. Problematisch wird es, wenn sich jemand **sich im Ton vergreifen (vergreift, vergriff, hat vergriffen) (to cross the line in tone)** oder Kritik **sich etw. gefallen lassen (lässt gefallen, ließ gefallen, hat gefallen lassen) (to put up with something)** muss.
+Globale Probleme erscheinen häufig **unlösbar** *(unsolvable)*, besonders wenn **Hungersnöte** *(famines)* herrschen und man aktiv **gegen etwas ankämpfen** *(to fight against something, + accusative)* muss.
+Regierungen **verordnen** *(to decree)* Maßnahmen, um den **Anbau** *(cultivation)* von Nahrungsmitteln zu sichern.
 
-Macht im Beruf ist **begrenzt (limited)**, auch wenn Führungskräfte **jdn./etw. überwachen (to monitor someone/something)**. Manche reagieren **ausdrücklich (explicitly)**, andere machen **der Irrtum, -¨er (mistake)**e. Wichtig ist **der Kündigungsschutz (Sg.) (protection against dismissal)**, der Sicherheit gibt. Entscheidungen beruhen oft auf **die Prognose, -n (forecast)**, doch niemand darf **jdm. etw. zumuten (to impose something on someone)**. Wenn sich Konflikte zuspitzen, versuchen einige, **sich durchsetzen (to assert oneself)** oder sogar **brüllen (to shout)**. In ernsten Fällen muss man **jdn. einschalten (to involve someone)**, etwa den Betriebsrat, der **spezialisiert sein auf (+ Akk.) (to be specialized in)** Arbeitsrecht.
+Gleichzeitig werden Grenzen **bewacht** *(guarded)*, Entscheidungen wirken **scheinbar** *(apparently)* logisch, sollen Gesellschaften **sättigen** *(to satiate)* und Ressourcen **einsetzbar** *(deployable)* machen.
+Politische **Stellvertreter** *(representatives)*, insbesondere **die Stellvertreterin** *(female representative)*, handeln **von nun an** *(from now on)* unter neuen Bedingungen.
+Systeme müssen **funktionieren** *(to function)*, dürfen aber keine sozialen Risse **einreißen** *(to tear open)*.
 
-In **MODUL 2: FREIE FAHRT? (free ride?)** geht es um Verantwortung im Straßenverkehr. Wer **jmd. etw. darlegen (to explain something to someone)** kann, zeigt sich oft **schuldbewusst (aware of guilt)**. Eine **die Konversation, -en (conversation)** hilft, den **der Schwerpunkt, -e (focus)** zu klären. Dennoch kann man leicht **etw./jdn. übersehen (übersieht, übersah, hat übersehen) (to overlook something/someone)**. Maßnahmen sollen **einwirken auf (+ Akk.) (to have an effect on)** Verhalten, wenn man sich **sich bemühen um (+ Akk.) (to make an effort for)** Sicherheit, also **sinngemäß (in essence)** korrekt handelt.
+Der Wandel geschieht oft **einst** *(once)* im Namen des **Einheitsbreis** *(uniform mass)*, obwohl Vielfalt eigentlich Stärke bedeutet.
 
-Manche versuchen, **sich raushalten (hält raus, hielt raus, hat rausgehalten) (to stay out of something)**, statt Verantwortung zu übernehmen. Wer Regeln missachtet, wird oft **jdn. konfrontieren mit (+ Dat.) (to confront someone with)** den Folgen, zum Beispiel wenn man **geblitzt werden (to be caught by a speed camera)** ist. Das **das Verkehrsaufkommen (Sg.) (traffic volume)** steigt, besonders wenn Menschen **etw. überschreiten (überschreitet, überschritt, hat überschritten) (to exceed something)**, etwa Geschwindigkeitsbegrenzungen. Trotzdem kann es helfen, **jdn. ermuntern (to encourage someone)**, denn verantwortungsvolles Verhalten ist **herausragend (outstanding)**.
+## **GESCHICHTE: WITZIG, ODER? – HUMOR, MACHT UND MEHRDEUTIGKEIT**
 
-In **MODUL 3: WER HAT RECHT? (who is right?)** geraten Meinungen oft aneinander. Manche Menschen sind **stur (stubborn)** und wollen **den Ton angeben (gibt an, gab an, hat angegeben) (to set the tone)**. Konflikte lassen sich jedoch entschärfen, wenn man bereit ist, **jdm. entgegenkommen (kommt entgegen, kam entgegen, ist entgegengekommen) (to accommodate someone)** und Kompromisse einzugehen.
+In einer lebhaften Debatte trafen **der Humorist** *(male humorist)* und **die Humoristin** *(female humorist)* aufeinander, beide **humoristisch** *(humorous)* geprägt durch **das Milieu** *(social environment)*, aus dem sie stammten.
+Ihre Beiträge stellten gängige **Normvorstellungen** *(normative ideas)* infrage und dienten nicht dem **Selbstzweck** *(end in itself)*, sondern waren klar **bildungsbürgerlich** *(educated middle-class)* kontextualisiert.
+Manche Pointen **stießen jemanden vor den Kopf** *(to offend someone)*, obwohl sie formal **ordinär** *(ordinary)* wirkten und dennoch eine ganze **Gesellschaftsschicht** *(social class)* adressierten.
+Im öffentlichen **Diskurs** *(discourse)* zeigte sich schnell die **Mehrdeutigkeit** *(ambiguity)* der Aussagen sowie die damit verbundene **Verdrängung** *(repression)* unbequemer Themen, die mancherorts sogar **tabuisiert** *(to taboo)* wurden.
 
+Gleichzeitig versuchten einige Akteure, eine **Ungerechtigkeit aufrechtzuerhalten** *(to uphold an injustice)*, indem sie Humor instrumentell einsetzten.
+Dabei wurde **das Machtverhältnis** *(power relationship)* sichtbar, das sich im Umgang mit Sprache zeigte: Ein ironischer Verweis konnte **ein Tabubruch** *(taboo violation)* sein, wenn er Freiheiten **beschneidet** *(to curtail)* — ja, sogar **Freiheit beschneidet** *(to curtail freedom)*.
+Andere betrachteten alles **schwarz-weiß** *(black-and-white)* und übersahen, dass **die Spracherziehung** *(language education)* entscheidend ist, um **gewisse** *(certain)* Nuancen zu verstehen.
+So wurde Humor **instrumentalisiert** *(instrumentalized)*, um Argumente **einzuordnen** *(to classify)* und **das Vertrauensverhältnis** *(relationship of trust)* zwischen Sprecher und Publikum **zusammenzureißen** *(to tear apart)*.
 
-## 📘 **STORY**
+Mit zunehmender **Reichweite** *(reach)* der Beiträge entschieden sich manche Verantwortliche, kritische Aspekte bewusst **auszublenden** *(to ignore deliberately)*.
+Dabei entstand eine zusätzliche **Doppeldeutigkeit** *(double meaning)*, die **vermeintlich** *(allegedly)* harmlose Witze in ein neues Licht rückte.
+Was zunächst als Unterhaltung erschien, entpuppte sich als Spiegel gesellschaftlicher Spannungen — **witzig, oder?** *(funny, right?)*
 
-Zu Beginn unserer Geschichte geht es um Konflikte, Meinungen und Lösungen. In Diskussionen wollen manche sofort **Abstriche machen (to make compromises)**, während andere versuchen zu **einlenken (to give in)** oder sehr **beharrlich (persistent)** bleiben. Oft wollen Menschen Entscheidungen **etw. auf sich beruhen lassen (to let something rest)**, doch andere **auf sein Recht pochen (to insist on one’s right)**. In schwierigen Situationen versucht man, **einen Mittelweg finden (to find a middle ground)**, auch wenn man dafür **Zugeständnisse machen (to make concessions)** muss. Manche verlieren sich jedoch emotional und **sich auf etw. versteifen (to fixate on something)**, statt offen zu bleiben.
 
-Andere wiederum sind bereit **nachgeben (gibt nach, gab nach, hat nachgegeben) (to give in)**, wenn klar wird, dass ein Streit **zu nichts führen (to lead to nothing)** wird. Manchmal ist bereits **etw. ist abzusehen (something is foreseeable)**, und eine Lösung wirkt **einleuchtend (convincing)**. In solchen Fällen entscheiden sich viele, **sich auf eine Diskussion einlassen (lässt ein, ließ ein, hat eingelassen) (to engage in a discussion)**, statt stur zu bleiben. Manche Positionen **einknicken (to cave in)** schließlich, besonders wenn alle Beteiligten **harmoniebedürftig (in need of harmony)** sind.
+## **GESCHICHTE: WAS DÜRFEN VORGESETZTE – UND WER HAT RECHT?**
 
-In **MODUL 4: SPANNEND (exciting)** rückt dann die gesellschaftliche Realität in den Fokus. **Die Kriminalitätsrate, -n (crime rate)** steigt in manchen Regionen, was viele Menschen **verwerflich (reprehensible)** finden. Besonders **das Leid (Sg.) (suffering)** der Betroffenen und **das Schicksal, -e (fate)** der Familien bewegen die Öffentlichkeit. Journalisten versuchen, Ereignisse **rundum gelungen (all-around successful)** darzustellen, um **große Beachtung finden (to receive great attention)** zu können. Skandale entstehen oft durch Korruption, etwa wenn Projekte **bestechen durch (+ Akk.) (to impress through)** Geld, also **(besticht, bestach, hat bestochen) (to bribe)**.
+### **MODUL 1 – WAS DÜRFEN VORGESETZTE?**
 
-Solche Geschichten sind oft **fesselnd (captivating)** geschrieben und **sorgfältig (carefully)** recherchiert. Medien müssen Informationen **aufarbeiten (to process / work through)**, die der Öffentlichkeit **bestens bekannt (well known)** erscheinen, auch wenn Journalisten nur **nebenberuflich (part-time)** tätig sind. Berichte sollen **kurzweilig (entertaining)** sein, aber nicht **übermäßig (excessive)** wirken oder **klischeehaft (clichéd)** erscheinen. Dennoch bleiben Darstellungen manchmal **eingeschränkt (limited)**, weil nicht alle Fakten zugänglich sind.
+Der **Dienstaccount** *(work account)* eines Mitarbeiters war plötzlich **ausgesetzt** *(suspended)*, was viele als klare **Sachlage** *(situation / state of affairs)* empfanden.
+Der Vorfall ließ sich kaum **einschätzen** *(assess)*, war jedoch **erstaunlich** *(astonishing)*, da die Leitung die Belastung offenbar **unterschätzt** *(underestimated)* hatte.
+Dabei gilt die **Fürsorgepflicht** *(duty of care)*, und niemand darf gezielt **schikaniert** *(harassed)* werden, denn **die Schikane** *(harassment)* ist rechtlich unzulässig.
 
-Unter **Weitere Wörter, die für mich wichtig sind (additional words that are important to me)** fällt besonders Sprache und Bewertung. In einer Übung heißt es: **Wie kann man es noch sagen? (How else can one say it?)** Lernende sollen **Suchen Sie passende Wörter im Lernwortschatz. (Search for suitable words in the learning vocabulary.)** Dazu gehören Ausdrücke wie **auf jemanden zugehen (to approach someone)**, **besonders gut (particularly good)** oder **etwas auf bestimmte Weise beurteilen (to assess something in a certain way)**. Ebenso wichtig sind Wendungen wie **eine Person/Institution bedrängen oder um Rat fragen (to pressure a person/institution or ask for advice)**, **kontrollieren (to control)** und **logisch/gut nachvollziehbar (logical / easy to understand)**.
+Trotzdem **vergriff** sich der Vorgesetzte **im Ton** *(used an inappropriate tone)* und ließ sich zu Aussagen **gefallen** *(put up with)*, die andere nicht hätten akzeptieren müssen.
+Zwar sind Führungsbefugnisse **begrenzt** *(limited)*, doch manche Verantwortliche glauben, sie dürften **jemanden oder etwas überwachen** *(monitor someone or something)* und Entscheidungen **ausdrücklich** *(explicitly)* durchsetzen.
+Das führte zu einem regelrechten **Irrtum** *(error)* über den geltenden **Kündigungsschutz** *(protection against dismissal)*.
 
-Weitere Begriffe betreffen Moral und Kommunikation, zum Beispiel **moralisch nicht akzeptabel (morally unacceptable)**, **nicht vollständig (not complete)** oder **nicht weiter im Detail besprechen (not discuss further in detail)**. Manche Situationen bleiben **ohne befriedigendes Ergebnis bleiben (to remain without a satisfying result)**, sind jedoch trotzdem **spannend (exciting)**. Schließlich gibt es Momente, in denen Menschen **über eine Grenze/ein Limit gehen (to go beyond a boundary / limit)** und Konflikte eskalieren.
+Die interne **Prognose** *(forecast)* war negativ, da man den Mitarbeitenden zu viel **zumutete** *(expected too much)*.
+Einige versuchten dennoch, sich **durchzusetzen** *(assert themselves)*, schrien sogar **brüllend** *(shouting)* durch die Abteilung und wollten externe Stellen **einschalten** *(involve)*.
+Dabei übersah man, dass manche Fachkräfte **spezialisiert auf** *(specialized in)* bestimmte Aufgaben waren und entsprechend behandelt werden mussten.
 
+---
 
-## 📘 **STORY**
+### **MODUL 2 – FREIE FAHRT?**
 
-In **MODUL 1: IMMER IN BEWEGUNG BLEIBEN (always keep moving)** beginnt die Geschichte mit Gesundheit und persönlicher Entwicklung. Viele Menschen **scheitern an (+ Dat.) (to fail at something)** ihrem Vorsatz, aktiver zu werden, was oft **(hin)deuten auf (+ Akk.) (to indicate something)** mangelnde Motivation, denn **(Dies deutet darauf hin, dass …) (This indicates that …)** regelmäßige Bewegung fehlt. Entscheidend ist **das Maß, -e (the extent / the amount)**, also **(~ die Menge) (the quantity)**, denn Sport dient auch **die Vorbeugung, -en (prevention)**, also **(zur Vorbeugung gegen Krankheiten) (to prevent diseases)**.
+In der Diskussion **legte jemand etwas dar** *(explained something)* und zeigte sich dabei **schuldbewusst** *(aware of guilt)*.
+Die **Konversation** *(conversation)* verlagerte ihren **Schwerpunkt** *(focus)*, weil entscheidende Aspekte zuvor **übersehen** *(overlooked)* worden waren.
+Das Verhalten der Führung wirkte direkt **auf etwas ein** *(had an effect on something)*, obwohl sich alle **um eine Lösung bemühten** *(made an effort)* und dabei **sinngemäß** *(in essence)* argumentierten.
 
-Im Körper reagiert **die Zelle, -n (cell)** auf Bewegung, da **das Hormon, -e (hormone)** ausgeschüttet wird. Diese **die Ausschüttung, -en (release / secretion)** verbessert **die Bereitstellung, -en (provision)** von Energie, was **der Stoffwechsel, - (metabolism)** deutlich zeigt. Bewegung beeinflusst **die Fortpflanzung, -en (reproduction)** und stärkt **der Knochen, - (bone)**, besonders bei regelmäßigem Training.
+Einige hielten sich bewusst **raus** *(stayed out)*, während andere Kolleginnen und Kollegen **mit etwas konfrontiert wurden** *(were confronted with something)*.
+Als externe Prüfer **geblitzt wurden** *(were caught speeding metaphorically)*, kam der Skandal **ans Licht** *(came to light)*.
+Interne Regeln wurden **überschritten** *(exceeded)*, doch einzelne Führungskräfte wollten Mitarbeitende weiterhin **ermutigen** *(encourage)*, obwohl die Situation alles andere als **herausragend** *(outstanding)* war.
 
-Durch Training lässt sich **die Leistungsfähigkeit, -en (performance capacity)** steigern und innere Widerstände **überwinden (überwindet, überwand, hat überwunden) (to overcome)**. Jede **die Überwindung, -en (overcoming)** von Hindernissen hilft, gesunde Routinen zu **etablieren (to establish)**. Gleichzeitig sollte man falsche Mythen **abwerten (to devalue)**, denn Fortschritte sind manchmal **verzögert (zeitlich verzögert) (delayed)**. Manche versuchen, **(sich) drücken vor (+ Dat.) (to avoid something)** Training, etwa **(Wir drücken uns vor dem Training.) (We avoid training.)**, und reagieren **impulsiv (impulsive)**, statt aktiv zu werden. Genau hier zeigt sich **die Trägheit, -en (sluggishness / inertia)**.
+---
 
-In **MODUL 2: PER KLICK IN DIE PRAXIS (into the doctor’s office with one click)** geht es um moderne Medizin. Ein klarer **der Ablauf, -¨e (procedure / process)** ist wichtig für **die Patientenversorgung (Sg.) (patient care)**. Immer häufiger nutzen Menschen **die Videosprechstunde, -n (video consultation)**. Politiker **jdn. in der Pflicht sehen (to see someone as responsible)**, etwa wenn **(Ich sehe die Politik in der Pflicht.) (I see politicians as responsible.)**, um digitale Lösungen voranzutreiben.
+### **MODUL 3 – WER HAT RECHT?**
 
-Ein transparenter **der Behandlungsweg, -e (treatment path)** reduziert **die Problematik, -en (problematic situation)** und hilft, **(sich) etw. ersparen (to spare oneself something)**, wie **(Ersparen dir die Mühe.) (Spare yourself the effort.)**. Auch **die Terminvergabe, -n (appointment scheduling)** wird effizienter. Langfristig **längerfristig (long-term)** profitieren sowohl **die Gemeinschaftspraxis, -praxen (group practice)** als auch einzelne Ärztinnen und Ärzte. Ein digitaler **der Abstrich, -e (swab)** kann **vorrangig (with priority)** organisiert werden.
+Der Abteilungsleiter blieb **stur** *(stubborn)* und **gab den Ton an** *(set the tone)*, doch letztlich musste er den Mitarbeitenden **entgegenkommen** *(meet someone halfway)*.
+Erst dadurch konnte der Konflikt beigelegt werden.
 
-Nicht jede Lösung ist sofort der richtige Weg, manchmal ist es ein **der Irrweg, -e (wrong path)**. Gute Systeme sind **zielführend (goal-oriented)** und ermöglichen, jederzeit **auf etw. zurückkommen (kommt zurück, kam zurück, ist zurückgekommen) (to return to something)**. Wenn neue Ideen entstehen, sollten Fachleute **etw. aufgreifen (greift auf, griff auf, hat aufgegriffen) (to take something up)** und weiterentwickeln.
 
-In **MODUL 3: HELFEN – HEILEN – HEILE WELT (help – heal – ideal world)** geht es um Medien und Wahrnehmung. Bestimmte Themen gehören zu **das Genre, -s (genre)** Unterhaltung, oft **komödiantisch (comedic)** dargestellt, etwa in **die Seifenoper, -n (soap opera)**. Diese Formate **abzielen auf (+ Akk.) (to aim at)** Emotionen und Hoffnungen der Zuschauer und zeigen eine Welt, in der Probleme scheinbar leicht gelöst werden.
+## **GESCHICHTE: ZWISCHEN KONFLIKT, KOMPROMISS UND SPANNUNG**
 
+In einer hitzigen Verhandlung versuchten beide Seiten zunächst, **Abstriche zu machen** *(to make concessions)*, doch niemand wollte sofort **einlenken** *(to give in)*.
+Die Positionen blieben **beharrlich** *(persistent)*, da sich jede Partei **auf etwas berufen ließ** *(to invoke something)* und fest **auf ihr Recht pochte** *(to insist on one’s right)*.
+Erst als man bereit war, **einen Mittelweg zu finden** *(to find a middle ground)* und **Zugeständnisse zu machen** *(to make concessions)*, konnte sich die Diskussion langsam entspannen.
+Dennoch **versteiften** sich einige Beteiligte weiterhin **auf etwas** *(to fixate on something)*.
 
-## 📘 **STORY**
+Andere hingegen waren bereit **nachzugeben** *(to give in)*, da ihnen klar wurde, dass weiteres Streiten **zu nichts führte** *(led to nothing)* und dass **von etwas abzusehen war** *(it was foreseeable)*.
+Ein besonders **einleuchtendes** *(convincing)* Argument brachte schließlich Bewegung in die Sache, sodass sich alle **auf eine Diskussion einließen** *(to engage in a discussion)*.
+Einige mussten dabei **einknicken** *(to cave in)*, vor allem jene, die besonders **harmoniebedürftig** *(in need of harmony)* waren.
 
-Im Abschnitt **WORTSCHATZ (vocabulary)** beginnt unsere Geschichte sehr emotional. Die Erzählung lebt von **die Dramatik (Sg.) (drama)** und ist von Anfang an **unermüdlich (tireless)** erzählt. Der Stil ist stark **gefühlsbetont (emotionally charged)**, weil der Autor dem Thema große Bedeutung **etw. anlegen (etw. ist angelegt als) (to design something as)** eine persönliche Geschichte beimisst. Der Text bleibt dennoch **wirklichkeitsnah (close to reality)**, da er den **der Lebensumstand, -e (living condition)** der Hauptfigur ehrlich beschreibt. Eine wichtige Rolle spielt **die Vaterfigur, -en (father figure)**, die immer wieder symbolisch **sich / etw. in Szene setzen (to stage oneself / something)** lässt.
+---
 
-In **MODUL 4: LOHNT SICH DIE MÜHE? (is the effort worth it?)** begibt sich die Hauptfigur auf eine lange Reise. Sie muss Flüsse **überqueren (to cross)** und entscheidet sich, eines Tages **aufbrechen (bricht auf, brach auf, ist aufgebrochen) (to set off)**, genauer gesagt **(zu einer Weltreise aufbrechen) (to set off on a world trip)**. Unterwegs wird sie **zeugen von (+ Dat.) (to witness)** schwierigen Situationen, die ihr **das Durchhaltevermögen (Sg.) (perseverance)** abverlangen. Immer wieder beginnt sie **(sich) quälen (to torment oneself)** und fragt sich, ob sie sich diese Belastung **(sich) zumuten (to impose on oneself)** sollte, etwa **(So eine anstrengende Tour will ich mir nicht zumuten.) (I don’t want to impose such a strenuous tour on myself.)**
+### **MODUL 4 – SPANNEND**
 
-Auf ihrem Weg lernt sie, dass jede Entscheidung **die Konsequenz, -en (consequence)** hat. Körperlich stößt sie an Grenzen der **die Überforderung, -en (overstrain)**, was schließlich zur **die Erschöpfung (Sg.) (exhaustion)** führt. Dennoch treibt sie **die Ambition, -en (ambition)** weiter an, besonders ihre **(sportliche Ambitionen haben) (to have athletic ambitions)**. Rückblickend versucht sie, alle Erfahrungen **nachvollziehen (vollzieht nach, vollzog nach, hat nachvollzogen) (to comprehend)** zu können und aus ihnen zu lernen.
+Der Fall wurde bald öffentlich, denn die **Kriminalitätsrate** *(crime rate)* war gestiegen und das Geschehen galt als **verwerflich** *(reprehensible)*.
+Das verursachte großes **Leid** *(suffering)* und stellte für viele ein tragisches **Schicksal** *(fate)* dar.
+Medienberichte waren **rundum gelungen** *(successful all around)* und **fanden große Beachtung** *(received great attention)*, da sie **durch Fakten bestachen** *(impressed through facts)*.
 
-Unter **Weitere Wörter, die für mich wichtig sind (additional words that are important to me)** zählt sie besonders Begriffe, die mit innerer Stärke und Entwicklung zu tun haben. In einem Lernkontext folgt dann die Aufgabe **Wortfamilien – Notieren Sie weitere Wörter mit dem markierten Wortstamm. (Word families – note additional words with the marked word stem.)** Dazu gehören Beispiele wie **abwerten (to devalue)**, etwa **(der Wert, aufwerten) (value, to upgrade)**, sowie **die Erkrankung (illness)**, **die Überforderung (overstrain)**, **die Versorgung (care / supply)**, **längerfristig (long-term)**, **die Behandlung (treatment)** und **fühlen (to feel)**. Diese Begriffe zeigen, wie eng Sprache, Emotion und Erfahrung miteinander verbunden sind.
+Die Darstellung war **fesselnd** *(captivating)*, **sorgfältig** *(careful)* **aufbereitet** *(prepared)* und dem Publikum **bestens bekannt** *(well known)*, da einige Journalisten nur **nebenberuflich** *(part-time)* recherchierten.
+Der Beitrag wirkte **kurzweilig** *(entertaining)*, teilweise **übermäßig** *(excessive)*, stellenweise **klischeehaft** *(cliched)* und in seiner Perspektive **eingeschränkt** *(limited)*.
 
-## 📘 **STORY**
+---
 
-In **MODUL 1: DER UNBESIEGBARE (the invincible)** beginnt die Geschichte mit etwas Alltäglichem, das oft unterschätzt wird: **der Staub (Sg.) (dust)**. Ob **(der Feinstaub) (fine dust)**, **der Hausstaub (house dust)** oder **der Blütenstaub (pollen)** – all diese Partikel bestehen aus **die Faser, -n (fiber)**, **der Krümel, - (crumb)** oder sogar **die (Haut-)Schuppe, -n (skin flake)**. Zusammen bilden sie **die Hausstaubmilbe, -n (house dust mite)**, die unbemerkt in unsere Umgebung eindringt. Sie reizen **die Atemwege (Pl.) (airways)**, weshalb viele versuchen, **etw. in den Griff bekommen (to get something under control)**.
+### **REFLEXION**
 
-Um sich zu schützen, leisten Menschen **der Dienst, -e (service)**, etwa **(einen guten Dienst leisten für + Akk.) (to provide a good service for)** ihre Gesundheit. Allergien lassen sich nur dann kontrollieren, wenn man sie **etw. in Schach halten (to keep something in check)** kann. Dabei hilft es, sich regelmäßig **sich vergegenwärtigen (to remind oneself)**, wie wichtig Hygiene ist. Für viele wird Sauberkeit zum Ritual, fast wie **der Putzgeist, -er (cleaning spirit)**, der ständig um sie **schweben (to float)** scheint. Staubpartikel werden **etw. aufnehmen (nimmt auf, nahm auf, hat aufgenommen) (to absorb)** und enthalten oft **der Schadstoff, -e (pollutant)**, weshalb Menschen regelmäßig **staubwischen (to dust)**.
+Am Ende blieb vieles offen. Manche Fragen wurden bewusst nicht weiter vertieft, andere konnten logisch erklärt werden.
+Der Konflikt zeigte, wie wichtig es ist, kontrolliert vorzugehen, Grenzen zu erkennen und dennoch offen für Kompromisse zu bleiben.
 
-In **MODUL 2: UNGELIEBTE MOMENTE (unloved moments)** geht es um soziale Situationen, die niemand gern erlebt. Ein Kommentar kann **fies (mean)** sein, besonders in einer Umgebung mit **der Überfluss (Sg.) (abundance)**, also **(zu allem Überfluss) (to make matters worse)**. Ein kleiner Fehler wird schnell **die Blamage, -n (embarrassment)**, vor allem wenn er **markant (striking)** auffällt. Man tritt sprichwörtlich **das Fettnäpfchen, - (gaffe)**, also **(in ein / ins Fettnäpfchen treten) (to put one’s foot in it)**, und wird **knallrot (bright red)** vor Scham.
 
-Solche Situationen wirken oft **ungeschickt (clumsy)** und **beschämend (shameful)**. Die betroffene Person empfindet **die Scham (Sg.) (shame)** und erkennt im Rückblick **das Missgeschick, -e (mishap)** als **konfus (confused)** und **unüberlegt (thoughtless)**. Gesellschaftlich greifen dann **der Mechanismus, Mechanismen (mechanism)** und **die Norm, -en (norm)**. Menschen **sich hinwegsetzen über (+ Akk.) (to disregard something)** Regeln oder beginnen, **sich fremdschämen (to feel second-hand embarrassment)**. Andere **lästern über (+ Akk.) (to gossip about)** den Vorfall, während souveräne Personen **souverän (confident / composed)** bleiben und **stehen zu (+ Dat.) (steht, stand, hat gestanden) (to stand by)** ihren Fehlern. Manche lassen sich helfen, wenn jemand **jdm. etw. nachsehen (sieht nach, sah nach, hat nachgesehen) (to forgive someone something)**, also **(~ etwas durchgehen lassen) (to let something slide)**. Wer kleinlich reagiert, gilt schnell als **kleinschrittig (petty)**.
+## **GESCHICHTE: IMMER IN BEWEGUNG BLEIBEN – VON KÖRPER, PRAXIS UND HEILUNG**
 
-In **MODUL 3: GUTER PLAN, ABER … (good plan, but …)** zeigt sich, dass selbst gute Ideen unerwartete Folgen haben können. Ein Projekt bringt **der Nebeneffekt, -e (side effect)** mit sich, besonders wenn ein Angebot wie **das Schnäppchen, - (bargain)** zu verlockend ist. Der bekannte **der Rebound-Effekt, -e (rebound effect)** kann dazu **verführen zu (+ Dat.) (to tempt someone into)** falschen Entscheidungen. Um dem entgegenzuwirken, setzen viele auf **die Nivellierung, -en (leveling)** und planen **energieeffizient (energy-efficient)**.
+### **MODUL 1 – IMMER IN BEWEGUNG BLEIBEN**
 
-Solche Strategien sind oft **aufschlussreich (insightful)**, werden jedoch manchmal **sorglos (careless)** umgesetzt, was neue Probleme schafft. So zeigt sich, dass selbst der beste Plan nur dann funktioniert, wenn man alle Aspekte bewusst bedenkt.
+Im Leben kann man leicht **an etwas scheitern** *(to fail at something, + dative)*, doch oft **deutet etwas auf etwas hin** *(to indicate something, + accusative)*, dass man daraus lernen kann.
+**Das Maß** *(measure / amount)* an Belastung ist entscheidend, ebenso wie **die Vorbeugung** *(prevention)* gegen Krankheiten.
+Im menschlichen Körper arbeitet jede **Zelle** *(cell)* präzise, gesteuert durch **das Hormon** *(hormone)* und dessen **Ausschüttung** *(release)*.
+Ohne innere **Bereitstellung** *(readiness)* gerät der **Stoffwechsel** *(metabolism)* aus dem Gleichgewicht, was sich negativ auf **die Fortpflanzung** *(reproduction)* und sogar auf **den Knochen** *(bone)* auswirken kann.
 
+Ziel ist es, die **Leistungsfähigkeit** *(performance capacity)* zu steigern, Hindernisse zu **überwinden** *(to overcome)* und jede **Überwindung** *(act of overcoming)* als persönlichen Fortschritt zu begreifen.
+Neue Routinen lassen sich **etablieren** *(to establish)*, während man alte Gewohnheiten bewusst **abwertet** *(to devalue)*.
+Manche Prozesse verlaufen **verzögert** *(delayed)*, etwa wenn man sich **vor etwas drückt** *(to avoid something, + dative)*.
+Wer jedoch nicht **impulsiv** *(impulsive)* reagiert, sondern geduldig handelt, kann **die Trägheit** *(inertia / sluggishness)* überwinden.
 
-## 📘 **STORY**
+---
 
-Zu Beginn unserer Geschichte geht es um Entscheidungen in Wirtschaft und Arbeitswelt. Manche Maßnahmen gelten als **legitimiert (legitimized)**, besonders wenn Menschen sich bewusst **sich etw. gönnen (to treat oneself to something)**. Fehlentscheidungen können jedoch **fatal (fatal)** sein, vor allem wenn man sie nur **makroökonomisch (macroeconomic)** betrachtet. In vielen Organisationen scheint **die Regel sein (to be the rule)**, dass **der Anreiz, -e (incentive)** gesetzt wird, um Ziele zu erreichen. Unternehmen wollen oft **etw. anstreben (to strive for something)**, ohne die Folgen wie **der Kompensationseffekt, -e (compensation effect)** vollständig zu bedenken.
+### **MODUL 2 – PER KLICK IN DIE PRAXIS**
 
-In **MODUL 4: (UN)PERFEKTE MEETINGS ((im)perfect meetings)** wird der Arbeitsalltag genauer beleuchtet. Meetings sind oft stark **verknüpfen mit (+ Dat.) (to link with)** Emotionen, etwa wenn **(Gefühle mit etwas verknüpfen) (to associate feelings with something)** den Verlauf bestimmen. Teilnehmende müssen **aushalten (hält aus, hielt aus, hat ausgehalten) (to endure)**, dass Diskussionen lang sind, während man dennoch **die Verbindung, -en (connection)** hält, also **(in Verbindung bleiben mit + Dat.) (to stay connected with)** dem Team. Besonders störend ist **der Zeitfresser, - (time waster)**, der jede Sitzung verlängert.
+Der medizinische **Ablauf** *(process)* hat sich verändert, besonders in der **Patientenversorgung** *(patient care)*.
+Heute ist **die Videosprechstunde** *(video consultation)* fester Bestandteil vieler Behandlungen.
+Manche Ärztinnen und Ärzte **sehen jemanden in der Pflicht** *(to see someone as obligated)*, neue Wege zu gehen, denn **der Behandlungsweg** *(course of treatment)* muss an moderne Bedürfnisse angepasst werden.
 
-Trotzdem versuchen Projektleitende, Ergebnisse **voranbringen (bringt voran, brachte voran, hat vorangebracht) (to push forward)**, etwa **(eine Arbeit voranbringen) (to advance a piece of work)**. Manche Teilnehmende **verfallen in (+ Akk.) (to lapse into)** Tagträume, also **(in Tagträume verfallen) (to drift into daydreams)**, statt aktiv etwas **erbringen (erbringt, erbrachte, hat erbracht) (to deliver / achieve)**, wie **(eine Leistung erbringen) (to deliver a performance)**.
+Dabei zeigt sich häufig **die Problematik** *(problematic nature)* digitaler Prozesse, doch man kann sich dadurch auch Zeit **ersparen** *(to save oneself something)*.
+Eine effiziente **Terminvergabe** *(appointment scheduling)* ist daher zentral.
+Langfristig *(long-term)* profitieren sowohl **die Gemeinschaftspraxis** *(group practice)* als auch Einzelpraxen von digitalen Lösungen.
 
-Andere versuchen, Kolleginnen und Kollegen zu bremsen, also **jdn. bremsen (to slow someone down)**. Wichtig ist, Aufgaben korrekt **eintragen (trägt ein, trug ein, hat eingetragen) (to enter)**, etwa **(Termine im Kalender eintragen) (to enter appointments in the calendar)**. In hitzigen Momenten beginnen manche zu **quatschen (to chatter)**, während **der Besserwisser, - (know-it-all)** oder **die Besserwisserin, -nen (female know-it-all)** alles kommentiert. Notizen verschwinden schnell in **die Labertasche, -n (big mouth / chatterbox)**, während **der Vielredner, - (big talker)** oder **die Vielrednerin, -nen (female big talker)** dominieren.
+Nicht jeder akzeptiert jedoch **den Abstrich** *(cut / reduction)*, wenn Effizienz **Vorrang** *(priority)* erhält.
+Manchmal ist **der Irrweg** *(wrong path)* verlockend, doch nur ein **zielführender** *(goal-oriented)* Ansatz bringt nachhaltige Ergebnisse.
+Deshalb sollte man regelmäßig **auf etwas zurückkommen** *(to return to something)* und bewährte Methoden **aufgreifen** *(to take up again)*.
 
-In Meetings sitzen auch **der / die Schüchterne, -n (shy person)** und **der / die Schweigsame, -n (quiet person)**, die selten etwas sagen, obwohl ihre Beiträge wichtig wären.
+---
 
-Unter **Weitere Wörter, die für mich wichtig sind (additional words that are important to me)** tauchen Begriffe aus Übungen auf. In einer Aufgabe heißt es: **Wählen Sie eines der Wörter (Choose one of the words)** und **finden Sie möglichst viele Wörter aus der Wortfamilie (find as many words from the word family as possible)**, also **(Komposita, Verben, Adjektive) (compounds, verbs, adjectives)**. **Sie haben vier Minuten (you have four minutes)** und **zu zweit (in pairs)** soll gearbeitet werden. Die Frage lautet: **Wer findet die meisten Wörter? (Who finds the most words?)**
+### **MODUL 3 – HELFEN – HEILEN – HEILE WELT**
 
-Als Beispiele erscheinen **der Staub (dust)**, **der Effekt (effect)**, **die Scham (shame)** und **die Besprechung (meeting)**, die zeigen, wie vielfältig Sprache im Arbeitskontext eingesetzt werden kann.
+Auch **das Genre** *(genre)* medizinischer Kommunikation hat sich verändert und wirkt teils **komödiantisch** *(comedic)*, etwa in Aufklärungsvideos.
+Doch hinter der Leichtigkeit stehen ernste Ziele: **die Seifenoper** *(soap opera)* dient hier nur als Stilmittel.
+Die eigentliche Absicht **zielt auf etwas ab** *(to aim at something, + accusative)*: den Menschen zu helfen, sie zu heilen und ihnen eine **heile Welt** *(ideal world)* zu vermitteln.
 
-## 📘 **STORY**
+## **GESCHICHTE: LOHNT SICH DIE MÜHE?**
 
-In **MODUL 1: WAS SOLLEN MEDIEN LEISTEN? (what should media deliver?)** beginnt die Geschichte mit einer gesellschaftlichen Debatte über Verantwortung. Gute Medien **sich auszeichnen durch (+ Akk.) (to distinguish oneself by)** Qualität und Transparenz. Viele Informationen wirken zunächst **absehbar (foreseeable)**, doch Journalistinnen und Journalisten müssen Inhalte **etw./jdn. hinterfragen (to question something/someone)**, statt Probleme **etw. vernachlässigen (to neglect something)**. Ihre Aufgabe ist es, Zusammenhänge **etw. verdeutlichen (to make something clear)**, also **(~ etw. klarmachen) (to clarify something)**, damit **die Teilhabe (Sg.) (participation)** der Bevölkerung möglich wird. Medien fördern **die Entfaltung, -en (development)** demokratischer Prozesse und decken **die Verschwörung, -en (conspiracy)** auf, wenn sie durch gründliche **die Berichterstattung, -en (reporting)** Missstände sichtbar machen.
+Die Geschichte beginnt mit **der Dramatik** *(drama)* eines Moments, der **unermüdlich** *(tirelessly)* voranschreitet und stark **gefühlsbetont** *(emotionally charged)* wirkt.
+Man kann dieses Projekt **als etwas anlegen** *(to frame something as)*, das **wirklichkeitsnah** *(close to reality)* bleibt, weil **der Lebensumstand** *(life circumstance)* des Protagonisten eng mit **der Vaterfigur** *(father figure)* verknüpft ist, die er bewusst **in Szene setzt** *(to stage / to portray)*.
 
-Ein zentrales Ziel ist **die Meinungsbildung, -en (opinion-forming)**, die **frei von (~ ohne) (free from)** Manipulation bleiben soll. Viele Menschen **sich ein Bild machen von (+ Dat.) (to form an opinion about)** politischen Ereignissen. Gefährlich wird es, wenn **das Monopol, -e (monopoly)** entsteht, statt Vielfalt **im Rahmen von (+ Dat.) (within the framework of)** demokratischen Regeln, also **(~ im Kontext von) (in the context of)**. Medien müssen Grundrechte **etw. gewährleisten (to guarantee something)** und Entwicklungen realistisch **etw. abschätzen (to assess something)**, denn **(Die politische Zukunft kann man schwer abschätzen.) (The political future is hard to assess.)**
+### **MODUL 4 – LOHNT SICH DIE MÜHE?**
 
-Unabhängige Medien sind **unverzichtbar (indispensable)**, da sie Entscheidungen **etw. umsetzen (to implement something)**, also **(~ realisieren) (to realize)**, kritisch begleiten. Inhalte werden oft **festgeschrieben in (+ Dat.) (to be laid down in)** Gesetzen, also **(schreibt fest, schrieb fest, hat festgeschrieben) (to set down in writing)**. Besonders wichtig ist der **öffentlich-rechtlich (public-service)**e Bereich, etwa **(der öffentlich-rechtliche Rundfunk) (public broadcasting)**, der Transparenz sichern soll.
+Um sein Ziel zu erreichen, muss er Grenzen **überqueren** *(to cross)* und den Mut finden, **aufzubrechen** *(to set out)*, denn jede Reise verlangt Opfer.
+Sein Handeln wird **Zeuge von** *(to bear witness to, + dative)* einem starken **Durchhaltevermögen** *(perseverance)*, obwohl er sich zeitweise **quält** *(to torment oneself)* und sich nicht alles **zumutet** *(to impose on oneself)*.
 
-In **MODUL 2: SPRACHLICHE VARIETÄTEN (linguistic varieties)** wechselt der Fokus zur Sprache. Ein **der Ausschnitt, -e (excerpt)** aus einem Text zeigt, wie **unzählig (countless)** Formen von Sprache existieren. Neben **die Standardvarietät, -en (standard variety)** spielt **die Schriftsprache, -n (written language)** eine große Rolle. Leser können **den Eindruck gewinnen (gewinnt, gewann, hat gewonnen) (to get the impression)**, dass Sprache sich ständig verändert. Zwischen Dialekten gibt es **der Übergang, -gänge (transition)**, besonders in Regionen, die **benachbart (neighboring)** sind.
+Der Weg hat **Konsequenzen** *(consequences)*: Es kommt zur **Überforderung** *(overstrain)* und schließlich zur **Erschöpfung** *(exhaustion)*.
+Doch seine **Ambition** *(ambition)*, sogar **sportliche Ambitionen** *(athletic ambitions)*, treibt ihn an.
+Er versucht, jeden Schritt **nachzuvollziehen** *(to retrace / comprehend)*, um aus Fehlern zu lernen und weiterzugehen.
 
-Mit der Zeit verschwindet **das Gefälle, - (difference / gap)** zwischen Sprachformen, während alte Begriffe **verdrängen (von etwas verdrängt werden) (to be displaced)** werden und schließlich **ausgestorben (extinct)** sind. Sprache kann auf soziale Hintergründe **aufweisen (weist auf, wies auf, hat aufgewiesen) (to point to)**, denn sie ist oft **(~ gekennzeichnet sein durch etwas) (to be characterized by something)**. Bestimmte Varietäten sind stark **ausgeprägt (pronounced)** und **zu etwas beitragen (trägt bei, trug bei, hat beigetragen) (to contribute to something)**, etwa zur **die Färbung, -en (coloring / nuance)** eines Textes.
 
-Dabei wird Sprache selbst zum **das Phänomen, -e (phenomenon)**, das man mit Bildung **assoziieren mit (+ Dat.) (to associate with)** kann. Der **der Bildungsstand, -stände (level of education)** beeinflusst Wahrnehmung, ebenso ein **herablassend (condescending)**er Ton. Manche Bedeutungen bleiben jedoch **verbergen (verbirgt, verbarg, hat verborgen) (to conceal)** und sind nicht sofort erkennbar.
+## **GESCHICHTE: DER UNBESIEGBARE – VOM STAUB DES ALLTAGS UND UNGELIEBTEN MOMENTEN**
 
+### **MODUL 1 – DER UNBESIEGBARE**
 
-## 📘 **STORY**
+Der Alltag beginnt oft unscheinbar, mit **dem Staub** *(dust)* – sei es **der Feinstaub** *(fine dust)*, **der Hausstaub** *(house dust)* oder **der Blütenstaub** *(pollen)* –, der sich aus **den Fasern** *(fibers)* löst und als **Krümel** *(crumb)* oder **(Haut-)Schuppe** *(skin flake)* in der Wohnung verteilt.
+Sogar **die Hausstaubmilbe** *(house dust mite)* findet sich darin, was besonders für **die Atemwege** *(airways)* problematisch ist.
+Erst wenn man die Situation **in den Griff bekommt** *(to get under control)*, zeigt sich, dass selbst kleine Routinen **einen guten Dienst leisten** *(to render good service)*.
 
-In **MODUL 3: SPRACHE IST MACHT (language is power)** beginnt die Geschichte mit gesellschaftlichen Spannungen. Manche Menschen reagieren **stur (stubborn)** auf Veränderungen, was oft zu **die Stagnation, -en (stagnation)** führt. Sprache kann **die Ausgrenzung, -en (exclusion)** verstärken, besonders wenn gezielt **die Manipulation, -en (manipulation)** eingesetzt wird. Häufig werden Probleme durch **der Euphemismus, -men (euphemism)** abgeschwächt, statt offen benannt zu werden. Bestimmte Begriffe **etw. hervorufen (ruft hervor, rief hervor, hat hervorgerufen) (to trigger something)** starke Reaktionen im **der Personenkreis, -e (group of people)**.
+Ordnung zu halten bedeutet auch, Dinge **in Schach zu halten** *(to keep in check)*, sich die Risiken **zu vergegenwärtigen** *(to make oneself aware)* und den Blick nicht **schweben** *(to hover)* zu lassen.
+Wer Schadstoffe **aufnimmt** *(to absorb)*, nimmt auch **den Schadstoff** *(pollutant)* ernst und greift zum Tuch, um **Staub zu wischen** *(to dust)*.
 
-In Debatten sollte man nicht unkritisch Meinungen **etw. übernehmen (übernimmt, übernahm, hat übernommen) (to adopt something)**, denn **(Man sollte Meinungen nicht einfach übernehmen.) (One should not simply adopt opinions.)** Sprache kann Gruppen beeinflussen, da Wörter **die Assoziation, -en (association)** erzeugen. Aussagen können Probleme **etw. verharmlosen (to downplay something)** oder bewusst **etw./jdn. durchschauen (to see through something/someone)**. Oft versucht man, Menschen **sich etw./jdm. unterordnen (to subordinate oneself to something/someone)** zu lassen, während andere bewusst **sparsam umgehen mit (+ Dat.) (to use sparingly)** Sprache, also **(~ nur wenig verwenden von etw.) (to use little of something)**. Worte können **eine Wirkung erzielen (to achieve an effect)**, also **(~ etw. bewirken / erreichen) (to bring about / achieve something)**.
+---
 
-In **MODUL 4: EINE NEUE SPRACHE (a new language)** rückt das Thema Migration in den Mittelpunkt. Die **die Herkunft (origin)** eines Menschen prägt seine Identität. Viele mussten **fliehen (flieht, floh, ist geflohen) (to flee)**, besonders **(vor dem Krieg fliehen) (to flee from war)**. In neuen Ländern versuchen sie, **(sich) zurechtfinden (findet zurecht, fand zurecht, hat zurechtgefunden) (to find one’s way)** im Alltag. Die Situation wirkt oft **durcheinandergeraten (chaotic)**, und neue Wörter können einem einfach **rausglucken (ugs.) (to slip out)**.
+### **MODUL 2 – UNGELIEBTE MOMENTE**
 
-Um eine neue Sprache zu lernen, muss man sich in andere Menschen **sich hineinversetzen in (+ Akk.) (to put oneself in someone’s place)**. Fehler sind **auffallend (noticeable)**, aber Teil des Lernprozesses. Unter **Weitere Wörter, die für mich wichtig sind (additional words that are important to me)** fallen besonders Begriffe, die beim Lernen helfen.
+Nicht alles verläuft reibungslos, manchmal wird es **fies** *(mean)*, und **der Überfluss** *(excess)* schlägt um in **die Blamage** *(embarrassment)*.
+Ein Moment wirkt **markant** *(striking)*, etwa wenn man **ins Fettnäpfchen tritt** *(to put one’s foot in it)* und dabei **knallrot** *(bright red)* anläuft.
+Solche Situationen sind **ungeschickt** *(clumsy)* und **beschämend** *(shameful)*, sodass **die Scham** *(shame)* und sogar **das Missgeschick** *(mishap)* lange nachwirken.
 
-In einer Übung heißt es: **Verben mit Nomen kombinieren – Arbeiten Sie zu zweit. (Combine verbs with nouns – work in pairs.)** **A nennt ein Verb, B ergänzt ein passendes Nomen. (A names a verb, B adds a suitable noun.)** **Dann wechseln. (Then switch.)** Als Beispiel erscheinen Kombinationen wie **abschätzen (to assess)** mit **eine Situation abschätzen (to assess a situation)**, **etwas beitragen zu (to contribute to something)** und **etwas zu einer Lösung beitragen (to contribute to a solution)**. Diese Übungen zeigen, wie Sprache verbindet und Verständnis schafft.
+Zurück bleibt man **konfus** *(confused)* und **unüberlegt** *(ill-considered)*.
+Dabei greifen soziale **Mechanismen** *(mechanisms)* und **Normen** *(norms)*, über die sich manche hinwegsetzen *(to disregard)*, während andere sich **fremdschämen** *(to feel second-hand embarrassment)* oder **über etwas lästern** *(to gossip about something)*.
+Wer **souverän** *(confident)* bleibt, **zu etwas steht** *(to stand by something)* und jemandem **nachsieht** *(to forgive)*, kann **etwas durchgehen lassen** *(to let something pass)* und **kleinschrittig** *(step by step)* weitermachen.
 
-## 📘 **STORY**
+---
 
-In **MODUL 1: URSACHE UND WIRKUNG (cause and effect)** beginnt die Geschichte mit Entscheidungen, die Menschen **etw. hinnehmen (nimmt hin, nahm hin, hat hingenommen) (to accept something)** müssen, auch wenn sie unangenehm sind. Jede Handlung hat **der Effekt, -e (effect)**, besonders in **die Krisenzeit, -en (time of crisis)**, in der Veränderungen **unumgänglich (inevitable)** erscheinen. Für viele spielt **das Prestige (Sg.) (prestige)** eine große Rolle, selbst wenn Entscheidungen nur **vordergründig (superficial)** sinnvoll wirken. Manche beginnen, Produkte **schwärmen für (+ Akk.) (to rave about something)**, obwohl Bewertungen **widersprüchlich (contradictory)** sind. Werbung wirkt oft **verlockend (tempting)**, weshalb Konsumenten **ab und an (from time to time)** zu **das Luxusgut, -¨er (luxury good)** greifen.
+### **MODUL 3 – GUTER PLAN, ABER …**
 
-Unternehmen wollen ihren **der Absatz (Sg.) (sales)** steigern, also **(den Absatz antreiben) (to boost sales)**, und Kunden **zuschlagen (- kaufen) (schlägt zu, schlug zu, hat zugeschlagen) (to snap up / buy quickly)**. Werbung ist häufig **angesehen sein von (+ Dat.) (to be regarded as)** modern, und Produkte werden trotz **der Trotz (Sg.) (defiance)** gekauft. Manche Menschen handeln **erst recht (now more than ever)** impulsiv, wenn sie **hereinfallen auf (+ Akk.) (fällt herein, fiel herein, ist hereingefallen) (to fall for something)** geschickte Angebote. Positive Emotionen entstehen, wenn Marken **positiv besetzt sein (to have a positive connotation)**.
+Jeder Plan hat **den Nebeneffekt** *(side effect)*, manchmal sogar **das Schnäppchen** *(bargain)* oder den überraschenden **Rebound-Effekt** *(rebound effect)*.
+Manche Ideen **verführen zu** *(to tempt into, + dative)* vorschnellem Handeln, obwohl **die Nivellierung** *(levelling)* langfristig wichtiger wäre.
+Ein Konzept kann zwar **energieeffizient** *(energy-efficient)* und **ausschlussreich** *(conclusive)* erscheinen, wirkt jedoch im Alltag **sorglos** *(carefree)* umgesetzt riskant.
 
-In **MODUL 2: INFORMIERT EUCH! (get informed!)** geht es um Wahrnehmung und Einfluss. Wer Informationen **etw. verstehen von (+ Dat.) (versteht, verstand, hat verstanden) (to understand something)** kann, entwickelt einen eigenen **der Uhrzeigersinn (Sg.) (clockwise direction)** an Denkweisen. Medien lenken **die Blickrichtung, -en (direction of gaze)** gezielt, indem sie Informationen **vorbeischleusen (~ vorbeiführen) (to channel past)** oder strategisch **platzieren (to place)**. Bestimmte Inhalte fallen sofort **ins Auge fallen (to catch the eye)**, vor allem durch **die Signalfarbe, -n (signal color)**.
+---
 
-Oft versuchen Medien, Meinungen zu **suggerieren (to suggest)**, besonders durch **der Influencer, - (influencer)** oder **die Influencerin, -nen (female influencer)**. Zuschauer nehmen dabei häufig nur **die Zur-Schau-Stellung (Sg.) (display / exhibition)** wahr. Gleichzeitig können Menschen sich **sich verschulden (to get into debt)**, wenn sie auf Konsum setzen. Sie wählen **die Ratenzahlung, -en (installment payment)** und geraten in **der Schuldenberg, -e (mountain of debt)**, was schlimmstenfalls zur **die Insolvenz, -en (insolvency)** führt.
+### **SCHLUSS**
 
-Trotzdem versuchen viele, **zurechtkommen (kommt zurecht, kam zurecht, ist zurechtgekommen) (to cope)**, solange Mittel **zur Verfügung haben (to have at one’s disposal)**. Entscheidungen wirken oft **anmaßend (arrogant)**, besonders wenn **der Entscheidungsträger, - (decision-maker)** oder **die Entscheidungsträgerin, -nen (female decision-maker)** fern der Realität handeln. Gute Entscheidungen sollten immer **lebensnah (close to real life)** sein.
+So zeigt sich, dass selbst der „Unbesiegbare“ nur dann stark bleibt, wenn er Ordnung hält, Fehler akzeptiert und aus kleinen Momenten lernt. Der Alltag mag staubig sein, doch mit Bewusstsein, Reflexion und Maß lässt er sich meistern.
 
-In **MODUL 3: MODERNE KONZEPTE (modern concepts)** richtet sich der Blick auf Gesellschaft und Zukunft. **Menschen mit Fluchthintergrund (people with a refugee background)** wollen **Zugang finden zu (+ Dat.) (to gain access to)** Bildung und Arbeit. Politische Untätigkeit kann dazu führen, **zur Untätigkeit verdammt sein (to be condemned to inactivity)**. Stattdessen sollten Gesellschaften neue Ideen **kreieren (to create)**, um Chancen für alle zu ermöglichen.
 
+## **GESCHICHTE: (UN)PERFEKTE MEETINGS UND IHRE WIRKUNGEN**
 
-## 📘 **STORY**
+In vielen Unternehmen gilt es inzwischen als **legitimiert** *(legitimate)*, sich nach intensiven Arbeitsphasen **etwas zu gönnen** *(to allow oneself something)*, denn Dauerstress kann **fatal** *(fatal)* sein, nicht nur individuell, sondern auch **makroökonomisch** *(macroeconomic)* betrachtet.
+Überstunden sind oft **die Regel** *(the rule)*, weil **der Anreiz** *(incentive)* besteht, sich beruflich zu profilieren und **nach etwas zu streben** *(to strive for something)*. Gleichzeitig zeigt sich häufig **der Kompensationseffekt** *(compensation effect)*: Wer zu viel arbeitet, verliert langfristig an Produktivität.
 
-Zu Beginn unserer Geschichte geht es um Kreativität, Arbeit und gesellschaftliche Verantwortung. Eine Designerin arbeitet an **die Kollektion, -en (collection)**, bei der **der Schnitt, -e (cut)** bewusst **universell (universal)** gestaltet ist. Ziel ist es, den **der Erlös, -e (revenue)** zu steigern und gleichzeitig soziale Verantwortung zu übernehmen. Dabei arbeitet sie eng mit **die Handwerkskammer, -n (chamber of crafts)** zusammen, um sowohl **kognitiv (cognitive)**e als auch **motorisch (motor)**e Fähigkeiten zu fördern.
+---
 
-Neue Produkte werden **entwerfen (entwirft, entwarf, hat entworfen) (to design)** und nicht nur **herkömmlich (conventional)** gedacht, sondern bewusst **außergewöhnlich (extraordinary)**. Besonders wichtig ist, dass auch **Menschen mit Einschränkungen (people with disabilities)** einbezogen werden. Materialien werden sorgfältig **schleifen (to grind / sand)** bearbeitet, bevor Prozesse offiziell **genehmigen (to approve)** werden.
+### **MODUL 4 – (UN)PERFEKTE MEETINGS**
 
-In **MODUL 4: GRUNDEINKOMMEN (basic income)** rückt die gesellschaftliche Debatte in den Mittelpunkt. Die **die Arbeitsmoral (Sg.) (work ethic)** steht dabei oft **im Fokus stehen (to be in focus)**. Kritiker sprechen von **die Stigmatisierung, -en (stigmatization)**, während Befürworter auf **die Gegenleistung, -en (counter-performance)** verweisen. Ziel ist es, **ein Bedürfnis befriedigen (to satisfy a need)** zu können, ohne Menschen auszugrenzen. Politische Maßnahmen können **eine Debatte anheizen (to fuel a debate)**, doch zugleich versucht man, sozialen Spannungen **etw. entgegenwirken (to counteract something)**.
+In Meetings werden Emotionen oft **mit etwas verknüpft** *(to link with something, + dative)*, etwa Frustration mit Zeitdruck.
+Nicht jeder hat die Energie, lange Diskussionen **durchzuhalten** *(to endure)*, obwohl eine stabile **Verbindung** *(connection)* unter den Teilnehmenden wichtig wäre.
+Manche empfinden das Treffen als **Zeitfresser** *(time waster)*, andere wollen Projekte unbedingt **voranbringen** *(to push forward)*.
 
-Viele Modelle sind **zeitlich begrenzt sein (to be limited in time)**, andere sollen **immers (immersive / constantly)** wirken. Die Frage nach **das Vermögen, - (wealth)** spielt dabei eine zentrale Rolle, besonders wenn Gesellschaften **vor einem Dilemma stehen (to face a dilemma)**. Unterstützungsmodelle sollen **die bürokratischen Hürden scheuen (to avoid bureaucratic hurdles)** und direkt Hilfe leisten, etwa durch **das Bürgergeld (Sg.) (citizen’s income)** oder **das Kindergeld (Sg.) (child benefit)**.
+Während einige gedanklich **in etwas verfallen** *(to lapse into something, e.g. daydreaming)*, versuchen andere, konkrete Ergebnisse zu **erbringen** *(to deliver / to achieve)*.
+Doch oft muss man Kolleginnen oder Kollegen bewusst **bremsen** *(to slow someone down)*, damit nicht alle durcheinanderreden.
 
-Ein langfristiges Ziel ist **die Grundsicherung (basic security)**, die nicht durch **die Bürokratie (Sg.) (bureaucracy)** ausgebremst wird. Viele Organisationen **sich etw. widmen (to devote oneself to something)** sozialen Innovationen. Dabei entstehen **die Innovation, -en (innovation)**, die neue **Anreize schaffen (to create incentives)**.
+Ein strukturierter Ablauf hilft: Termine werden sauber **eingetragen** *(to enter, e.g. into a calendar)*, Wortmeldungen nicht bloß **gequatscht** *(to chatter)*.
+Besonders auffällig sind dabei **der Besserwisser** *(know-it-all)* und **die Besserwisserin** *(female know-it-all)*, aber auch **die Labertasche** *(chatterbox)* sowie **der Vielredner** *(big talker)* und **die Vielrednerin** *(female big talker)*.
 
-Unter **Weitere Wörter, die für mich wichtig sind (additional words that are important to me)** fällt auch Sprachreflexion. In einer Übung heißt es: **Suchen Sie im Lernwortschatz Wörter oder Ausdrücke, die das Gegenteil bedeuten. (Search the learning vocabulary for words or expressions that mean the opposite.)** Dazu gehören Aufgaben wie **sich gegen etwas wehren (to resist something)**, **etwas nicht mögen (to dislike something)** oder **mit etwas Schwierigkeiten haben (to have difficulties with something)**. Weitere Gegensätze sind **wirklichkeitsfremd (detached from reality)**, **alltäglich (everyday)**, **kaum (hardly)**, **für immer gelten (to apply forever)** und **keine Beachtung finden (to receive no attention)**.
+Gleichzeitig sitzen **der Schüchterne** *(shy person)* und **die Schüchterne** *(shy female person)* still daneben, ebenso wie **der Schweigsame** *(quiet person)* und **die Schweigsame** *(quiet female person)*, deren Beiträge oft übersehen werden.
 
+---
 
-## 📘 **STORY**
+### **SCHLUSS**
 
-In **MODUL 1: GUT GEGEN STRESS (good against stress)** beginnt die Geschichte mit Menschen, die lernen müssen, mit Belastungen umzugehen. Ein zentrales Thema ist **die Resilienz, -en (resilience)**, denn nur wer **resilient (resilient)** ist, kann langfristig Herausforderungen meistern. Dabei spielt **die Widerstandskraft, -¨e (resistance / mental strength)** eine große Rolle, besonders wenn **die Beeinträchtigung, -en (impairment)** den Alltag erschwert. Viele Menschen müssen schwierige Situationen **etw. überstehen (übersteht, überstand, hat überstanden) (to get through something)**. Vorbilder wie **das Vorbild, -er (role model)** zeigen, dass man trotz Problemen wachsen kann.
+Ein gelungenes Meeting berücksichtigt all diese Rollen, gleicht Interessen aus und schafft Raum für echte Leistung.
+Nur wenn Zeit sinnvoll genutzt, Menschen respektiert und Ziele realistisch gesetzt werden, entfalten Besprechungen ihre Wirkung – ohne Zeit zu verschwenden und ohne unnötigen Druck.
 
-Oft ist man **beteiligt sein an (+ Dat.) (to be involved in)** Projekten, die **umstritten (controversial)** sind. Deshalb ist es wichtig, **sich befassen mit (+ Dat.) (to deal with something)** und Thesen kritisch zu prüfen. Wissenschaftler können Hypothesen **etw. widerlegen (eine Annahme bestätigen oder widerlegen) (to refute something)** oder bestätigen. Studien **Hinweise geben auf (+ Akk.) (to give indications of)** Zusammenhänge, wenn Forschende sie **durchführen (eine Studie durchführen) (to conduct a study)**. Persönliche Entwicklung kann sich zeigen, wenn Menschen **(sich) entfalten (to unfold / develop)**.
 
-Oft basiert Stress auf **die Annahme, -n (assumption)**, also **(~ Vermutung) (assumption)**, die nicht überprüft wurde. Medien können **das Interesse wecken an (+ Dat.) (to spark interest in)** Themen wie **der Schicksalsschlag, -¨e (stroke of fate)**. Manche lassen sich dabei **sich dominieren lassen von (+ Dat.) (to let oneself be dominated by)** Angst, während andere versuchen, **jdm. etw. ersparen wollen (to want to spare someone something)**.
+## **GESCHICHTE: WAS SOLLEN MEDIEN LEISTEN?**
 
-In **MODUL 2: UNABHÄNGIG UND FREI? (independent and free?)** geht es um Arbeit und Selbstständigkeit. Selbständige kümmern sich um **die Akquise, -n (acquisition)** neuer Projekte. Dabei spielen **der Auftraggeber, - (client)** und **die Auftraggeberin, -nen (female client)** eine zentrale Rolle. Wichtig ist auch **die Vorsorge, -n (provision / precaution)** für die Zukunft. In Verhandlungen zählt oft das **ausschlaggebend (decisive)**e Argument. Unternehmen freuen sich über **die Auftragslage, -n (order situation)**, etwa wenn **(Unsere Firma hat eine gute Auftragslage.) (Our company has a good order situation.)**
+### **MODUL 1 – WAS SOLLEN MEDIEN LEISTEN?**
 
-Manche Projekte **die Rücklage, -n (financial reserve)** betreffen, während andere einem besonders **am Herzen liegen (to be close to one’s heart)**, wie **(Das neue Projekt liegt mir am Herzen.) (The new project is close to my heart.)** Selbstständige wollen **jdm. selbst überlassen sein (= selbst / frei entscheiden können) (to be left to oneself)** und Aufgaben wählen, die ihren Werten **etw. entsprechen (entspricht, entsprach, hat entsprochen) (to correspond to something)**. Ziel ist es, Einnahmen **erzielen (Einnahmen erzielen) (to generate income)** und neue **der Einsteiger, - (beginner)** oder **die Einsteigerin, -nen (female beginner)** zu fördern. Finanzielle Sicherheit entsteht durch **der Zuschuss, -¨e (subsidy)** und langfristige **die Absicherung, -en (security / insurance)**.
+Moderne Medien **zeichnen sich durch** *(to be characterized by, + accusative)* Transparenz und Verantwortung aus, denn Informationen müssen **absehbar** *(foreseeable)* und überprüfbar sein.
+Bürgerinnen und Bürger sollten Medieninhalte **hinterfragen** *(to question critically)* und nicht blind konsumieren, da manche Themen bewusst **vernachlässigt** *(to neglect)* oder nur unzureichend **verdeutlicht** *(to clarify)* werden.
+Gerade die **Teilhabe** *(participation)* an demokratischen Prozessen hängt davon ab, wie verständlich und differenziert **die Entfaltung** *(development)* von Argumenten erfolgt.
 
-In **MODUL 3: KÜNSTLICHE INTELLIGENZ? (artificial intelligence?)** geht es um neue Technologien und Wahrnehmung. Viele Menschen bewerten Innovationen nach **der Gesamteindruck (Sg.) (overall impression)**. KI ermöglicht **ein anderer Blick auf (+ Akk.) (a different perspective on)** Arbeit, Kreativität und Entscheidungsprozesse. Dadurch verändert sich, wie wir Stress, Freiheit und Zukunft einschätzen.
+In Zeiten zunehmender **Verschwörungen** *(conspiracies)* kommt der **Berichterstattung** *(reporting)* eine besondere Rolle zu, da sie aktiv zur **Meinungsbildung** *(opinion formation)* beiträgt.
+Unabhängige Medien müssen **frei von** *(free from)* wirtschaftlichen oder politischen Interessen bleiben, damit sich Menschen **ein Bild von etwas machen können** *(to form an opinion about something, + dative)*.
 
-## 📘 **STORY**
+Gleichzeitig existiert oft **das Monopol** *(monopoly)* einzelner Akteure, vor allem **im Rahmen von** *(within the context of, + dative)* großen Medienkonzernen.
+Daher müssen Medien demokratische Grundwerte **gewährleisten** *(to guarantee)* und Entwicklungen realistisch **abschätzen** *(to assess)*, denn die politische Zukunft ist schwer vorhersehbar.
+Für eine funktionierende Demokratie sind unabhängige Medien **unverzichtbar** *(indispensable)*.
 
-Zu Beginn der Geschichte geht es um Wahrnehmung, Urteile und Verantwortung. In Diskussionen übertragen Menschen oft Meinungen **übertragen auf (+ Akk.) (überträgt, übertrug, hat übertragen) (to transfer something to)** andere Situationen. Dabei neigen viele dazu, von Einzelbeobachtungen **schließen auf (+ Akk.) (schließt, schloss, hat geschlossen) (to conclude from something)**, also **(von einem Detail auf das Ganze schließen) (to infer the whole from a detail)**. Solche Denkweisen führen häufig zu **die Fehleinschätzung, -en (misjudgment)**, also **(zu Fehleinschätzungen führen) (to lead to misjudgments)**. Menschen beginnen, **Schlüsse aus etw. ziehen (to draw conclusions from something)**, obwohl sie wichtige Aspekte **absehen (sieht ab, sah ab, hat abgesehen) (to foresee / consider)**, also **(die Folgen (nicht) absehen können) (to (not) foresee the consequences)**, gar nicht vollständig erfassen. Daraus entsteht oft **der Widerspruch zu (+ Dat.) (contradiction to)** anderen Meinungen.
+Gesetze müssen nicht nur formuliert, sondern auch konsequent **umgesetzt** *(implemented)* und **in etwas festgeschrieben** *(laid down in something, + dative)* werden, etwa im Medienstaatsvertrag.
+Besonders der **öffentlich-rechtliche** *(public-law)* Rundfunk trägt dabei Verantwortung.
 
-Um fundierter zu urteilen, sollte man **einen (genaueren) Blick werfen auf (+ Akk.) (to take a closer look at)** Zusammenhänge. Trotzdem bleibt **die Wahrscheinlichkeit, -en (probability)** für Fehlurteile bestehen, besonders wenn **der Rückkopplungseffekt, -e (feedback effect)** einsetzt. Menschen **ableiten (Fehler ableiten) (to derive / infer)** falsche Schlüsse, was zu **die Hetze (Sg.) (incitement)** und **der Hass (Sg.) (hatred)** führen kann. Im Extremfall werden Personen **jdn. strafrechtlich verfolgen (to prosecute someone criminally)**, weil sie **an Grenzen stoßen (to hit limits)**. Dabei ist **die Meinungsfreiheit (Sg.) (freedom of expression)** **ein hohes Gut sein (to be a highly valued good)** und muss geschützt werden.
+---
 
-In **MODUL 4: DER WAHRHEIT AUF DER SPUR (on the trail of truth)** rückt Medienkompetenz in den Mittelpunkt. Unterschiedliche **die Belichtung, -en (exposure / coverage)** beeinflussen, wie Informationen wahrgenommen werden. Durch **die Desinformation, -en (disinformation)** geraten Menschen leicht in die Irre, obwohl es **die gesetzliche Vorgabe, -n (legal regulation)** gibt. Viele Nutzer bewegen sich in **die Nachrichtenblase, -n (news bubble)** und vertreten **abweichend (eine abweichende Position vertreten) (divergent)**e Meinungen. Dadurch entsteht ein verzerrtes **das Weltbild, -er (worldview)**, das oft von Algorithmen **vor|herrschen (to dominate)** beeinflusst wird.
+### **MODUL 2 – SPRACHLICHE VARIETÄTEN**
 
-Manche Inhalte gelten als **lohnenswert (für nicht lohnenswert halten) (worthwhile)**, andere werden ignoriert. Hilfreich sind **die FAQs (oft gestellte Fragen) (frequently asked questions)**, die Orientierung bieten. Dennoch bleibt vieles **die Belegschaft, -en (workforce)** verborgen, wenn Informationen einfach **weg|fallen (fällt weg, fiel weg, ist weggefallen) (to drop away)**. Nachrichten werden häufig stark **die Gefallskürzung, -en (selective shortening)** unterzogen, wodurch **das Feingefühl (Sg.) (sensitivity)** verloren geht. Um Fakten zu prüfen, braucht es **der Beleg, -e (evidence)**, also **(~ der Nachweis) (proof)**.
+Ein einzelner **Ausschnitt** *(excerpt)* medialer Sprache kann bereits **unzählige** *(countless)* sprachliche Nuancen enthalten.
+Neben der **Standardvarietät** *(standard variety)* spielt **die Schriftsprache** *(written language)* eine zentrale Rolle, da sie Vertrauen schafft und **Eindruck gewinnt** *(to make an impression)*.
 
-Unter **Weitere Wörter, die für mich wichtig sind (additional words that are important to me)** erscheinen Begriffe aus einer Übung. Bei den **Herausforderungen (challenges)** sollen Lernende **Finden Sie für das Kapitel so viele Paare wie möglich (find as many pairs as possible)** und **Lesen Sie dann zu zweit laut vor (then read aloud in pairs)**. Beispiele sind **der Stress (stress)** und **die Entspannung (relaxation)**, **das Problem (problem)** und **die Lösung (solution)** sowie **der Schutz (protection)** und **die Gefahr (danger)**. Diese Wortpaare zeigen, wie eng Gegensätze miteinander verbunden sind und wie wichtig differenziertes Denken bleibt.
+Sprachliche **Übergänge** *(transitions)* sind fließend, besonders wenn Sprache **benachbart** *(neighboring)* zu Dialekten verwendet wird.
+Dabei verändert sich oft **das Gefälle** *(gradient / imbalance)* zwischen formeller und informeller Sprache, während alte Formen **verdrängt werden** *(to be displaced)* oder sogar **ausgestorben** *(extinct)* sind.
 
+Moderne Medien **weisen auf** *(to point to)* neue Ausdrucksformen **ausgeprägt** *(distinctively)* hin und **tragen zu** *(to contribute to)* sprachlichem Wandel bei.
+Dabei entstehen neue **Färbungen** *(shades / nuances)*, die als sprachliches **Phänomen** *(phenomenon)* wahrgenommen werden.
 
-## 📘 **STORY**
+Sprache wird häufig **mit etwas assoziiert** *(to associate with something, + dative)*, etwa mit dem **Bildungsstand** *(educational level)*, was jedoch schnell **herablassend** *(condescending)* wirken kann.
+Zudem bleiben bestimmte Bedeutungen oft **verborgen** *(hidden)*, obwohl sie gesellschaftlich relevant sind.
 
-In **MODUL 1: IM AUFTRAG DER FORSCHUNG (on behalf of research)** beginnt die Geschichte mit großen Fragen über den **der Weltraum (Sg.) (outer space)** und **das Weltall (Sg.) (the universe)**, auch **(~ das All (Sg.)) (space)** genannt. Forschende arbeiten oft fernab der Erde und verlassen ihre **die Bettruhe (Sg.) (bed rest)**, um neue Erkenntnisse zu gewinnen. In Experimenten nimmt **der Proband, -en (test subject)** oder **die Probandin, -nen (female test subject)** teil, wobei die **die Gesunderhaltung (Sg.) (maintenance of health)** oberste Priorität hat. Schon bei der Bewerbung müssen strenge **die Bewerbungsvoraussetzung, -en (application requirement)** erfüllt sein. Dennoch kann es zur **die Aufwandsentschädigung, -en (expense allowance)** kommen, da Tests in **die Schwerelosigkeit (Sg.) (weightlessness)** stattfinden und besondere **die Gegenmaßnahme, -n (countermeasure)** nötig machen.
+---
 
-Viele Prozesse sind **reversibel (reversible)**, besonders in der **die Raumfahrt (Sg.) (space travel)**, die stark von **die Grundlagenforschung (Sg.) (basic research)** abhängt. Trotz aller Technik können sich Forschende **sich in guten Händen fühlen (to feel in good hands)**, denn Zeit scheint **wie im Flug vergehen (to fly by)**. Neue Abläufe müssen **sich einspielen (to settle in)**, damit **die Vitalfunktion, -en (vital function)** stabil bleibt. Manchmal bleiben Ergebnisse **heimlich (secret)**, während andere streng **überwacht (monitored)** werden. Forschung ist immer auch **die Geselligkeit (Sg.) (sociability)**, da Vergleichsdaten aus **die Kontrollgruppe, -n (control group)** notwendig sind.
+### **SCHLUSS**
 
-In **MODUL 2: ARBEITSALLTAG ARCHÄOLOGIE (everyday work in archaeology)** wechselt die Perspektive zur Erde. **Der Archäologe, -n (archaeologist)** und **die Archäologin, -nen (female archaeologist)** arbeiten auf einer **die Ausgrabung, -en (excavation)**, also **(~ die Grabung, -en) (dig)**. Mit **die Schaufel, -n (shovel)** werden **der Fund, -e (find)**e geborgen, die in **das Fundstück, -e (artifact)** eingeordnet werden. Jede **die Ruine, -n (ruin)** und **die Siedlung, -en (settlement)** wird vorsichtig **freilegen (to uncover)**, während **der Alltagsgegenstand, -e (everyday object)** analysiert wird.
+Medien tragen Verantwortung – nicht nur für Inhalte, sondern auch für Sprache.
+Wer informiert, prägt Wahrnehmung, Haltung und demokratische Teilhabe. Deshalb müssen Medien differenziert berichten, sprachliche Vielfalt respektieren und kritisch mit Macht umgehen.
 
-Oft kommt **der Metalldetektor, -en (metal detector)** zum Einsatz, besonders bei der **die Schatzsuche, -n (treasure hunt)**. Die Funde lassen sich **sich etw. ausmalen (~ sich etw. vorstellen) (to imagine something)** und werden sorgfältig **restaurieren (to restore)** und **rekonstruieren (to reconstruct)**. Jede **die Epoche, -n (epoch)** wird neu bewertet, während Teams weiter **graben (gräbt, grub, hat gegraben) (to dig)**. Dabei schützen sie **die Überreste (Pl.) (remains)** als **das Bodendenkmal, -er (archaeological monument)**, besonders wenn ein **das Bauvorhaben, - (construction project)** geplant ist. Funde müssen gemeldet werden, sonst droht Verlust des **der Finderlohn, -¨e (finder’s reward)**.
+## **GESCHICHTE: SPRACHE IST MACHT – UND ANFANG EINER NEUEN SPRACHE**
 
-In **MODUL 3: IMMER NEUES AUS DER WISSENSCHAFT (always something new from science)** zeigt sich, wie wichtig Ressourcen sind. Ohne **Forschungsgelder (Pl.) (research funds)** und **die Forschungsfreiheit, -en (freedom of research)** wäre Fortschritt kaum möglich. Ebenso bedeutend ist **die Öffentlichkeitsarbeit (Sg.) (public relations)**, damit Wissen geteilt und verstanden wird.
+### **MODUL 3 – SPRACHE IST MACHT**
 
-## 📘 **STORY**
+In politischen und gesellschaftlichen Debatten reagieren manche Menschen **stur** *(stubborn)*, was häufig zu **der Stagnation** *(stagnation)* von Diskussionen führt.
+Besonders problematisch wird es, wenn Sprache gezielt zur **Ausgrenzung** *(exclusion)* oder sogar zur **Manipulation** *(manipulation)* eingesetzt wird.
+Dabei greift man nicht selten auf **den Euphemismus** *(euphemism)* zurück, um unangenehme Realitäten zu verschleiern und Emotionen gezielt **hervorzurufen** *(to evoke)*.
 
-Zu Beginn der Geschichte geht es um Wissenschaft, Öffentlichkeit und Wahrnehmung. In den letzten Jahren hat sich **der Wissenschaftshype, -s (science hype)** stark entwickelt, wodurch Forschende oft aus dem **der Elfenbeinturm (ivory tower)** heraustreten müssen. Universitäten stehen zunehmend **in Konkurrenz stehen mit (+ Dat.) (to be in competition with)** anderen Institutionen, besonders wenn **das Medieninteresse (Sg.) (media interest)** wächst. Manche Forschende fühlen sich gezwungen, **sich etw./jdm. ausliefern (to expose oneself to something/someone)**, um sichtbar zu bleiben. Eine neue **die Trendwelle, -n (trend wave)** bringt regelmäßig **das Trendthema, -themen (trending topic)** hervor, das plötzlich **zur Sprache kommen (to be brought up)** soll.
+Innerhalb **des Personenkreises** *(circle of people)* entstehen dadurch **Assoziationen** *(associations)*, die bestimmte Gruppen negativ rahmen.
+Solche Strategien können dazu führen, dass Menschen Entwicklungen **verharmlosen** *(to downplay)* oder nicht mehr kritisch **durchschauen** *(to see through something / someone)*, was tatsächlich geschieht.
 
-Parallel dazu gewinnt **das Wissenschaftsmarketing (science marketing)** an Bedeutung. Viele Forschende sagen **gefühlt (subjectively / it feels like)**, etwa **(Ich habe es gefühlt hundert Mal gesagt.) (I feel like I’ve said it a hundred times.)**, dass Inhalte vereinfacht werden müssen. Grundlage dafür ist **die Datenbasis (Sg.) (data basis)**, denn Glaubwürdigkeit muss **in der Natur von etw. liegen (to be inherent in something)**. Trotzdem geraten wichtige Erkenntnisse oft **in Vergessenheit geraten (to fall into oblivion)**. Neue Projekte muss man aktiv **etw. in Angriff nehmen (to tackle something)**, besonders wenn Forschende **resistent (resistant)** gegenüber Vereinfachung sind. Deshalb ist es wichtig, Themen gezielt **etw. zur Sprache bringen (to bring something up)**.
+Wer Sprache unreflektiert verwendet, läuft Gefahr, sich **jemandem zu unterordnen** *(to subordinate oneself to someone)* oder fremde Narrative **zu übernehmen** *(to adopt something)*, obwohl man Meinungen nicht einfach übernehmen sollte.
+Gerade deshalb ist es wichtig, Sprache **sparsam umzugehen mit** *(to use sparingly, + dative)* starken Begriffen, um bewusst **eine Wirkung zu erzielen** *(to achieve an effect)*, statt unkontrolliert zu emotionalisieren.
 
-In **MODUL 4: AN DER HOCHSCHULE (at the university)** wechselt der Blick auf den Campusalltag. Das **das Orgteam (organization team)** plant Veranstaltungen, die fachlich **ansiedeln (etw. ist bei/an … angesiedelt) (to be located/assigned)** an bestimmten Instituten sind. Neue Studierende sollen **sich wie zu Hause fühlen (to feel at home)**, auch wenn **die eiserne Regel (iron rule)** gilt, dass Leistung zählt. Internationale Gäste müssen zunächst **unterkommen (kommt unter, kam unter, ist untergekommen) (to find accommodation)**, manchmal hört man sogar **(etw. ist jdm. untergekommen) (something came to someone’s notice)**. Besonders beliebt ist **das Kompaktseminar, -e (compact seminar)**, in dem klare **die Ansage, -n (announcement / clear statement)** gemacht werden, um Diskussionen bewusst **provozieren (to provoke)**.
+---
 
-Im akademischen Diskurs spielt **die Wissensautorität (authority of knowledge)** eine große Rolle. Lehrveranstaltungen werden zunehmend **interaktiv (interactive)** gestaltet, obwohl einige Teilnehmende **skeptisch (skeptical)** bleiben. Dennoch ist es **durchaus (quite / indeed)** möglich, auch kontroverse Themen **heftig (ugs.) (- stark) (intensely)** zu diskutieren, solange man **differenziert (differentiated)** argumentiert. Neue **das Lernformat, -e (learning format)** prägt die **die Lernkultur, -en (learning culture)** und beeinflusst zugleich **die Lehrkultur, -en (teaching culture)**. Hochschulen wollen Kompetenzen **etw. schulen (~ schaffen) (to train / develop something)** und pflegen dabei **die Lerntradition, -en (learning tradition)**.
+### **MODUL 4 – EINE NEUE SPRACHE**
 
-Unter **Weitere Wörter, die für mich wichtig sind (additional words that are important to me)** fallen besonders didaktische Methoden. In einer Übung heißt es: **Arbeiten Sie zu dritt. (Work in groups of three.)** **Eine/r wählt ein Wort aus einem Modul von der Liste und würfelt. (One person chooses a word from a module and rolls the dice.)** **Erklären Sie das Wort je nach gewürfelter Zahl. (Explain the word according to the number rolled.)** Je nach Aufgabe soll man **Stellen Sie die Bedeutung des Worts mit einer Zeichnung dar. (Show the meaning of the word with a drawing.)**, **Erklären Sie es durch Pantomime. (Explain it through pantomime.)** oder **Umschreiben Sie es. (Paraphrase it.)** Für Fortgeschrittene gilt: **Sie können es schwieriger machen, wenn Sie nicht sagen, aus welchem Modul das Wort stammt. (You can make it harder by not saying which module the word comes from.)**
+Die persönliche **Herkunft** *(origin)* prägt den sprachlichen Ausdruck stark, besonders bei Menschen, die gezwungen waren zu **fliehen** *(to flee)* und **vor dem Krieg zu fliehen** *(to flee from war)*.
+Viele versuchen, sich in einer neuen Gesellschaft **zurechtzufinden** *(to find one’s way)*, auch wenn sie sprachlich zunächst **durcheinandergeraten** *(to get confused)*.
 
-## 📘 **STORY**
+In Gesprächen verschlucken manche Wörter oder **rauslucken** *(to blurt out, colloquial)* Gedanken, die sie eigentlich zurückhalten wollten.
+Wer jedoch bereit ist, sich **in etwas hineinzuversetzen** *(to put oneself into something, + accusative)*, erkennt schnell, wie **auffallend** *(striking)* Sprache mit Identität verbunden ist.
 
-In **MODUL 1: ÜBER DAS WARTEN (about waiting)** beginnt die Geschichte mit einem Gefühl tiefer **die Machtlosigkeit (Sg.) (powerlessness)**. Das Warten fällt nur dann **erträglich (etw. erträglich gestalten) (bearable)**, wenn man versucht, dem **das Vergehen (Sg.) (passing)**, also **(das Vergehen der Zeit) (the passing of time)**, Sinn zu geben. Gedanken werden oft **überdeutlich (overly clear)**, besonders im **der Trubel, - (hustle and bustle)** des Alltags, also **(der Alltagstrubel) (everyday hustle)**. Diese Situation kann **quälend (tormenting)** sein, wenn man gezwungen ist, **ausharren (to persevere)** zu müssen, ohne Einfluss zu haben.
+Eine neue Sprache zu lernen bedeutet daher mehr als Grammatik und Wortschatz: Es heißt, Verantwortung zu übernehmen, sensibel zu kommunizieren und aktiv dazu beizutragen, dass Sprache nicht trennt, sondern verbindet.
 
-Manche versuchen, sich auf Geduld **beruhen auf (+ Akk.) (to be based on)** rationale Erklärungen, andere handeln **überdacht (well thought out)**. Währenddessen kann Zeit einfach **verstreichen (verstreicht, verstrich, ist verstrichen) (to pass)**, wie man sagt: **(die Zeit verstreicht) (time passes)**. Man fühlt sich manchmal **etw./jdm. ausgesetzt sein (to be exposed to something/someone)**, etwa wenn man **(seinen Blicken ausgesetzt sein) (to be exposed to someone’s gaze)** muss. Gedanken beginnen **abschweifen (to drift away)**, denn **die Gedanken schweifen ab (thoughts drift off)**. Dennoch wächst **die Vorfreude, -n (anticipation)** auf das, was kommt, denn man **etw. nicht missen möchten (to not want to miss something)**.
 
-In **MODUL 2: WIE FÜHLST DU DICH? (how do you feel?)** wechselt der Fokus zu Emotionen. In stillen Momenten spürt man **die Sehnsucht, -e (longing)**, manchmal auch **der Neid (Sg.) (envy)**. In schwierigen Situationen entsteht **das Mitleid (Sg.) (compassion)**, während **die Eifersucht (Sg.) (jealousy)** Konflikte auslösen kann. Oft folgt **die Verlegenheit (Sg.) (embarrassment)**, wenn man mit **die Überforderung, -en (overwhelm)** konfrontiert ist. Daraus kann **die Empörung, -en (indignation)** entstehen, denn Gefühle sind **vielschichtig (multi-layered)**.
+## **GESCHICHTE: URSACHE UND WIRKUNG IN EINER KOMPLEXEN GEGENWART**
 
-Diese Emotionen beeinflussen **die Stimmung, -en (mood)** und sind für das Zusammenleben **unerlässlich (essential)**. Menschen versuchen, sich **abhalten von (+ Dat.) (hält ab, hielt ab, hat abgehalten) (to deter from something)** impulsiven Reaktionen. Wichtig ist **das soziale Miteinander (social interaction)**, das viele **gerührt (moved emotionally)** zurücklässt. Manchmal ist man **beunruhigt (disturbed)** oder **nachtragend (resentful)**, andere reagieren **nachsichtig (lenient)**. Im Idealfall bleibt man **sachlich (objective)**, auch wenn Situationen **ungerecht (unjust)** erscheinen.
+### **MODUL 1 – URSACHE UND WIRKUNG**
 
-In **MODUL 3: TRAUMHAFT (dreamlike)** verschmelzen Körper und Geist. In stillen Nächten steigen **der Blutdruck (Sg.) (blood pressure)** und **der Puls (Sg.) (pulse)**, während sich **das Lid, -er (eyelid)** langsam schließt. Man beginnt, **eine Handlung ausführen (to carry out an action)**, oft gelenkt durch **der Impuls, -e (impulse)**. In solchen Momenten kann man **etw. mit Sicherheit sagen (to say something with certainty)**, dass Erlebnisse tief wirken.
+In wirtschaftlichen Debatten muss man Kritik oft **hinnehmen** *(to accept)*, denn **der Effekt** *(effect)* politischer Entscheidungen zeigt sich meist erst in **Krisenzeiten** *(times of crisis)*.
+Was heute **unumgänglich** *(unavoidable)* erscheint, wird morgen hinterfragt, zumal **das Prestige** *(prestige)* eines Projekts oft nur **vordergründig** *(superficial)* überzeugt.
+Viele beginnen dennoch **für etwas zu schwärmen** *(to rave about something)*, selbst wenn die Argumentation **widersprüchlich** *(contradictory)* wirkt und eher **verlockend** *(tempting)* als fundiert ist.
 
-Das Gehirn beginnt, Eindrücke **etw. verarbeiten (to process something)**, **Informationen verknüpfen (to link information)** und Erinnerungen **einprägen (to imprint)**. Manche Erfahrungen sind **einschneidend (ein einschneidendes Erlebnis) (life-changing)** und bleiben lange **vorherrschend (dominant)** im Gedächtnis. So endet die Geschichte zwischen Warten, Fühlen und Träumen — intensiv, bewusst und menschlich.
+Von **ab und an** *(from time to time)* wird **das Luxusgut** *(luxury good)* zur Norm erklärt, während Unternehmen versuchen, **den Absatz anzutreiben** *(to boost sales)*.
+Konsumentinnen und Konsumenten **schlagen zu** *(to snap up / buy)*, obwohl sie **von Risiken angetan sind** *(to be impressed by, + dative)*.
+**Trotz** *(despite)* berechtigter Zweifel heißt es oft: *„Erst recht!“* *(all the more)*, und man **fällt auf Versprechen herein** *(to fall for something, + accusative)*, die **positiv besetzt** *(positively connoted)* sind.
 
+---
 
-## 📘 **STORY**
+### **MODUL 2 – INFORMIERT EUCH!**
 
-Zu Beginn der Erzählung steht ein gesellschaftliches Thema, das oft **ein Dauerbrenner sein (to be a perennial issue)** ist, wie man sagt: **(Dieses Thema ist ein Dauerbrenner.) (This topic is a constant issue.)** Dabei geht es um Freiheit und Selbstbestimmung, also um **die Autonomie, -n (autonomy)**, die viele Menschen als zentral empfinden. Erinnerungen tauchen manchmal wie **der Erinnerungsschnipsel, - (memory fragment)** auf, schwer greifbar, aber emotional stark. Um diese Erinnerungen zu verstehen, versuchen Menschen sie zu **entziffern (to decipher)** und **etw. in Bezug herstellen zu (+ Dat.) (to relate something to)** ihrem Leben. Erst **der Verlauf (im Verlauf des Lebens) (course / over the course of life)** zeigt, wie sehr solche Themen nachwirken.
+Um Entscheidungen besser **zu verstehen** *(to understand, + dative)*, lohnt es sich, den Blick im **Uhrzeigersinn** *(clockwise)* zu wenden und **die Blickrichtung** *(direction of gaze)* bewusst zu ändern, statt Informationen nur zu **vorbeischleusen** *(to let pass through)*.
+Wer Inhalte strategisch **platziert** *(to place)*, weiß, wie schnell sie **ins Auge fallen** *(to catch the eye)*, besonders wenn **die Signalfarbe** *(signal color)* Aufmerksamkeit erzeugt.
 
-In **MODUL 4: UNSERE BUNTE WELT (our colorful world)** wird die Geschichte visuell und symbolisch. Farben spielen eine zentrale Rolle, besonders **die Komplementärfarbe, -n (complementary color)**, die Gegensätze sichtbar macht. Künstler **illustrieren (to illustrate)** gesellschaftliche Themen oft **gezielt (deliberately)**, um bestimmte Aspekte zu **beleuchten (hier – betrachten) (to shed light on / examine)**. Solche Darstellungen wirken **über Jahrhunderte hinweg (over centuries)**, auch wenn Farben mit der Zeit **flau (dull)** werden.
+Medien **suggerieren** *(to suggest)* häufig bestimmte Deutungen, nicht zuletzt durch **den Influencer** *(influencer)* oder **die Influencerin** *(female influencer)*, die **die Zur-Schau-Stellung** *(display)* von Meinungen perfektioniert haben.
+Gleichzeitig geraten viele Menschen in finanzielle Schwierigkeiten, **verschulden sich** *(to get into debt)*, greifen zur **Ratenzahlung** *(installment payment)* und stehen plötzlich vor **dem Schuldenberg** *(mountain of debt)*.
+Die Folge kann **die Insolvenz** *(insolvency)* sein, aus der man nur mühsam **zurechtkommt** *(to get back on one’s feet)*.
 
-Humor darf dabei nicht fehlen. **Der Spießer, - (petty bourgeois)** und **die Spießerin, -nen (female petty bourgeois)** stehen oft im Kontrast zu freieren Lebensentwürfen. Gleichzeitig stehen Symbole für Frieden wie **der Friedhof, -¨e (cemetery)** im Raum, während Schuldzuweisungen durch **der Sündenbock, -¨e (scapegoat)** sichtbar werden. Erinnerungen können **verblassen (to fade)**, Eindrücke wirken manchmal **holprig (awkward)**. Doch gesellschaftliche Spannungen brauchen **der Blitzableiter, - (lightning rod)**, um sich zu entladen, bevor Emotionen **glitzern (to glitter)** oder offen **prahlen (to boast)**.
+Wer Informationen **zur Verfügung hat** *(to have at one’s disposal)*, trifft Entscheidungen **anmaßend** *(presumptuous)* oder reflektiert – abhängig davon, ob **der Entscheidungsträger** *(decision-maker)* oder **die Entscheidungsträgerin** *(female decision-maker)* Verantwortung übernimmt.
+Glaubwürdige Berichte bleiben **lebensnah** *(close to real life)* und vermeiden Sensationslust.
 
-Manche feiern das Leben wie **der Pfau, -e (peacock)**, der sich stolz zeigt und **den Spieß herumdrehen (to turn the tables)** will. Farben werden zu Zeichen von Identität, etwa **GRÜN (green)** für **NATUR (nature)** und **NEID (envy)**, **ROT (red)** für Leidenschaft, **BLAU (blue)** für Ruhe, **ORANGE (orange)** für Energie, **SCHWARZ (black)** für Ernsthaftigkeit und **LILA (purple)** für Kreativität.
+---
 
-Unter **Weitere Wörter, die für mich wichtig sind (additional words that are important to me)** sammeln sich all diese Eindrücke. In einer Aufgabe heißt es: **Woran denken Sie bei diesen Farben? (What do you think of with these colors?)** **Notieren Sie Wörter wie im Beispiel. (Write down words like in the example.)** Danach sollen Lernende **Sprechen Sie dann zu zweit (then speak in pairs)** und **erklären Sie Ihre Wahl (explain your choice)**. So wird Sprache lebendig, bunt und bedeutungsvoll — genau wie die Welt selbst.
+### **MODUL 3 – MODERNE KONZEPTE**
+
+Besonders **Menschen mit Fluchthintergrund** *(people with a refugee background)* müssen erst **Zugang zu etwas finden** *(to gain access to something, + dative)*, während bürokratische Hürden sie **zur Untätigkeit verdammen** *(to condemn to inaction)*.
+Dennoch entstehen innovative Ideen, wenn Akteurinnen und Akteure gemeinsam Neues **kreieren** *(to create)* und Strukturen kritisch hinterfragen.
+
+---
+
+### **SCHLUSS**
+
+Die Geschichte zeigt, wie eng Ursache und Wirkung miteinander verbunden sind.
+Nur wer informiert bleibt, Zusammenhänge erkennt und Verantwortung übernimmt, kann verhindern, dass verlockende Oberflächen reale Risiken verdecken.
+
+## **GESCHICHTE: DESIGN, ARBEIT UND DIE FRAGE NACH DEM GRUNDEINKOMMEN**
+
+In einer renommierten Werkstatt entstand **die Kollektion** *(collection)*, deren **Schnitt** *(cut)* bewusst **universell** *(universal)* gehalten war, um möglichst vielen Menschen zu passen.
+Der erwartete **Erlös** *(revenue)* sollte teilweise an **die Handwerkskammer** *(chamber of crafts)* fließen, da das Projekt sowohl **kognitiv** *(cognitive)* als auch **motorisch** *(motor)* anspruchsvoll war.
+Die Designerin begann, neue Modelle zu **entwerfen** *(to design)*, brach jedoch bewusst mit **herkömmlichen** *(conventional)* Mustern und setzte auf **außergewöhnliche** *(extraordinary)* Lösungen, die auch **Menschen mit Einschränkungen** *(people with disabilities)* einbezogen.
+Feine Details wurden sorgfältig **geschliffen** *(to grind / polish)*, bevor alle Entwürfe offiziell **genehmigt** *(approved)* wurden.
+
+---
+
+### **MODUL 4 – GRUNDEINKOMMEN**
+
+Parallel dazu rückte das Thema **Grundeinkommen** *(basic income)* gesellschaftlich stark in den Fokus.
+Die traditionelle **Arbeitsmoral** *(work ethic)* geriet ins Wanken, da **die Stigmatisierung** *(stigmatization)* von Erwerbslosigkeit zunehmend kritisiert wurde.
+Viele forderten, **die Gegenleistung** *(reciprocal service)* neu zu denken, um **ein Bedürfnis zu befriedigen** *(to satisfy a need)* und soziale Sicherheit zu gewährleisten.
+
+Politisch wurde **eine Debatte angeheizt** *(to fuel a debate)*, die dem Vorwurf entgegenwirken sollte, staatliche Unterstützung wirke leistungshemmend.
+Stattdessen wollte man **etwas entgegenwirken** *(to counteract something)*, das soziale Ungleichheit verstärkt.
+Da Reformen oft **zeitlich begrenzt** *(limited in time)* sind, ging es darum, mutige Entscheidungen **zu fassen** *(to dare)*, ohne **das Vermögen** *(wealth)* der Gesellschaft zu gefährden.
+Viele Verantwortliche standen **vor einem Dilemma** *(faced with a dilemma)*.
+
+Im politischen Diskurs **standen bürokratische Hürden im Fokus** *(to be in focus)*, da Menschen Unterstützung brauchen, ohne **die bürokratischen Hürden zu scheuen** *(to shy away from bureaucratic hurdles)*.
+Diskutiert wurden **das Bürgergeld** *(citizen’s allowance)* und **das Kindergeld** *(child benefit)* als Bausteine einer neuen **Grundsicherung** *(basic security)*.
+Zugleich wurde **die Bürokratie** *(bureaucracy)* kritisch hinterfragt, während sich innovative Akteure sozialen Projekten **widmeten** *(to devote oneself to something)*.
+
+Besonderes Gewicht lag auf **der Innovation** *(innovation)*, da man durch Reformen neue **Anreize schaffen** *(to create incentives)* wollte, um gesellschaftliche Teilhabe zu stärken und kreative Potenziale freizusetzen.
+
+---
+
+### **SCHLUSS**
+
+Die Geschichte zeigt, wie eng Design, Arbeit und soziale Verantwortung miteinander verbunden sind.
+Zwischen handwerklicher Präzision und politischer Vision entsteht ein Raum, in dem neue Ideen wachsen können – wenn man bereit ist, alte Muster zu überdenken und Verantwortung gemeinsam zu tragen.
+
+## **GESCHICHTE: GUT GEGEN STRESS – ZWISCHEN SELBSTSTÄNDIGKEIT UND NEUEN BLICKEN**
+
+### **MODUL 1 – GUT GEGEN STRESS**
+
+In Zeiten hoher Belastung gewinnt **die Resilienz** *(resilience)* an Bedeutung, denn nur wer **resilient** *(resilient)* ist, kann **die Widerstandskraft** *(resistance)* aufrechterhalten und **die Beeinträchtigung** *(impairment)* durch äußere Faktoren **überstehen** *(to withstand)*.
+Ein **Vorbild** *(role model)* kann helfen, wenn man **an etwas beteiligt ist** *(to be involved in, + dative)*, das gesellschaftlich **umstritten** *(controversial)* bleibt.
+Viele Fachleute **befassen sich mit** *(to deal with, + dative)* Stressforschung und versuchen, Hypothesen **zu widerlegen** *(to refute)* oder zu bestätigen.
+
+Studien **geben Hinweise auf** *(to give indications of, + accusative)* wirksame Strategien, indem sie systematisch **durchgeführt** *(to conduct)* werden und zeigen, wie sich Menschen **entfalten** *(to unfold)* können.
+Dabei spielt **die Annahme** *(assumption)* eine Rolle, dass Prävention **das Interesse wecken an** *(to arouse interest in, + dative)* gesunder Lebensführung kann.
+Doch selbst nach einem **Schicksalsschlag** *(stroke of fate)* lassen sich manche nicht **von etwas dominieren** *(to be dominated by, + dative)* und möchten anderen **etwas ersparen** *(to spare someone something)*.
+
+---
+
+### **MODUL 2 – UNABHÄNGIG UND FREI?**
+
+In der Selbstständigkeit beginnt vieles mit **der Akquise** *(acquisition)* neuer Kundschaft.
+**Der Auftraggeber** *(client)* oder **die Auftraggeberin** *(female client)* erwartet Verlässlichkeit, während **die Vorsorge** *(provision / precaution)* langfristig Sicherheit schafft.
+Oft ist ein Argument **ausschlaggebend** *(decisive)*, wenn **die Auftragslage** *(order situation)* stabil bleibt.
+
+Manche Projekte liegen einem besonders **am Herzen** *(close to one’s heart)*, selbst wenn **die Rücklage** *(reserve)* begrenzt ist.
+Wer frei arbeitet, möchte sich Entscheidungen **selbst überlassen** *(to leave to oneself)* und Aufträgen bewusst **entsprechen** *(to meet expectations)*.
+Ziel ist es, Umsätze **zu erzielen** *(to achieve)* und zugleich **den Einsteiger** *(beginner)* oder **die Einsteigerin** *(female beginner)* mitzunehmen.
+
+Doch nicht alles gelingt sofort: **Der Zuschuss** *(subsidy)* bleibt manchmal aus, sodass **die Absicherung** *(security)* neu gedacht werden muss.
+
+---
+
+### **MODUL 3 – KÜNSTLICHE INTELLIGENZ?**
+
+Abschließend verändert Technologie **den Gesamteindruck** *(overall impression)* moderner Arbeit.
+Künstliche Intelligenz eröffnet **einen anderen Blick auf** *(a different perspective on, + accusative)* Effizienz, Verantwortung und Zukunftsplanung.
+
+---
+
+### **SCHLUSS**
+
+Die Geschichte zeigt, dass Resilienz, Selbstbestimmung und technischer Wandel zusammengehören.
+Wer Stress aktiv begegnet, Verantwortung übernimmt und offen für neue Perspektiven bleibt, kann auch unter Druck handlungsfähig bleiben.
+
+## **GESCHICHTE: DER WAHRHEIT AUF DER SPUR**
+
+In der öffentlichen Debatte werden Informationen häufig **auf etwas übertragen** *(to transfer to, + accusative)*, während Journalistinnen versuchen, **auf das Ganze zu schließen** *(to infer the whole from details)*.
+Dabei kommt es nicht selten **zu Fehleinschätzungen** *(misjudgments)*, wenn voreilig **Schlüsse aus etwas gezogen** *(to draw conclusions from something)* werden.
+Manche Redaktionen **sehen von Konsequenzen ab** *(to disregard consequences)*, obwohl **der Widerspruch zu** *(contradiction to, + dative)* offiziellen Daten offensichtlich ist.
+
+Andere werfen **einen genaueren Blick auf** *(to take a closer look at, + accusative)* **die Wahrscheinlichkeit** *(probability)* bestimmter Entwicklungen und berücksichtigen **den Rückkopplungseffekt** *(feedback effect)* öffentlicher Reaktionen.
+Wer argumentativ sauber arbeitet, kann Denkfehler **ableiten** *(to derive / infer)* und **die Hetze** *(incitement)* sowie **den Hass** *(hatred)* klar benennen.
+Tatsächlich wird **jemand strafrechtlich verfolgt** *(to prosecute criminally)*, wenn Grenzen überschritten werden, denn **an Grenzen zu stoßen** *(to hit limits)* gehört zur Verantwortung öffentlicher Kommunikation.
+Gerade **die Meinungsfreiheit** *(freedom of expression)* gilt als **ein hohes Gut** *(a highly valued good)*.
+
+---
+
+### **MODUL 4 – DER WAHRHEIT AUF DER SPUR**
+
+Um Falschinformationen zu begegnen, braucht es **die Belichtung** *(exposure)* von Fakten und die Korrektur **der Desinformation** *(disinformation)* gemäß **der gesetzlichen Vorgabe** *(legal requirement)*.
+Problematisch wird es, wenn sich Menschen in **der Nachrichtenblase** *(news bubble)* bewegen und bewusst **abweichende Positionen vertreten** *(to hold a divergent position)*.
+So prägt **das Weltbild** *(worldview)* die Wahrnehmung, während vereinfachende Narrative **vorherrschen** *(to prevail)*.
+
+Faktenchecks sind nicht immer **lohneswert** *(worthwhile)*, zumindest nicht für jene, die Inhalte für **nicht lohnenswert halten** *(to consider not worth the effort)*.
+Dennoch helfen **die FAQs** *(frequently asked questions)* und transparente **die Belegschaft** *(staff)* in Redaktionen, Vertrauen aufzubauen.
+Wer sorgfältig arbeitet, lässt Gerüchte **wegfallen** *(to fall away)* und vermeidet **die Gehaltskürzung** *(salary cut)*, die durch Vertrauensverlust drohen kann.
+Nicht selten entscheidet **das Feingefühl** *(tact / sensitivity)* darüber, ob **der Beleg** *(evidence)* überzeugend ist.
+
+---
+
+### **SCHLUSS**
+
+Die Suche nach Wahrheit erfordert Präzision, Mut und Verantwortung.
+Wer Informationen einordnet, statt sie zu verzerren, schützt die Öffentlichkeit — und stärkt eine Debattenkultur, die Kritik zulässt, ohne Hass zu fördern.
+
+
+## **GESCHICHTE: IM AUFTRAG DER FORSCHUNG – VOM WELTRAUM BIS ZUR ERDE**
+
+### **MODUL 1 – IM AUFTRAG DER FORSCHUNG**
+
+Seit jeher übt **der Weltraum** *(outer space)* und **das Weltall** *(the universe)* eine besondere Faszination aus.
+Im Rahmen moderner **Raumfahrt** *(space travel)* untersuchen Forschende **die Schwerelosigkeit** *(weightlessness)* und ihre Auswirkungen auf **die Gesunderhaltung** *(health maintenance)*.
+Jede **Probandin** *(female test subject)* und jeder **Proband** *(test subject)* muss strenge **Bewerbungsvoraussetzungen** *(application requirements)* erfüllen und erhält für die Teilnahme eine **Aufwandsentschädigung** *(expense allowance)*.
+
+Die Effekte vieler Experimente sind **reversibel** *(reversible)*, was besonders in der **Grundlagenforschung** *(basic research)* wichtig ist.
+Während eines Langzeitaufenthalts müssen sich die Teilnehmenden **in guten Händen fühlen** *(to feel well taken care of)*, denn Zeit kann sich **wie im Flug vergehen** *(to fly by)*, sobald man sich **eingespielt** *(to get accustomed)* hat.
+Dabei werden ständig **die Vitalfunktionen** *(vital functions)* **heimlich** *(covertly)* **überwacht** *(monitored)*, um mögliche Risiken frühzeitig zu erkennen.
+
+Auch **die Geselligkeit** *(sociability)* spielt eine Rolle, weshalb eine **Kontrollgruppe** *(control group)* auf der Erde zum Vergleich herangezogen wird.
+Treten unerwartete Effekte auf, wird sofort eine passende **Gegenmaßnahme** *(countermeasure)* ergriffen.
+
+---
+
+### **MODUL 2 – ARBEITSALLTAG ARCHÄOLOGIE**
+
+Zurück auf der Erde arbeiten **der Archäologe** *(archaeologist)* und **die Archäologin** *(female archaeologist)* an einer neuen **Ausgrabung** *(excavation)*.
+Mit **der Schaufel** *(shovel)* werden vorsichtig **Funde** *(finds)* freigelegt, darunter **das Fundstück** *(artifact)* aus einer antiken **Ruine** *(ruin)*.
+Oft handelt es sich um eine ganze **Siedlung** *(settlement)*, die nach und nach **freigelegt** *(exposed)* wird, wobei selbst **der Alltagsgegenstand** *(everyday object)* wertvolle Hinweise liefert.
+
+Um sich das Leben früherer Menschen vorzustellen, **malt man sich etwas aus** *(to imagine something)* und beginnt anschließend zu **restaurieren** *(to restore)* oder **zu rekonstruieren** *(to reconstruct)*.
+So lässt sich eine ganze **Epoche** *(epoch)* besser verstehen, wenn man sorgfältig **gräbt** *(to dig)* und **Überreste** *(remains)* dokumentiert.
+
+Besonders aufschlussreich ist **das Bodendenkmal** *(archaeological monument)* im Bereich eines geplanten **Bauvorhabens** *(construction project)*.
+Hier kommen **der Metalldetektor** *(metal detector)*, **die Schatzsuche** *(treasure hunt)* und manchmal sogar **der Finderlohn** *(finder’s fee)* ins Spiel.
+
+---
+
+### **MODUL 3 – IMMER NEUES AUS DER WISSENSCHAFT**
+
+All diese Projekte wären ohne **Forschungsgelder** *(research funds)* und **die Forschungsfreiheit** *(freedom of research)* nicht möglich.
+Gleichzeitig sorgt **die Öffentlichkeitsarbeit** *(public outreach)* dafür, dass wissenschaftliche Erkenntnisse verständlich vermittelt und gesellschaftlich diskutiert werden.
+
+---
+
+### **SCHLUSS**
+
+Ob im All oder im Boden vergangener Zivilisationen – Forschung lebt von Neugier, Sorgfalt und Verantwortung.
+Erst durch interdisziplinäre Zusammenarbeit wird Wissen sichtbar, überprüfbar und für alle nutzbar.
+
+## **GESCHICHTE: WISSENSCHAFT ZWISCHEN ÖFFENTLICHKEIT UND HOCHSCHULE**
+
+In der öffentlichen Wahrnehmung existiert oft **der Wissenschaftshype** *(science hype)*, der den Eindruck erweckt, Forschung finde ausschließlich im **Elfenbeinturm** *(ivory tower)* statt.
+Dabei stehen wissenschaftliche Einrichtungen längst **in Konkurrenz mit** *(to be in competition with, + dative)* anderen Akteuren um Aufmerksamkeit und **das Medieninteresse** *(media interest)*.
+Viele Forschende **liefern sich jemandem aus** *(to expose oneself to someone)*, wenn sie sich auf mediale Logiken einlassen, wodurch **die Trendwelle** *(trend wave)* neue **Trendthemen** *(trend topics)* hervorbringt, die plötzlich **zur Sprache kommen** *(to be talked about)*.
+
+Gleichzeitig gewinnt **das Wissenschaftsmarketing** *(science marketing)* an Bedeutung.
+Ich habe es **gefühlt** *(felt it; “I’ve said it a hundred times”)*, dass ohne klare Kommunikation wertvolle Inhalte übersehen werden.
+Oft bleiben Ergebnisse nur in **der Datenbasis** *(database)* gespeichert oder **liegen in der Natur von etwas** *(to be inherent in something)*, ohne öffentlich wahrgenommen zu werden, und geraten so **in Vergessenheit** *(into oblivion)*.
+Erst wenn Forschende Themen aktiv **in Angriff nehmen** *(to tackle something)*, ihre Arbeit **resistent** *(resilient)* gegenüber Vereinfachungen präsentieren und Erkenntnisse **zur Sprache bringen** *(to put into words)*, entfalten sie gesellschaftliche Wirkung.
+
+---
+
+### **MODUL 4 – AN DER HOCHSCHULE**
+
+An der Universität arbeitet **das Orgateam** *(organization team)* daran, neue Studiengänge strategisch **anzusiedeln** *(to locate / establish)*.
+Viele Studierende **fühlen sich wie zu Hause** *(to feel at home)*, obwohl **die eiserne Regel** *(iron rule)* gilt, Leistung konsequent einzufordern.
+Nicht alle kommen gleich gut zurecht; manchen ist **etwas untergekommen** *(something slipped by someone)*, andere profitieren von kleinen Lerngruppen wie **dem Kompaktseminar** *(compact seminar)*.
+
+Eine provokante **Ansage** *(announcement / statement)* kann Diskussionen **provozieren** *(to provoke)*, besonders wenn sie von **der Wissensautorität** *(authority of knowledge)* ausgeht.
+Lehrveranstaltungen werden zunehmend **interaktiv** *(interactive)* gestaltet, auch wenn Studierende **skeptisch** *(skeptical)* bleiben.
+Diskussionen verlaufen **durchaus** *(quite / indeed)* intensiv und manchmal **heftig** *(intensely, colloquial)*, doch genau das fördert **differenziertes** *(differentiated)* Denken.
+
+Neue **Lernformate** *(learning formats)* verändern **die Lernkultur** *(learning culture)* nachhaltig, während **die Lehrkultur** *(teaching culture)* schrittweise angepasst wird.
+Studierende müssen lernen, **sich etwas zu schultern** *(to manage / handle something)*, ohne dabei **die Lerntradition** *(learning tradition)* völlig aufzugeben.
+
+---
+
+### **SCHLUSS**
+
+Die Geschichte zeigt, dass Wissenschaft weder abgeschottet noch oberflächlich sein darf.
+Zwischen öffentlicher Sichtbarkeit, akademischer Tiefe und kritischer Reflexion entsteht ein Spannungsfeld, das nur durch verantwortungsvolle Kommunikation und eine lebendige Hochschulkultur produktiv genutzt werden kann.
+
+## **ÜBER DAS WARTEN UND DIE INNERE BEWEGUNG**
+
+In einer Phase tiefer **Machtlosigkeit** *(powerlessness)* wird das Warten oft nur schwer **erträglich** *(bearable; tolerable)*, auch wenn man versucht, die Situation bewusst **erquicklich zu gestalten** *(to make something tolerable)*.
+Das stetige **Vergehen** *(passing)* der Zeit, genauer gesagt **das Vergehen der Zeit** *(the passage of time)*, wird dann besonders **überdeutlich** *(very clear)* wahrgenommen.
+Im alltäglichen **Trubel** *(hustle; bustle)*, also im **Alltagstrubel** *(daily hustle)*, kann das Warten regelrecht **quälend** *(agonizing)* sein, vor allem, wenn man innerlich **ausharrt** *(to persevere)* und Entscheidungen **auf etwas beruhen** *(to be based on something, + accusative)*, die lange im Voraus **überdacht** *(well thought out)* wurden.
+
+Währenddessen **verstreicht** *(passes)* die Zeit, ja, **die Zeit verstreicht** *(time passes)*, und man fühlt sich **jemandem oder etwas ausgesetzt** *(to be exposed to)*, etwa **den Blicken ausgesetzt** *(exposed to stares)* anderer Menschen.
+Gedanken beginnen abzuschweifen, sie **schweifen ab** *(to drift off)*, und gleichzeitig wächst **die Vorfreude** *(anticipation)* auf das, was kommen könnte, etwas, das man **nicht missen möchte** *(would not want to miss)*.
+
+---
+
+## **WIE FÜHLST DU DICH?**
+
+In solchen Momenten mischen sich **Sehnsucht** *(longing)* und **Neid** *(envy)* mit tiefem **Mitleid** *(compassion)*, manchmal auch mit **Eifersucht** *(jealousy)*.
+Die eigene **Verlegenheit** *(embarrassment)* tritt ebenso zutage wie **Überforderung** *(overstrain)* und sogar **Empörung** *(outrage)*.
+All diese Emotionen sind **vielschichtig** *(complex; multi-layered)* und prägen die innere **Stimmung** *(mood)*, die trotz allem **unerlässlich** *(indispensable)* für das eigene Selbstverständnis bleibt.
+
+Man versucht, sich bewusst **von etwas abzuhalten** *(to refrain from something, + dative)*, etwa impulsiv zu reagieren, weil **das soziale Miteinander** *(social interaction)* davon **berührt** *(affected)* wird.
+Ruhige Gespräche wirken **beruhigend** *(calming)*, regen aber auch **nachtragend** *(resentful)*e Gedanken an, die im Rückblick **nachsichtig** *(lenient)* betrachtet werden sollten.
+Eine **sachliche** *(objective)* Haltung hilft, selbst wenn man sich zeitweise **ungerecht** *(unfairly)* behandelt fühlt.
+
+---
+
+## **TRAUMHAFT UND DOCH REAL**
+
+In stillen Momenten nimmt man den eigenen **Blutdruck** *(blood pressure)* wahr, spürt den **Puls** *(pulse)* und schließt für einen Augenblick **das Lid** *(eyelid)*.
+Man beginnt, eine neue **Handlung auszuführen** *(to carry out an action)*, angestoßen durch **den Impuls** *(impulse)*, von dem man **mit Sicherheit sagen** *(to say with certainty)* kann, dass er nicht zufällig entstand.
+
+Erlebnisse werden innerlich **verarbeitet** *(processed)*, **Informationen verknüpft** *(to link information)* und dauerhaft **eingeprägt** *(imprinted)*.
+Manches wirkt im Rückblick **einschneidend** *(decisive; life-changing)*, ein wirklich **einschneidendes Erlebnis** *(decisive experience)*, das im Gedächtnis **vorherrschend** *(predominant)* bleibt.
+
+---
+
+### **SCHLUSS**
+
+So zeigt das Warten nicht nur Stillstand, sondern auch innere Bewegung: Gefühle ordnen sich, Gedanken reifen, und aus der scheinbaren Leere entsteht Klarheit.
+
+
+## **UNSERE BUNTE WELT – EINE ERZÄHLUNG ÜBER ZEIT, FARBEN UND SINN**
+
+Manche Themen scheinen **ein Dauerbrenner** *(a perennial issue)* zu sein; **dieses Thema ist ein Dauerbrenner** *(this topic never loses relevance)*, weil es die menschliche **Autonomie** *(autonomy)* berührt und wie ein **Erinnerungsschnipsel** *(fragment of memory)* immer wieder auftaucht.
+Wenn man beginnt, solche Erfahrungen zu **entziffern** *(to decipher)* und **einen Bezug zu etwas herzustellen** *(to establish a connection to something, + dative)*, erkennt man oft erst im **Verlauf des Lebens** *(over the course of life)*, wie stark sie das eigene Denken geprägt haben.
+
+---
+
+## **UNSERE BUNTE WELT**
+
+In **unserer bunten Welt** begegnet man der **Komplementärfarbe** *(complementary color)* nicht nur in der Kunst, sondern auch im Alltag, wo Farben gezielt eingesetzt werden, um Inhalte zu **illustrieren** *(to illustrate)* und bestimmte Aspekte **gezielt** *(deliberately)* zu **beleuchten** *(to examine; to shed light on)*.
+Über **Jahrhunderte hinweg** *(over centuries)* haben Menschen Farben genutzt, um Bedeutungen zu transportieren: Manche wirken **flau** *(dull)*, andere intensiv und lebendig.
+
+Auf einem Marktplatz steht **der Spieler** *(male gambler)* neben **der Spielerin** *(female gambler)*, beide drehen **den Spieß herum** *(to turn the tables)* und lachen über gesellschaftliche Erwartungen. In der Ferne liegt **der Friedhof** *(cemetery)* still, während jemand zum **Sündenbock** *(scapegoat)* gemacht wird, obwohl die Wahrheit längst **verblassen** *(to fade)* sollte.
+
+---
+
+## **ZWISCHEN GLANZ UND BRUCH**
+
+Ein alter Mann geht **holprig** *(awkwardly)* über den Weg, während über ihm ein **Blitzableiter** *(lightning rod)* aus Metall **glitzert** *(to sparkle)*. Daneben **prahlen** *(to boast)* Menschen mit ihrem Besitz, während **der Pfau** *(peacock)* als Symbol für Eitelkeit dient.
+Ein Kind beginnt, **den Spieß herumzudrehen** *(to reverse roles)*, indem es die Erwachsenen mit einfachen Fragen konfrontiert, die deren Gewissheiten erschüttern.
+
+---
+
+## **SCHLUSS**
+
+So zeigt sich, dass unsere Wahrnehmung – wie Farben – nie eindimensional ist: Sie entsteht aus Erinnerungen, Deutungen und Zusammenhängen, die wir im Laufe der Zeit entschlüsseln. Wer lernt, diese Vielfalt anzunehmen, erkennt, dass gerade die Gegensätze unserer Welt ihren besonderen Reiz verleihen.
+
+---
