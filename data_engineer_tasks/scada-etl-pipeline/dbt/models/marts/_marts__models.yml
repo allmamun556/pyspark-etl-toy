@@ -1,0 +1,31 @@
+version: 2
+
+models:
+  - name: turbine_daily_summary
+    description: One row per turbine per day - averages, capacity factor, anomaly count.
+    columns:
+      - name: turbine_id
+        data_tests:
+          - not_null
+      - name: reading_date
+        data_tests:
+          - not_null
+
+  - name: pipeline_run_daily_summary
+    description: One row per calendar day - DAG run counts, success rate, row throughput, duration.
+    columns:
+      - name: run_date
+        data_tests:
+          - not_null
+          - unique
+
+  - name: ambient_wind_daily_comparison
+    description: >
+      One row per calendar day comparing the simulated turbine fleet's avg
+      wind speed against real ambient weather (Open-Meteo) and a real ocean
+      buoy (NOAA NDBC).
+    columns:
+      - name: reading_date
+        data_tests:
+          - not_null
+          - unique

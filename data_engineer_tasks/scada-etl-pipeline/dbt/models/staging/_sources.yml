@@ -1,0 +1,22 @@
+version: 2
+
+sources:
+  - name: scada
+    description: Curated schema written by the Airflow pipeline (src/load/loaders.py).
+    schema: public
+    tables:
+      - name: scada_readings
+        description: One row per turbine per timestamp, already validated by the pipeline.
+        loaded_at_field: ingested_at
+      - name: scada_readings_rejects
+        description: Rows that failed pipeline validation, with the failure reason.
+      - name: pipeline_run_audit
+        description: One row per DAG run - extract/load/reject counts, duration, status.
+      - name: extraction_watermark
+        description: Per-turbine high-water mark used for incremental extraction.
+      - name: weather_api_readings
+        description: Real ambient weather pulled from the Open-Meteo HTTP API (no key required).
+      - name: iot_buoy_readings
+        description: Real IoT sensor telemetry from a NOAA NDBC ocean buoy (no key required).
+      - name: external_data_run_audit
+        description: One row per external_data_sources DAG task run - fetch/load/reject counts, duration, status.

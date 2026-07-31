@@ -1,0 +1,25 @@
+name: "scada_analytics"
+version: "1.0.0"
+config-version: 2
+
+profile: "scada_analytics"
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+# Rated power for the simulated turbine fleet - mirrors RATED_POWER_KW in
+# src/extract/scada_simulator.py. Kept as a var (not hardcoded per-model)
+# so it only needs updating in one place if the fleet's turbine spec changes.
+vars:
+  rated_power_kw: 3300
+
+models:
+  scada_analytics:
+    staging:
+      +materialized: view
+      +schema: staging
+    marts:
+      +materialized: table
+      +schema: marts

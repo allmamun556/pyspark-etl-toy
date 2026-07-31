@@ -1,0 +1,53 @@
+version: 2
+
+models:
+  - name: stg_scada_readings
+    description: Pass-through over scada_readings with a synthetic uniqueness key.
+    columns:
+      - name: turbine_id
+        data_tests:
+          - not_null
+      - name: ts
+        data_tests:
+          - not_null
+      - name: reading_key
+        description: "turbine_id || '-' || ts, used to test row-level uniqueness of the grain."
+        data_tests:
+          - not_null
+          - unique
+      - name: status_code
+        data_tests:
+          - accepted_values:
+              values: ["operational", "curtailed", "fault", "maintenance", "offline"]
+
+  - name: stg_pipeline_run_audit
+    description: Pass-through over pipeline_run_audit.
+    columns:
+      - name: dag_run_id
+        data_tests:
+          - not_null
+      - name: status
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ["success", "failed"]
+
+  - name: stg_weather_api_readings
+    description: Pass-through over weather_api_readings (real Open-Meteo HTTP API data).
+    columns:
+      - name: ts
+        data_tests:
+          - not_null
+      - name: source
+        data_tests:
+          - not_null
+
+  - name: stg_iot_buoy_readings
+    description: Pass-through over iot_buoy_readings (real NOAA NDBC IoT buoy data).
+    columns:
+      - name: station_id
+        data_tests:
+          - not_null
+      - name: ts
+        data_tests:
+          - not_null

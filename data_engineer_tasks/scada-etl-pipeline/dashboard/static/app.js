@@ -1,0 +1,233 @@
+const REFRESH_MS = 15000;
+
+const fmtNum = (v, digits = 1) => (v === null || v === undefined ? "-" : Number(v).toFixed(digits));
+const fmtTime = (v) => (v ? new Date(v).toLocaleString() : "-");
+
+async function getJSON(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`${url} -> ${res.status}`);
+  return res.json();
+}
+
+function renderKpis(summary) {
+  const lastRun = summary.last_run || {};
+  const statusClass = lastRun.status === "success" ? "status-success" : lastRun.status === "failed" ? "status-failed" : "";
+  const cards = [
+    ["Turbines", summary.total_turbines ?? "-"],
+    ["Readings", summary.total_readings ?? "-"],
+    ["Fleet avg power (kW)", fmtNum(summary.avg_power_kw)],
+    ["Fleet avg wind (m/s)", fmtNum(summary.avg_wind_speed_ms, 2)],
+    ["Anomalies", summary.total_anomalies ?? "-"],
+    ["Rejects", summary.total_rejects ?? "-"],
+    ["Last run status", lastRun.status ?? "no runs yet", statusClass],
+    ["Last run duration (s)", fmtNum(lastRun.duration_seconds, 2)],
+  ];
+  document.getElementById("kpi-row").innerHTML = cards
+    .map(
+      ([label, value, cls]) => `
+      <div class="kpi-card">
+        <div class="label">${label}</div>
+        <div class="value ${cls || ""}">${value}</div>
+      </div>`
+    )
+    .join("");
+}
+
+let fleetChart, timeseriesChart;
+
+function renderFleetChart(stats) {
+  const ctx = document.getElementById("fleet-chart");
+  const labels = stats.map((s) => s.turbine_id);
+  const avgPower = stats.map((s) => s.avg_power_kw);
+  const anomalyCounts = stats.map((s) => s.anomaly_count);
+
+  if (fleetChart) {
+    fleetChart.data.labels = labels;
+    fleetChart.data.datasets[0].data = avgPower;
+    fleetChart.data.datasets[1].data = anomalyCounts;
+    fleetChart.update();
+    return;
+  }
+
+  fleetChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [
+        { label: "Avg power (kW)", data: avgPower, backgroundColor: "#2563eb", yAxisID: "y" },
+        { label: "Anomalies", data: anomalyCounts, backgroundColor: "#dc2626", yAxisID: "y1", type: "line", borderColor: "#dc2626", tension: 0.3 },
+      ],
+    },
+    options: {
+      responsive: true,
+      interaction: { mode: "index", intersect: false },
+      scales: {
+        y: { position: "left", title: { display: true, text: "kW" } },
+        y1: { position: "right", grid: { drawOnChartArea: false }, title: { display: true, text: "anomaly count" }, ticks: { precision: 0 } },
+      },
+    },
+  });
+}
+
+async function renderTimeseries(turbineId) {
+  const data = await getJSON(`/api/turbines/${turbineId}/timeseries?limit=200`);
+  const labels = data.map((r) => new Date(r.ts).toLocaleTimeString());
+  const wind = data.map((r) => r.wind_speed_ms);
+  const power = data.map((r) => r.power_kw);
+
+  const ctx = document.getElementById("timeseries-chart");
+  if (timeseriesChart) {
+    timeseriesChart.data.labels = labels;
+    timeseriesChart.data.datasets[0].data = wind;
+    timeseriesChart.data.datasets[1].data = power;
+    timeseriesChart.update();
+    return;
+  }
+
+  timeseriesChart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels,
+      datasets: [
+        { label: "Wind speed (m/s)", data: wind, borderColor: "#5b9dff", yAxisID: "y", tension: 0.25, pointRadius: 0 },
+        { label: "Power (kW)", data: power, borderColor: "#f59e0b", yAxisID: "y1", tension: 0.25, pointRadius: 0 },
+      ],
+    },
+    options: {
+      responsive: true,
+      interaction: { mode: "index", intersect: false },
+      scales: {
+        y: { position: "left", title: { display: true, text: "m/s" } },
+        y1: { position: "right", grid: { drawOnChartArea: false }, title: { display: true, text: "kW" } },
+      },
+    },
+  });
+}
+
+function renderExternalKpis(external) {
+  const weather = external.weather || {};
+  const buoy = external.buoy || {};
+  const cards = [
+    ["Weather source", "Open-Meteo (HTTP API)"],
+    ["Weather wind speed (m/s)", fmtNum(weather.wind_speed_ms, 2)],
+    ["Weather temp (°C)", fmtNum(weather.temperature_c, 1)],
+    ["Weather updated", fmtTime(weather.ts)],
+    ["Buoy source", `NOAA NDBC ${buoy.station_id || ""} (IoT)`],
+    ["Buoy wind speed (m/s)", fmtNum(buoy.wind_speed_ms, 2)],
+    ["Buoy wave height (m)", fmtNum(buoy.wave_height_m, 2)],
+    ["Buoy updated", fmtTime(buoy.ts)],
+  ];
+  document.getElementById("external-kpi-row").innerHTML = cards
+    .map(
+      ([label, value]) => `
+      <div class="kpi-card">
+        <div class="label">${label}</div>
+        <div class="value">${value}</div>
+      </div>`
+    )
+    .join("");
+}
+
+function renderTable(tableId, rows, rowFn, emptyText) {
+  const tbody = document.querySelector(`#${tableId} tbody`);
+  if (!rows.length) {
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="10">${emptyText}</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(rowFn).join("");
+}
+
+async function populateTurbineSelect() {
+  const select = document.getElementById("turbine-select");
+  if (select.options.length > 0) return select.value;
+  const stats = await getJSON("/api/turbines/stats");
+  select.innerHTML = stats.map((s) => `<option value="${s.turbine_id}">${s.turbine_id}</option>`).join("");
+  select.addEventListener("change", () => renderTimeseries(select.value));
+  return select.value;
+}
+
+async function refresh() {
+  try {
+    const [summary, latest, stats, runs, anomalies, rejects, external] = await Promise.all([
+      getJSON("/api/summary"),
+      getJSON("/api/turbines/latest"),
+      getJSON("/api/turbines/stats"),
+      getJSON("/api/audit/runs?limit=10"),
+      getJSON("/api/anomalies?limit=20"),
+      getJSON("/api/rejects?limit=20"),
+      getJSON("/api/external"),
+    ]);
+
+    renderKpis(summary);
+    renderFleetChart(stats);
+    renderExternalKpis(external);
+
+    renderTable(
+      "external-runs-table",
+      external.recent_runs || [],
+      (r) => `
+        <tr>
+          <td>${r.source}</td><td>${r.status}</td><td>${r.rows_fetched}</td>
+          <td>${r.rows_loaded}</td><td>${r.rows_rejected}</td><td>${fmtNum(r.duration_seconds, 2)}</td>
+          <td>${fmtTime(r.finished_at)}</td>
+        </tr>`,
+      "No external source runs yet"
+    );
+
+    const selectedTurbine = await populateTurbineSelect();
+    if (selectedTurbine) await renderTimeseries(selectedTurbine);
+
+    renderTable(
+      "latest-table",
+      latest,
+      (r) => `
+        <tr class="${r.is_anomalous ? "anomalous" : ""}">
+          <td>${r.turbine_id}</td><td>${fmtTime(r.ts)}</td><td>${fmtNum(r.wind_speed_ms, 2)}</td>
+          <td>${fmtNum(r.power_kw)}</td><td>${fmtNum(r.rotor_rpm, 2)}</td><td>${fmtNum(r.nacelle_temp_c, 1)}</td>
+          <td>${r.status_code}</td><td>${r.is_anomalous ? "yes" : ""}</td>
+        </tr>`,
+      "No readings yet"
+    );
+
+    renderTable(
+      "runs-table",
+      runs,
+      (r) => `
+        <tr>
+          <td>${r.dag_run_id}</td><td>${r.status}</td><td>${r.rows_extracted}</td>
+          <td>${r.rows_loaded}</td><td>${r.rows_rejected}</td><td>${fmtNum(r.duration_seconds, 2)}</td>
+          <td>${fmtTime(r.finished_at)}</td>
+        </tr>`,
+      "No pipeline runs yet"
+    );
+
+    renderTable(
+      "anomalies-table",
+      anomalies,
+      (r) => `
+        <tr class="anomalous">
+          <td>${r.turbine_id}</td><td>${fmtTime(r.ts)}</td><td>${fmtNum(r.wind_speed_ms, 2)}</td>
+          <td>${fmtNum(r.power_kw)}</td><td>${fmtNum(r.rotor_rpm, 2)}</td><td>${r.status_code}</td>
+        </tr>`,
+      "No anomalies detected"
+    );
+
+    renderTable(
+      "rejects-table",
+      rejects,
+      (r) => `
+        <tr>
+          <td>${r.turbine_id}</td><td>${fmtTime(r.ts)}</td><td>${r.reject_reason}</td><td>${fmtTime(r.rejected_at)}</td>
+        </tr>`,
+      "No rejects - all rows have passed validation"
+    );
+
+    document.getElementById("last-updated").textContent = `updated ${new Date().toLocaleTimeString()}`;
+  } catch (err) {
+    document.getElementById("last-updated").textContent = `error: ${err.message}`;
+    console.error(err);
+  }
+}
+
+refresh();
+setInterval(refresh, REFRESH_MS);
