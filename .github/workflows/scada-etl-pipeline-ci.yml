@@ -1,10 +1,20 @@
-name: CI
+name: scada-etl-pipeline CI
 
+# This repo is a monorepo of unrelated projects, so this workflow is scoped
+# with `paths:` to only fire on changes under the project directory - and
+# every step's working directory is explicitly the project subfolder, since
+# GitHub Actions checks out the whole repo, not just this project.
 on:
   push:
     branches: ["**"]
+    paths:
+      - "data_engineer_tasks/scada-etl-pipeline/**"
+      - ".github/workflows/scada-etl-pipeline-ci.yml"
   pull_request:
     branches: [main, master]
+    paths:
+      - "data_engineer_tasks/scada-etl-pipeline/**"
+      - ".github/workflows/scada-etl-pipeline-ci.yml"
   workflow_dispatch:
 
 env:
@@ -14,6 +24,9 @@ jobs:
   lint-and-test:
     name: Lint + unit tests
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: data_engineer_tasks/scada-etl-pipeline
     steps:
       - uses: actions/checkout@v4
 
@@ -21,6 +34,7 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: pip
+          cache-dependency-path: data_engineer_tasks/scada-etl-pipeline/requirements.txt
 
       # apache-airflow drags in ~150 transitive packages and needs its own
       # constraints file to install reliably outside the official image.
@@ -62,6 +76,9 @@ jobs:
       POSTGRES_DB: scada
       POSTGRES_USER: scada_user
       POSTGRES_PASSWORD: ci_password
+    defaults:
+      run:
+        working-directory: data_engineer_tasks/scada-etl-pipeline
     steps:
       - uses: actions/checkout@v4
 
@@ -69,6 +86,7 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: pip
+          cache-dependency-path: data_engineer_tasks/scada-etl-pipeline/requirements.txt
 
       - name: Install pipeline + dbt dependencies
         run: |
@@ -77,7 +95,7 @@ jobs:
           pip install -r requirements-dbt.txt
 
       # Validates the actual schema-of-record against a real, empty
-      # Postgres — catches migration drift/breakage that pytest (which
+      # Postgres - catches migration drift/breakage that pytest (which
       # never touches a live DB) structurally can't.
       - name: Run Alembic migrations against a fresh database
         run: alembic upgrade head
@@ -87,7 +105,7 @@ jobs:
       # compiles and the schema/tests are internally consistent - not that
       # the numbers are meaningful, which needs live pipeline data.
       - name: dbt build (models + tests)
-        working-directory: dbt
+        working-directory: data_engineer_tasks/scada-etl-pipeline/dbt
         run: dbt build --profiles-dir .
 
   docker-build:
@@ -101,8 +119,8 @@ jobs:
       - name: Build Airflow image
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: Dockerfile
+          context: data_engineer_tasks/scada-etl-pipeline
+          file: data_engineer_tasks/scada-etl-pipeline/Dockerfile
           push: false
           cache-from: type=gha,scope=airflow
           cache-to: type=gha,mode=max,scope=airflow
@@ -110,8 +128,8 @@ jobs:
       - name: Build dashboard image
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: Dockerfile.dashboard
+          context: data_engineer_tasks/scada-etl-pipeline
+          file: data_engineer_tasks/scada-etl-pipeline/Dockerfile.dashboard
           push: false
           cache-from: type=gha,scope=dashboard
           cache-to: type=gha,mode=max,scope=dashboard
@@ -119,8 +137,8 @@ jobs:
       - name: Build dbt image
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: Dockerfile.dbt
+          context: data_engineer_tasks/scada-etl-pipeline
+          file: data_engineer_tasks/scada-etl-pipeline/Dockerfile.dbt
           push: false
           cache-from: type=gha,scope=dbt
           cache-to: type=gha,mode=max,scope=dbt
