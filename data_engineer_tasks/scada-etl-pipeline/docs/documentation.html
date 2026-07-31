@@ -416,10 +416,11 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
       <li><a href="#dashboard"><span class="n">09</span>Dashboard</a></li>
       <li><a href="#deployment"><span class="n">10</span>Deployment</a></li>
       <li><a href="#testing"><span class="n">11</span>Testing &amp; benchmark</a></li>
-      <li><a href="#config"><span class="n">12</span>Configuration</a></li>
-      <li><a href="#layout"><span class="n">13</span>Repository layout</a></li>
-      <li><a href="#tradeoffs"><span class="n">14</span>Design tradeoffs</a></li>
-      <li><a href="#roadmap"><span class="n">15</span>Roadmap</a></li>
+      <li><a href="#cicd"><span class="n">12</span>CI/CD</a></li>
+      <li><a href="#config"><span class="n">13</span>Configuration</a></li>
+      <li><a href="#layout"><span class="n">14</span>Repository layout</a></li>
+      <li><a href="#tradeoffs"><span class="n">15</span>Design tradeoffs</a></li>
+      <li><a href="#roadmap"><span class="n">16</span>Roadmap</a></li>
     </ul>
   </nav>
 
@@ -1066,9 +1067,35 @@ Improvement: NN.N% lower latency per row (N.Nx throughput)</pre>
       <p style="font-size:12.5px;color:var(--muted);">The naive path is capped at 50,000 rows in the comparison — run to completion at full scale, it's too slow to be worth waiting for.</p>
     </section>
 
-    <!-- 12 CONFIG -->
+    <!-- 12 CI/CD -->
+    <section class="doc-section" id="cicd">
+      <div class="eyebrow-row"><span class="eyebrow">12 · CI/CD</span></div>
+      <h2>GitHub Actions</h2>
+      <p class="section-dek">
+        Live at <a href="https://github.com/allmamun556/pyspark-etl-toy/actions" target="_blank" rel="noopener">github.com/allmamun556/pyspark-etl-toy/actions</a>
+        — <code>.github/workflows/scada-etl-pipeline-ci.yml</code>, runs on every push/PR touching this project.
+      </p>
+
+      <div class="callout warn">
+        <span class="lbl">A real gotcha worth documenting</span>
+        <p>This project lives nested inside a monorepo (<code>pyspark-etl-toy</code>). GitHub Actions only discovers workflow files at <code>.github/workflows/</code> relative to the <b>true repository root</b> — a workflow file placed at <code>data_engineer_tasks/scada-etl-pipeline/.github/workflows/</code> (mirroring this project's own directory as if it were the repo root) is silently ignored; GitHub never registers it, so nothing ever triggers. The workflow has to live at the monorepo's actual root, <code>paths:</code>-filtered so it only fires on changes under <code>data_engineer_tasks/scada-etl-pipeline/**</code>, with every step's working directory and Docker build context pointed at the project subfolder explicitly.</p>
+      </div>
+
+      <div class="table-wrap"><table>
+        <thead><tr><th>Job</th><th>What it validates</th><th>Last run</th></tr></thead>
+        <tbody>
+          <tr><td><code>lint-and-test</code></td><td><code>ruff check .</code> + all 42 pytest cases (installs <code>requirements.txt</code> minus <code>apache-airflow</code> — nothing under test imports it, and it needs its own constraints file to install reliably)</td><td class="num" style="color:var(--good);">✓ 30s</td></tr>
+          <tr><td><code>migrations-and-dbt</code></td><td>Spins up a real <code>postgres:16-alpine</code> service container, runs <code>alembic upgrade head</code> against it from empty, then <code>dbt build</code> — catches schema/dbt drift that pytest structurally can't since it never touches a live DB</td><td class="num" style="color:var(--good);">✓ 56s</td></tr>
+          <tr><td><code>docker-build</code></td><td>Builds all three Dockerfiles (Airflow, dashboard, dbt) with GitHub Actions layer caching, to catch Dockerfile rot without running the full stack</td><td class="num" style="color:var(--good);">✓ 2m29s</td></tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size:12.5px;color:var(--muted);">Pushing also required granting the <code>gh</code> CLI's OAuth token the <code>workflow</code> scope (<code>gh auth refresh -h github.com -s workflow</code>) — GitHub requires that scope specifically to create or modify anything under <code>.github/workflows/</code>, as a deliberate guard against an app silently planting CI automation.</p>
+    </section>
+
+    <!-- 13 CONFIG -->
     <section class="doc-section" id="config">
-      <div class="eyebrow-row"><span class="eyebrow">12 · Configuration</span></div>
+      <div class="eyebrow-row"><span class="eyebrow">13 · Configuration</span></div>
       <h2>Every setting, one file</h2>
       <p class="section-dek"><code>src/config.py</code> — a single <code>pydantic-settings</code> class, cached with <code>@lru_cache</code>, reading from environment variables or a local <code>.env</code>.</p>
 
@@ -1095,9 +1122,9 @@ Improvement: NN.N% lower latency per row (N.Nx throughput)</pre>
       </table></div>
     </section>
 
-    <!-- 13 LAYOUT -->
+    <!-- 14 LAYOUT -->
     <section class="doc-section" id="layout">
-      <div class="eyebrow-row"><span class="eyebrow">13 · Repository layout</span></div>
+      <div class="eyebrow-row"><span class="eyebrow">14 · Repository layout</span></div>
       <h2>Where everything lives</h2>
       <div class="code-panel">
         <pre>scada-etl-pipeline/
@@ -1127,11 +1154,12 @@ Improvement: NN.N% lower latency per row (N.Nx throughput)</pre>
 ├── docker-compose.yml                <span class="c"># postgres + airflow + dashboard + dbt</span>
 └── Dockerfile / Dockerfile.dashboard / Dockerfile.dbt</pre>
       </div>
+      <p style="font-size:12.5px;color:var(--muted);">Not shown above: <code>.github/workflows/scada-etl-pipeline-ci.yml</code> — it has to live at the true git repository root, one level up from this project (see <a href="#cicd">§12</a> for why), so it isn't part of this directory's own tree.</p>
     </section>
 
-    <!-- 14 TRADEOFFS -->
+    <!-- 15 TRADEOFFS -->
     <section class="doc-section" id="tradeoffs">
-      <div class="eyebrow-row"><span class="eyebrow">14 · Design tradeoffs</span></div>
+      <div class="eyebrow-row"><span class="eyebrow">15 · Design tradeoffs</span></div>
       <h2>Why these decisions, specifically</h2>
 
       <h3>Airflow over cron</h3>
@@ -1153,9 +1181,9 @@ Improvement: NN.N% lower latency per row (N.Nx throughput)</pre>
       <p>Airflow's base image pins SQLAlchemy 1.4.x for its own ORM; the dashboard and dbt both want current-generation dependencies. Three Dockerfiles avoids three-way dependency resolution fights inside one image.</p>
     </section>
 
-    <!-- 15 ROADMAP -->
+    <!-- 16 ROADMAP -->
     <section class="doc-section" id="roadmap" style="border-bottom:none;">
-      <div class="eyebrow-row"><span class="eyebrow">15 · Roadmap</span></div>
+      <div class="eyebrow-row"><span class="eyebrow">16 · Roadmap</span></div>
       <h2>Extending this</h2>
       <ul>
         <li>Swap <code>scada_simulator.py</code> for a real OPC-UA/MQTT client or historian export — the rest of the pipeline is source-agnostic by construction.</li>

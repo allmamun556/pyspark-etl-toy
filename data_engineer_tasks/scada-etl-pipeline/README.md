@@ -40,10 +40,11 @@ this README is the text-first equivalent.
 9. [Dashboard](#9-dashboard)
 10. [Deployment](#10-deployment)
 11. [Testing & benchmark](#11-testing--benchmark)
-12. [Configuration reference](#12-configuration-reference)
-13. [Repository layout](#13-repository-layout)
-14. [Design tradeoffs](#14-design-tradeoffs-things-id-say-in-an-interview)
-15. [Roadmap](#15-roadmap--extending-this)
+12. [CI/CD (GitHub Actions)](#12-cicd-github-actions)
+13. [Configuration reference](#13-configuration-reference)
+14. [Repository layout](#14-repository-layout)
+15. [Design tradeoffs](#15-design-tradeoffs-things-id-say-in-an-interview)
+16. [Roadmap](#16-roadmap--extending-this)
 
 ---
 
@@ -419,7 +420,7 @@ the old unanchored 4–14 m/s free range.
 > still shows the fleet average well above the real sources on any given
 > day, because it averages the *whole day's* history — including readings
 > generated before anchoring went live. The daily mean converges as more
-> anchored rows accumulate. See [§15](#15-roadmap--extending-this) for a fix.
+> anchored rows accumulate. See [§16](#16-roadmap--extending-this) for a fix.
 
 ---
 
@@ -558,7 +559,39 @@ python scripts/benchmark.py --rows 500000
 
 ---
 
-## 12. Configuration reference
+## 12. CI/CD (GitHub Actions)
+
+Live at [github.com/allmamun556/pyspark-etl-toy/actions](https://github.com/allmamun556/pyspark-etl-toy/actions) —
+`.github/workflows/scada-etl-pipeline-ci.yml`, runs on every push/PR that
+touches this project.
+
+> **A real gotcha worth documenting**: this project lives nested inside a
+> monorepo (`pyspark-etl-toy`). GitHub Actions only discovers workflow files
+> at `.github/workflows/` relative to the **true repository root** — a
+> workflow file placed at
+> `data_engineer_tasks/scada-etl-pipeline/.github/workflows/` (i.e. mirroring
+> this project's own directory as if it were the repo root) is silently
+> ignored; GitHub never registers it, so nothing ever triggers. The workflow
+> file has to live at the monorepo's actual root, `paths:`-filtered so it
+> only fires on changes under `data_engineer_tasks/scada-etl-pipeline/**`,
+> with every step's working directory and Docker build context pointed at
+> the project subfolder explicitly.
+
+| Job | What it validates | Last run |
+|---|---|---|
+| `lint-and-test` | `ruff check .` + all 42 pytest cases (installs `requirements.txt` minus `apache-airflow`, since nothing under test imports it and it needs its own constraints file to install reliably) | ✅ 30s |
+| `migrations-and-dbt` | Spins up a real `postgres:16-alpine` service container, runs `alembic upgrade head` against it from empty, then `dbt build` — catches schema/dbt drift that pytest structurally can't since it never touches a live DB | ✅ 56s |
+| `docker-build` | Builds all three Dockerfiles (Airflow, dashboard, dbt) with GitHub Actions layer caching, to catch Dockerfile rot without running the full stack | ✅ 2m29s |
+
+Pushing to GitHub also required granting the `gh` CLI's OAuth token the
+`workflow` scope (`gh auth refresh -h github.com -s workflow`) — GitHub
+requires that scope specifically to create or modify anything under
+`.github/workflows/`, as a deliberate guard against an app silently
+planting CI automation.
+
+---
+
+## 13. Configuration reference
 
 `src/config.py` — a single `pydantic-settings` class, cached with
 `@lru_cache`, reading from environment variables or a local `.env`.
@@ -584,7 +617,7 @@ python scripts/benchmark.py --rows 500000
 
 ---
 
-## 13. Repository layout
+## 14. Repository layout
 
 ```
 scada-etl-pipeline/
@@ -623,9 +656,14 @@ scada-etl-pipeline/
 └── .env.example
 ```
 
+> **Not shown above**: `.github/workflows/scada-etl-pipeline-ci.yml` — it
+> has to live at the *true* git repository root, one level up from this
+> project (see [§12](#12-cicd-github-actions) for why), so it isn't part of
+> this directory's own tree.
+
 ---
 
-## 14. Design tradeoffs (things I'd say in an interview)
+## 15. Design tradeoffs (things I'd say in an interview)
 
 - **Airflow over cron**: retries with backoff, SLA-miss alerting, backfill
   support, and a visual DAG are worth the extra operational overhead once
@@ -650,7 +688,7 @@ scada-etl-pipeline/
 
 ---
 
-## 15. Roadmap / extending this
+## 16. Roadmap / extending this
 
 - Swap the simulator in `src/extract/scada_simulator.py` for a real
   OPC-UA / MQTT client or a historian export — the rest of the pipeline is
