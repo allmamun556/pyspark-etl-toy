@@ -87,9 +87,25 @@ def ensure_schema(engine) -> None:
         )
 
 
-def run_naive(engine, readings: list[TransformedReading]) -> float:
+def cleanup_benchmark_rows(engine) -> None:
+    """
+    Deletes every OPT-/NAIVE- row this script could have written. Called
+    both before a run (in case a previous run crashed mid-benchmark) and
+    always after (via try/finally in main()) - this table is also the
+    pipeline's real curated table, and leaving synthetic rows in it after
+    the script exits has previously caused it to be miscounted as real
+    pipeline data on the dashboard.
+    """
     with engine.begin() as conn:
-        conn.execute(text("DELETE FROM scada_readings WHERE turbine_id LIKE 'NAIVE-%'"))
+        conn.execute(
+            text(
+                "DELETE FROM scada_readings "
+                "WHERE turbine_id LIKE 'OPT-%' OR turbine_id LIKE 'NAIVE-%'"
+            )
+        )
+
+
+def run_naive(engine, readings: list[TransformedReading]) -> float:
     start = time.perf_counter()
     with engine.begin() as conn:
         load_batch_naive(conn, readings)
@@ -97,8 +113,6 @@ def run_naive(engine, readings: list[TransformedReading]) -> float:
 
 
 def run_optimized(engine, readings: list[TransformedReading], batch_size: int) -> float:
-    with engine.begin() as conn:
-        conn.execute(text("DELETE FROM scada_readings WHERE turbine_id LIKE 'OPT-%'"))
     start = time.perf_counter()
     with engine.begin() as conn:
         for i in range(0, len(readings), batch_size):
@@ -116,39 +130,50 @@ def main() -> None:
     engine = get_engine()
     ensure_schema(engine)
 
-    print(f"Generating {args.rows:,} synthetic readings...")
-    optimized_readings = make_synthetic_readings(args.rows, "OPT")
+    # Guards against a previous run having crashed mid-benchmark and left
+    # synthetic rows behind - start from a known-clean state regardless.
+    cleanup_benchmark_rows(engine)
 
-    print("\nRunning OPTIMIZED path (COPY + staged UPSERT)...")
-    optimized_time = run_optimized(engine, optimized_readings, args.batch_size)
-    optimized_rate = args.rows / optimized_time
-    print(f"  {args.rows:,} rows in {optimized_time:.2f}s  ({optimized_rate:,.0f} rows/sec)")
+    try:
+        print(f"Generating {args.rows:,} synthetic readings...")
+        optimized_readings = make_synthetic_readings(args.rows, "OPT")
 
-    if args.skip_naive:
-        print("\n--skip-naive set: not running the naive comparison.")
-        return
+        print("\nRunning OPTIMIZED path (COPY + staged UPSERT)...")
+        optimized_time = run_optimized(engine, optimized_readings, args.batch_size)
+        optimized_rate = args.rows / optimized_time
+        print(f"  {args.rows:,} rows in {optimized_time:.2f}s  ({optimized_rate:,.0f} rows/sec)")
 
-    naive_rows = min(args.rows, 50_000)  # naive path is too slow to run at full scale
-    naive_readings = make_synthetic_readings(naive_rows, "NAIVE")
-    print(f"\nRunning NAIVE path (row-by-row INSERT) on {naive_rows:,} rows "
-          f"(capped — full-scale naive run would take too long)...")
-    naive_time = run_naive(engine, naive_readings)
-    naive_rate = naive_rows / naive_time
-    print(f"  {naive_rows:,} rows in {naive_time:.2f}s  ({naive_rate:,.0f} rows/sec)")
+        if args.skip_naive:
+            print("\n--skip-naive set: not running the naive comparison.")
+            return
 
-    naive_ms_per_row = naive_time / naive_rows * 1000
-    optimized_ms_per_row = optimized_time / args.rows * 1000
-    improvement = (1 - optimized_ms_per_row / naive_ms_per_row) * 100
-    speedup_factor = naive_ms_per_row / optimized_ms_per_row
+        naive_rows = min(args.rows, 50_000)  # naive path is too slow to run at full scale
+        naive_readings = make_synthetic_readings(naive_rows, "NAIVE")
+        print(f"\nRunning NAIVE path (row-by-row INSERT) on {naive_rows:,} rows "
+              f"(capped — full-scale naive run would take too long)...")
+        naive_time = run_naive(engine, naive_readings)
+        naive_rate = naive_rows / naive_time
+        print(f"  {naive_rows:,} rows in {naive_time:.2f}s  ({naive_rate:,.0f} rows/sec)")
 
-    print("\n" + "=" * 60)
-    print(f"Naive:     {naive_ms_per_row:.3f} ms/row  ({naive_rate:,.0f} rows/sec)")
-    print(f"Optimized: {optimized_ms_per_row:.3f} ms/row  ({optimized_rate:,.0f} rows/sec)")
-    print(
-        f"Improvement: {improvement:.1f}% lower latency per row "
-        f"({speedup_factor:.1f}x throughput)"
-    )
-    print("=" * 60)
+        naive_ms_per_row = naive_time / naive_rows * 1000
+        optimized_ms_per_row = optimized_time / args.rows * 1000
+        improvement = (1 - optimized_ms_per_row / naive_ms_per_row) * 100
+        speedup_factor = naive_ms_per_row / optimized_ms_per_row
+
+        print("\n" + "=" * 60)
+        print(f"Naive:     {naive_ms_per_row:.3f} ms/row  ({naive_rate:,.0f} rows/sec)")
+        print(f"Optimized: {optimized_ms_per_row:.3f} ms/row  ({optimized_rate:,.0f} rows/sec)")
+        print(
+            f"Improvement: {improvement:.1f}% lower latency per row "
+            f"({speedup_factor:.1f}x throughput)"
+        )
+        print("=" * 60)
+    finally:
+        # Runs even on Ctrl-C or a mid-benchmark crash - this table is also
+        # the pipeline's real curated table, so synthetic rows must never
+        # be left behind for something else (e.g. the dashboard) to count.
+        print("\nCleaning up synthetic OPT-/NAIVE- rows...")
+        cleanup_benchmark_rows(engine)
 
 
 if __name__ == "__main__":

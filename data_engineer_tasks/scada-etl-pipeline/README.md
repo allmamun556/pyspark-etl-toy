@@ -6,10 +6,12 @@ time-series data — orchestrated with **Apache Airflow**, backed by
 **PostgreSQL**, modeled with **dbt**, visualized with a **FastAPI + vanilla
 JS dashboard**, and containerized end-to-end with **Docker Compose**.
 
-Three sources feed the warehouse: a physically-realistic turbine SCADA
-simulator, plus two **genuinely real, live, free** external sources with no
-API key required — the **Open-Meteo HTTP API** (ambient weather) and a
-**NOAA NDBC ocean buoy** (real IoT hardware). See [§2](#2-data-sources).
+Four sources feed the warehouse: two physically-realistic simulated fleets
+(wind turbines and solar PV plants), plus two **genuinely real, live, free**
+external sources with no API key required — the **Open-Meteo HTTP API**
+(ambient weather + solar irradiance) and a **NOAA NDBC ocean buoy** (real IoT
+hardware). Both simulated fleets anchor themselves to the real sources
+rather than drifting on pure noise. See [§2](#2-data-sources).
 
 This project reproduces, end-to-end, the kind of pipeline described by:
 
@@ -35,7 +37,7 @@ this README is the text-first equivalent.
 4. [Pipeline internals](#4-pipeline-internals)
 5. [Data quality framework](#5-data-quality-framework)
 6. [Orchestration](#6-orchestration-airflow)
-7. [Real-data wind anchoring](#7-real-data-wind-anchoring)
+7. [Real-data anchoring (wind + solar)](#7-real-data-anchoring-wind--solar)
 8. [Analytics layer (dbt)](#8-analytics-layer-dbt)
 9. [Dashboard](#9-dashboard)
 10. [Deployment](#10-deployment)
@@ -50,18 +52,21 @@ this README is the text-first equivalent.
 
 ## 0. Overview
 
-The system ingests wind-turbine SCADA readings on a 5-minute cadence,
-validates them against physical and statistical rules **before** they reach
-the curated table, and loads them idempotently at batch throughput. A second,
-independent DAG pulls in real ambient weather and real ocean-buoy telemetry
-every 15 minutes — purely to give the pipeline something external and true to
-check itself against. dbt turns the curated tables into tested analytics
+The system ingests wind-turbine SCADA and solar PV plant readings on a
+5-minute cadence each, validates them against physical and statistical
+rules **before** they reach the curated tables, and loads them idempotently
+at batch throughput. A third, independent DAG pulls in real ambient weather
+and real ocean-buoy telemetry every 15 minutes — purely to give both
+simulated pipelines something external and true to check themselves
+against (and, since [§7](#7-real-data-anchoring-wind--solar), to anchor
+their output to). dbt turns the curated tables into tested analytics
 marts; a small dashboard makes the whole system's health and output visible
 without a SQL client.
 
 | Source | Kind | Real or simulated? |
 |---|---|---|
 | `src/extract/scada_simulator.py` | Simulated turbine SCADA | Simulated — real per-turbine telemetry (rotor RPM, pitch angle, nacelle temp) is proprietary to wind-farm operators and isn't published anywhere openly |
+| `src/extract/solar_simulator.py` | Simulated PV plant fleet | Simulated — same reasoning as wind; anchored to real irradiance ([§7](#7-real-data-anchoring-wind--solar)) |
 | [Open-Meteo](https://open-meteo.com) | HTTP API | **Real, live** — free, no API key |
 | [NOAA NDBC](https://www.ndbc.noaa.gov) buoy 46050 | IoT (real ocean buoy, satellite telemetry) | **Real, live** — free, no API key |
 
@@ -69,11 +74,12 @@ Example output from a running instance (yours will differ — these are
 illustrative, not persisted facts):
 
 ```text
-scada_readings:  1,573 rows   (20 turbines)
-rejects:             7 rows
-weather_api_readings: 19 rows
-iot_buoy_readings:    17 rows
-pytest:              42 / 42 passing
+scada_readings:  22,306 rows   (20 turbines)
+solar_readings:      72 rows   (8 plants)
+rejects (wind):      54 rows
+weather_api_readings: 20 rows  (incl. real shortwave_radiation_w_m2)
+iot_buoy_readings:    19 rows
+pytest:              73 / 73 passing
 ```
 
 ---
@@ -81,41 +87,53 @@ pytest:              42 / 42 passing
 ## 1. Architecture
 
 ```
-                         ┌─────────────────────────────┐
-                         │        Apache Airflow        │
-                         │   (scheduling, retries,      │
-                         │    SLAs, alerting, backfill) │
-                         └───────┬───────────────┬───────┘
-                                 │               │
-                     every 5 min │               │ every 15 min
-                                 ▼               ▼
-              ┌──────────────────────┐  ┌──────────────────────────┐
-              │  scada_etl_pipeline   │  │   external_data_sources   │
-              │  ─────────────────    │  │   ─────────────────────   │
-              │  extract_transform_   │  │   extract_load_weather    │
-              │  validate → load →    │  │   extract_load_buoy       │
-              │  update_watermarks_   │  │   (independent tasks)     │
-              │  and_audit            │  │                            │
-              └──────────┬───────────┘  └──────────┬─────────────────┘
-                         │                          │
-                  reads latest                      │
-                  reference wind ◄───────────────────┘  (§7 anchoring)
-                         │                          │
-                         ▼                          ▼
-              ┌─────────────────────────────────────────────────┐
-              │            PostgreSQL — public schema             │
-              │  scada_readings · scada_readings_rejects ·        │
-              │  extraction_watermark · pipeline_run_audit ·      │
-              │  weather_api_readings · iot_buoy_readings ·       │
-              │  external_data_run_audit                          │
-              └───────────────┬─────────────────┬─────────────────┘
-                              │                 │
-                              ▼                 ▼
-              ┌──────────────────────┐  ┌──────────────────────┐
-              │  dbt (staging/marts)  │  │  FastAPI dashboard     │
-              │  own Postgres schemas │  │  reads public schema   │
-              │  staging/, marts/     │  │  directly, :3000       │
-              └──────────────────────┘  └──────────────────────┘
+                                  ┌─────────────────────────────┐
+                                  │        Apache Airflow        │
+                                  │   (scheduling, retries,      │
+                                  │    SLAs, alerting, backfill) │
+                                  └───────┬───────────┬───────┬───┘
+                                          │           │       │
+                             every 5 min  │           │       │ every 15 min
+                                          ▼           ▼       ▼
+                 ┌──────────────────┐ ┌──────────────────┐ ┌──────────────────────────┐
+                 │ scada_etl_pipeline│ │ solar_etl_pipeline│ │  external_data_sources    │
+                 │ ───────────────── │ │ ───────────────── │ │  ─────────────────────    │
+                 │ extract_transform_│ │ extract_transform_│ │  extract_load_weather     │
+                 │ validate → load → │ │ validate → load → │ │  extract_load_buoy        │
+                 │ update_watermarks_│ │ update_watermarks_│ │  (independent tasks)      │
+                 │ and_audit         │ │ and_audit         │ │                           │
+                 └─────────┬─────────┘ └─────────┬─────────┘ └─────────┬─────────────────┘
+                           │        reads latest  │                    │
+                           │◄──── reference wind ──┼──── reference ─────┤
+                           │        + irradiance   │     irradiance     │  (§7 anchoring)
+                           ▼                       ▼                    ▼
+              ┌───────────────────────────────────────────────────────────────────┐
+              │              TimescaleDB (PostgreSQL) — public schema               │
+              │  scada_readings · scada_readings_rejects · extraction_watermark ·  │
+              │  solar_readings · solar_readings_rejects ·                        │
+              │  solar_extraction_watermark · pipeline_run_audit (shared) ·        │
+              │  weather_api_readings · iot_buoy_readings · external_data_run_audit│
+              │  scada_readings / solar_readings are hypertables, 90-day retention │
+              └──────────────────────┬────────────────────────┬────────────────────┘
+                                     │                        │
+                                     ▼                        │
+                        ┌──────────────────────┐              │
+                        │  dbt (staging/marts)  │              │
+                        │  own Postgres schemas │              │
+                        │  staging/, marts/     │              │
+                        └───────────┬──────────┘              │
+                                    │ reads marts for          │
+                                    │ per-asset stats          │
+                                    ▼                          ▼
+                        ┌────────────────────────────────────────┐
+                        │           FastAPI dashboard              │
+                        │  stats endpoints → marts.*; everything   │
+                        │  else → public schema directly, :3000    │
+                        └────────────────────────────────────────┘
+
+DAG task failures also fire a Slack webhook (on_failure_callback,
+safe no-op when SLACK_WEBHOOK_URL is unset) — not shown above to keep
+the data-flow diagram readable; see §6.
 ```
 
 **Design principles applied:**
@@ -124,15 +142,18 @@ pytest:              42 / 42 passing
 |---|---|
 | Separation of concerns | `extract/`, `transform/`, `validation/`, `load/` are independent, unit-testable modules with no cross-imports of internals |
 | Idempotency | Every load path is `INSERT ... ON CONFLICT ... DO UPDATE` keyed on the natural grain, so replaying a DAG run never duplicates rows |
-| Incremental extraction | The SCADA extractor tracks a per-turbine high-water mark (`extraction_watermark`); each run only pulls new data |
+| Incremental extraction | Both simulated fleets track a high-water mark per asset (`extraction_watermark` / `solar_extraction_watermark`); each run only pulls new data |
+| Reuse where it genuinely fits | `scada_etl_pipeline` and `solar_etl_pipeline` share `pipeline_run_audit` (same shape, distinguished by `task_id`) rather than duplicating an audit table per fleet — but each gets its own readings/rejects/watermark tables, since those genuinely differ |
 | Data quality as a first-class step | Six dimensions checked before load — see [§5](#5-data-quality-framework). Failures go to a rejects table with a reason, never a silent drop |
 | Decoupled failure domains | The external-source DAG is separate from the SCADA DAG specifically so a NOAA/Open-Meteo outage can't retry-storm the turbine pipeline |
 | Idempotent + atomic loads | Batch `COPY` into a staging table, then a single `INSERT ... SELECT ... ON CONFLICT` inside one transaction |
-| Observability | Structured JSON logging, two audit tables (`pipeline_run_audit`, `external_data_run_audit`) with real elapsed duration, Airflow SLAs + exponential-backoff retries |
+| Observability | Structured JSON logging, two audit tables (`pipeline_run_audit`, `external_data_run_audit`) with real elapsed duration, Airflow SLAs + exponential-backoff retries, Slack failure alerts (`on_failure_callback`, safe no-op when unconfigured — [§6](#6-orchestration-airflow)) |
 | Config as code | All connection strings/thresholds via environment variables (`src/config.py`, pydantic-settings), never hardcoded |
 | Schema migrations | Alembic manages schema changes (`migrations/versions/`); `sql/init.sql` mirrors it for a zero-dependency local bootstrap |
-| Reproducibility | `docker compose up --build -d` brings up Postgres, both DAGs, the dashboard, and a one-shot dbt build with no manual steps |
-| Testability | 42 pytest cases across extract/transform/validation, all pure-function — no live DB required |
+| Bounded storage growth | `scada_readings`/`solar_readings` are TimescaleDB hypertables with a 90-day retention policy — old chunks drop themselves on TimescaleDB's own schedule instead of the tables growing forever ([§3](#3-schema-reference)) |
+| Single source of truth for aggregates | The dashboard's per-turbine/per-plant stats endpoints read dbt's `marts.*` tables instead of re-deriving the same aggregation SQL a second time ([§9](#9-dashboard)) |
+| Reproducibility | `docker compose up --build -d` brings up Postgres, all three DAGs, the dashboard, and a one-shot dbt build with no manual steps; every dependency set is pinned via a `pip-compile`-generated lockfile ([§10](#10-deployment)) |
+| Testability | 73 pytest cases across extract/transform/validation/alerting, all pure-function — no live DB required; `airflow dags test` runs the real DAGs end-to-end in CI ([§12](#12-cicd-github-actions)) |
 
 ---
 
@@ -154,9 +175,36 @@ anything else.
   value for 2–5 ticks (comms glitch), and an out-of-range power spike
   1.2–1.8× rated (icing-induced anemometer error) — deliberately what gives
   the validation layer real work to do.
-- **Reference-wind anchoring**: since [§7](#7-real-data-wind-anchoring), each
+- **Reference-wind anchoring**: since [§7](#7-real-data-anchoring-wind--solar), each
   run's fleet wind speed is anchored to the latest real Open-Meteo reading
   instead of drawn uniformly from `[4, 14]`.
+
+### Solar plant simulator — simulated
+
+`src/extract/solar_simulator.py`. Same reasoning and same shape as the wind
+simulator - real per-plant inverter telemetry is proprietary, so this
+simulates a fleet of 8 PV plants (5 MWp DC / 4.5 MW AC each by default).
+
+- **Clear-sky irradiance model**: sinusoidal curve between fixed sunrise
+  (06:00 UTC) and sunset (18:00 UTC), peaking at 950 W/m² - a deliberate
+  simplification (no solar-position math for the plant's actual
+  latitude/date), noted rather than left silently wrong.
+- **Panel heating**: NOCT model (45°C at 800 W/m², 20°C ambient, 1 m/s
+  wind - a standard PV datasheet spec), then a crystalline-silicon
+  temperature derate of 0.4%/°C above the 25°C STC baseline.
+- **Cloud cover**: an Ornstein-Uhlenbeck-style `cloud_factor` per plant
+  (same drift pattern as wind's `base_wind_ms`), so output wanders
+  realistically instead of following the clear-sky curve exactly.
+- **True night is exactly zero** - irradiance, DC power, and AC power all
+  read `0.0` outside daylight hours, not a noise-driven near-zero value.
+  (An earlier version added sensor noise unconditionally and occasionally
+  produced ~75 kW of "output" at 2 AM; fixed by gating noise on `clear_sky > 0`.)
+- **Injected faults (~0.5% of ticks)**: a stuck irradiance sensor (comms
+  glitch, 2-5 ticks), and an inverter trip - full sun available but AC
+  output drops to zero from a simulated grid fault.
+- **Reference-irradiance anchoring**: mirrors the wind simulator exactly
+  (see [§7](#7-real-data-anchoring-wind--solar)), anchored to Open-Meteo's real
+  `shortwave_radiation` field instead of Open-Meteo's wind speed.
 
 ### Open-Meteo — real, HTTP API
 
@@ -170,18 +218,21 @@ touch the network.
 {
   "latitude": 53.54, "longitude": 8.1,
   "current": {
-    "time": "2026-07-31T12:15",
-    "wind_speed_10m": 3.61,
-    "wind_direction_10m": 326,
-    "temperature_2m": 21.2,
-    "surface_pressure": 1014.0
+    "time": "2026-08-07T13:30",
+    "wind_speed_10m": 3.72,
+    "wind_direction_10m": 310,
+    "temperature_2m": 19.8,
+    "surface_pressure": 1016.0,
+    "shortwave_radiation": 605.0
   }
 }
 ```
 
 Query: `latitude=53.55&longitude=8.09` (Bremerhaven, Germany — a real North
-Sea wind-energy hub), `current=wind_speed_10m,wind_direction_10m,temperature_2m,surface_pressure`,
-`wind_speed_unit=ms`, `timezone=UTC`.
+Sea wind-energy hub), `current=wind_speed_10m,wind_direction_10m,temperature_2m,surface_pressure,shortwave_radiation`,
+`wind_speed_unit=ms`, `timezone=UTC`. `shortwave_radiation` is the field
+that anchors the solar simulator — one HTTP fetch feeds both the wind and
+solar pipelines' reference values.
 
 ### NOAA NDBC buoy 46050 — real, IoT
 
@@ -201,26 +252,38 @@ Columns used: `WSPD` → `wind_speed_ms`, `GST` → `wind_gust_ms`, `WVHT` →
 `water_temp_c`.
 
 Both real extractors run in their own DAG (`external_data_sources`),
-separate from `scada_etl_pipeline`, so an outage at NOAA or Open-Meteo can't
-retry-storm the turbine pipeline. Each task does fetch → validate
-(`src/validation/external_validators.py`) → idempotent upsert → audit row
-in `external_data_run_audit`.
+separate from `scada_etl_pipeline` and `solar_etl_pipeline`, so an outage at
+NOAA or Open-Meteo can't retry-storm either simulated pipeline. Each task
+does fetch → validate (`src/validation/external_validators.py`) →
+idempotent upsert → audit row in `external_data_run_audit`. This isn't
+theoretical: while building this, Open-Meteo returned a genuine `503
+Service Unavailable` mid-session — the DAG recorded `status="failed"`
+accurately (0 rows loaded, not a false success) and Airflow's own retry
+picked it up automatically.
 
 ---
 
 ## 3. Schema reference
 
-Nine tables in the `public` schema, managed by Alembic
+Thirteen tables in the `public` schema, managed by Alembic
 (`migrations/versions/0001_initial_schema.py`,
-`0002_external_data_sources.py`), mirrored in `sql/init.sql`.
+`0002_external_data_sources.py`, `0003_solar_energy_source.py`,
+`0004_timescaledb_hypertables.py`), mirrored in `sql/init.sql`.
 
 ### `scada_readings` — curated, one row per turbine per timestamp
 
+**TimescaleDB hypertable**, chunked automatically on `ts`, with a 90-day
+retention policy (`add_retention_policy`) — old chunks are dropped entirely
+on TimescaleDB's own background schedule rather than the table growing
+without bound. This is the reason the primary key is composite: TimescaleDB
+requires every unique index/primary key on a hypertable to include the
+partitioning column, so `id` alone can't be the key once it's a hypertable.
+
 | Column | Type | Notes |
 |---|---|---|
-| `id` | bigserial pk | |
+| `id` | bigserial | part of the composite primary key below |
 | `turbine_id` | varchar(20) | e.g. `WT-014`, indexed |
-| `ts` | timestamptz | reading timestamp, UTC, indexed |
+| `ts` | timestamptz | reading timestamp, UTC, indexed; hypertable partitioning column |
 | `wind_speed_ms` | numeric(6,2) | |
 | `power_kw` | numeric(8,2) | active power output |
 | `rotor_rpm` | numeric(5,2) | |
@@ -230,7 +293,8 @@ Nine tables in the `public` schema, managed by Alembic
 | `is_anomalous` | boolean | set by the transform layer's cross-field check |
 | `ingested_at` | timestamptz | pipeline load time |
 
-Unique on `(turbine_id, ts)` — this is what makes the upsert idempotent.
+Primary key `(id, ts)`; unique on `(turbine_id, ts)` — the latter is what
+makes the upsert idempotent.
 
 ### `scada_readings_rejects`
 
@@ -244,11 +308,39 @@ reasons), `rejected_at`.
 Per-turbine high-water mark driving incremental extraction. Columns:
 `turbine_id` (pk), `last_extracted_ts` (not null).
 
-### `pipeline_run_audit`
+### `solar_readings` — curated, one row per plant per timestamp
 
-One row per `scada_etl_pipeline` run: `dag_run_id`, `task_id`,
-`rows_extracted`/`rows_loaded`/`rows_rejected`, `duration_seconds` (real
-elapsed wall time), `status`, `started_at`, `finished_at`.
+Also a **TimescaleDB hypertable** with the same 90-day retention policy and
+composite `(id, ts)` primary key as `scada_readings` above, for the same
+reason — it's the fleet's other high-volume, ever-growing time-series table.
+
+| Column | Type | Notes |
+|---|---|---|
+| `plant_id` | varchar(20) | e.g. `SP-004`, indexed |
+| `ts` | timestamptz | reading timestamp, UTC, indexed; hypertable partitioning column |
+| `irradiance_w_m2` | numeric(6,2) | |
+| `panel_temp_c` | numeric(5,2) | NOCT-modeled |
+| `dc_power_kw` | numeric(8,2) | before inverter conversion |
+| `ac_power_kw` | numeric(8,2) | after inverter conversion + clipping |
+| `inverter_efficiency_pct` | numeric(5,2) | |
+| `status_code` | varchar(20) | operational / night / curtailed / fault / maintenance / offline |
+| `is_anomalous` | boolean | set by the transform layer's cross-field check |
+| `ingested_at` | timestamptz | pipeline load time |
+
+Primary key `(id, ts)`; unique on `(plant_id, ts)`. `solar_readings_rejects`
+and `solar_extraction_watermark` mirror `scada_readings_rejects` and
+`extraction_watermark` exactly, keyed on `plant_id` instead of `turbine_id`
+(and are plain tables, not hypertables — one row per reject/watermark
+update, not a genuine time series).
+
+### `pipeline_run_audit` — shared between both simulated fleets
+
+One row per `scada_etl_pipeline` **or** `solar_etl_pipeline` run: `dag_run_id`,
+`task_id` (doubles as the pipeline name - this is how a row is attributed to
+one fleet or the other), `rows_extracted`/`rows_loaded`/`rows_rejected`,
+`duration_seconds` (real elapsed wall time), `status`, `started_at`,
+`finished_at`. Reused rather than duplicated per fleet since the shape is
+identical either way.
 
 ### `external_data_run_audit`
 
@@ -260,7 +352,9 @@ Mirrors `pipeline_run_audit` for the external-sources DAG: `dag_run_id`,
 
 Unique on `(latitude, longitude, ts)`. Columns: `source` (default
 `open-meteo`), `latitude`/`longitude` (numeric(6,3)), `ts`, `wind_speed_ms`,
-`wind_direction_deg`, `temperature_c`, `pressure_hpa`, `ingested_at`.
+`wind_direction_deg`, `temperature_c`, `pressure_hpa`,
+`shortwave_radiation_w_m2` (added in `0003_solar_energy_source.py` — the
+solar simulator's anchor field), `ingested_at`.
 
 ### `iot_buoy_readings` — real
 
@@ -311,13 +405,24 @@ compare against — the production DAG never calls it.
 One row per fetch, so this is a plain idempotent `INSERT ... ON CONFLICT ...
 DO UPDATE` — no throughput problem to solve at this volume.
 
+**Solar plant fleet — `solar_transformers.py` / `solar_validators.py` / `solar_loaders.py`**
+
+Structurally identical to the wind path above (`RawSolarReading →
+TransformedSolarReading → validate_solar_batch() →
+load_solar_batch_optimized() → solar_readings`), reusing
+`normalize_status_code()` from `transformers.py` since status-code cleanup
+isn't source-specific. `flag_solar_anomaly()` is the solar equivalent of
+`flag_statistical_anomaly()`: meaningful irradiance with no output, or
+output with no irradiance, is physically inconsistent.
+
 ---
 
 ## 5. Data quality framework
 
-Every dimension below is enforced in `src/validation/validators.py` (SCADA)
-or `external_validators.py` (weather/buoy). Every row-level failure lands in
-a reject table with a specific reason, never a silent drop.
+Every dimension below is enforced in `src/validation/validators.py` (SCADA),
+`solar_validators.py` (solar - same six dimensions, `plant_id` instead of
+`turbine_id`), or `external_validators.py` (weather/buoy). Every row-level
+failure lands in a reject table with a specific reason, never a silent drop.
 
 | Dimension | How it's checked |
 |---|---|
@@ -344,8 +449,9 @@ exactly as designed.
 
 ## 6. Orchestration (Airflow)
 
-Two DAGs, two cadences, two failure domains — kept separate specifically so
-an outage in one upstream system can't retry-storm the other's schedule.
+Three DAGs, two distinct cadences, three failure domains — kept separate
+specifically so an outage in one upstream system can't retry-storm another
+DAG's schedule.
 
 ### `scada_etl_pipeline` — every 5 minutes
 
@@ -361,6 +467,16 @@ because they're the parts worth retrying and observing independently.
 | `load` | Batch COPY+UPSERT of valid readings; inserts failed readings into `scada_readings_rejects` | 3 min |
 | `update_watermarks_and_audit` | Advances each turbine's watermark; computes real run duration; writes the `pipeline_run_audit` row | — |
 
+### `solar_etl_pipeline` — every 5 minutes
+
+Structurally identical task graph and SLAs to `scada_etl_pipeline` above -
+same three tasks, same reasoning for why they're split the way they are.
+The only real differences: it reads/writes `solar_extraction_watermark`
+instead of `extraction_watermark`, and its `update_watermarks_and_audit`
+task calls the *same* `record_run_audit()` function as the wind DAG
+(imported from `src.load.loaders`) rather than a duplicated one, writing to
+the shared `pipeline_run_audit` table with `task_id="solar_etl_pipeline"`.
+
 ### `external_data_sources` — every 15 minutes
 
 Two independent tasks, no ordering dependency — `extract_load_weather` and
@@ -371,17 +487,46 @@ other's audit trail.
 ### Shared retry policy
 
 `retries: 3` · `retry_delay: 2 min` · exponential backoff ·
-`max_retry_delay: 15 min` · `max_active_runs: 1` (prevents overlapping
-`scada_etl_pipeline` runs from racing on the same watermark) ·
+`max_retry_delay: 15 min` · `max_active_runs: 1` per DAG (prevents
+overlapping runs of the same DAG from racing on the same watermark) ·
 `catchup: False`.
+
+### Failure alerting
+
+All three DAGs set `on_failure_callback: notify_dag_failure`
+(`src/utils/alerting.py`) in their shared `DEFAULT_ARGS`. When a task
+exhausts its retries, it posts the DAG id, task id, run id, and Airflow log
+URL to a Slack incoming webhook.
+
+```python
+# src/utils/alerting.py
+def notify_dag_failure(context: dict) -> None:
+    settings = get_settings()
+    if not settings.slack_webhook_url:
+        logger.info("slack_webhook_url not configured - skipping failure notification")
+        return
+    ...
+    requests.post(settings.slack_webhook_url, json={"text": text}, timeout=...)
+```
+
+Safe-by-default: with `SLACK_WEBHOOK_URL` unset (the default — see
+[§13](#13-configuration-reference)), this is a no-op logged at `INFO`, not a
+crash or a silently-swallowed exception. Any error posting to Slack itself
+(webhook down, network blip) is caught and logged, never re-raised — a
+notification failure must never fail the task that triggered it. Covered by
+`tests/test_alerting.py` (3 cases: no-op when unconfigured, correct payload
+when configured, exceptions swallowed).
 
 ---
 
-## 7. Real-data wind anchoring
+## 7. Real-data anchoring (wind + solar)
 
-The simulator doesn't just happen to be in the same range as the real
-sources — each run reads the latest real wind speed back out of Postgres and
-anchors the fleet to it.
+Neither simulator just happens to be in the same range as the real sources
+— each run reads the latest matching real value back out of Postgres and
+anchors its fleet to it. Both fleets follow the identical pattern; wind is
+shown first, solar right after.
+
+### Wind
 
 ```python
 # airflow/dags/scada_etl_dag.py
@@ -416,11 +561,53 @@ never its ability to run.
 3.77 m/s, new SCADA readings landed at 1.75–6.04 m/s (mean 3.65), against
 the old unanchored 4–14 m/s free range.
 
-> **Known lag**: `marts.ambient_wind_daily_comparison` ([§8](#8-analytics-layer-dbt))
-> still shows the fleet average well above the real sources on any given
-> day, because it averages the *whole day's* history — including readings
-> generated before anchoring went live. The daily mean converges as more
-> anchored rows accumulate. See [§16](#16-roadmap--extending-this) for a fix.
+> **Same-day blending, observed converging**: `marts.ambient_wind_daily_comparison`
+> ([§8](#8-analytics-layer-dbt)) averages the *whole calendar day's* history,
+> including readings generated before anchoring went live, so a day mixing
+> old and new data reads closer to the unanchored range than the anchor
+> itself. This isn't hypothetical - the day this was shipped, the fleet
+> average started at 8.58 m/s (only 20 of 1,493 rows were anchored) and had
+> converged to 5.02 m/s by the same evening (vs. 3.99 real weather / 4.74
+> real buoy) as anchored rows came to dominate the day's average. A rolling
+> window instead of a calendar-day grain would remove the lag entirely — see
+> [§16](#16-roadmap--extending-this).
+
+### Solar
+
+Same mechanism, anchoring to `shortwave_radiation_w_m2` instead of
+`wind_speed_ms`, and expressed as a cloud-cover factor rather than a direct
+value (since the simulator models clear-sky irradiance as a function of
+time-of-day, not a flat number):
+
+```python
+# airflow/dags/solar_etl_dag.py
+def _fetch_reference_irradiance(conn) -> float | None:
+    row = conn.execute(text(
+        "SELECT shortwave_radiation_w_m2, ts FROM weather_api_readings "
+        "ORDER BY ts DESC LIMIT 1"
+    )).fetchone()
+    if row is None or row.shortwave_radiation_w_m2 is None:
+        return None
+    staleness = now() - row.ts
+    if staleness > max_staleness:  # default 180 min
+        return None
+    return float(row.shortwave_radiation_w_m2)
+```
+
+```python
+# src/extract/solar_simulator.py
+def _initial_cloud_factor(self) -> float:
+    if self._reference_irradiance_w_m2 is None or self._reference_irradiance_w_m2 <= 0:
+        return self._rng.uniform(0.6, 1.0)  # unanchored fallback
+    implied = self._reference_irradiance_w_m2 / PEAK_CLEAR_SKY_W_M2
+    spread = self._rng.uniform(-0.1, 0.1)
+    return max(0.15, min(implied + spread, 1.05))
+```
+
+**Verified effect**: triggered live while the real irradiance reading was
+605.0 W/m², the fleet's irradiance landed at 421–590 W/m² (implied cloud
+factor ≈ 0.64), squarely aligned with reality rather than following an
+unanchored clear-sky assumption.
 
 ---
 
@@ -434,30 +621,32 @@ custom `generate_schema_name` macro.
 public.* → source() → staging.stg_* (views) → ref() → marts.* (tables)
 ```
 
-**Staging models**: `stg_scada_readings`, `stg_pipeline_run_audit`,
-`stg_weather_api_readings`, `stg_iot_buoy_readings` — thin pass-throughs
-with light derivation (e.g. a synthetic `reading_key` for native uniqueness
-tests without needing `dbt_utils`).
+**Staging models**: `stg_scada_readings`, `stg_solar_readings`,
+`stg_pipeline_run_audit`, `stg_weather_api_readings`, `stg_iot_buoy_readings`
+— thin pass-throughs with light derivation (e.g. a synthetic `reading_key`
+for native uniqueness tests without needing `dbt_utils`).
 
 **Marts**:
 
 | Mart | Grain | What it answers |
 |---|---|---|
 | `turbine_daily_summary` | turbine × day | Avg/max/min power, reading count, anomaly count, % operational, capacity factor (avg power ÷ rated 3,300 kW) |
-| `pipeline_run_daily_summary` | day | Run count, success rate, total rows extracted/loaded/rejected, avg/max duration |
-| `ambient_wind_daily_comparison` | day | **The payoff mart**: fleet avg wind speed vs. real Open-Meteo vs. real NOAA buoy, joined by day — a plausibility check against independent, externally-sourced ground truth |
+| `solar_daily_summary` | plant × day | Same shape as above for solar: avg irradiance/DC/AC power, capacity factor (avg DC power ÷ 5,000 kWp) |
+| `pipeline_run_daily_summary` | day | Run count, success rate, total rows extracted/loaded/rejected, avg/max duration — both fleets combined, since it reads the shared `pipeline_run_audit` |
+| `ambient_wind_daily_comparison` | day | Fleet avg wind speed vs. real Open-Meteo vs. real NOAA buoy, joined by day — a plausibility check against independent, externally-sourced ground truth |
+| `renewable_fleet_daily_summary` | day | **The payoff mart**: wind + solar total average output side by side plus a combined total — the portfolio-level view a mixed-fleet operator would actually want |
 
 ```sql
--- SELECT * FROM marts.ambient_wind_daily_comparison;
- reading_date | fleet_avg_wind_speed_ms | weather_avg_wind_speed_ms | buoy_avg_wind_speed_ms
---------------+--------------------------+----------------------------+-------------------------
- 2026-07-31   |                     8.58 |                       3.69 |                    3.00
+-- SELECT * FROM marts.renewable_fleet_daily_summary ORDER BY reading_date DESC LIMIT 1;
+ reading_date | turbine_count | wind_total_avg_power_kw | plant_count | solar_total_avg_dc_power_kw | combined_total_avg_power_kw
+--------------+---------------+--------------------------+-------------+-------------------------------+------------------------------
+ 2026-08-07   |            20 |                 36780.15 |           8 |                      25752.93 |                     62533.08
 ```
 
-**Tests**: 18 data tests across staging and marts — `not_null`, `unique`,
-and `accepted_values` on `status_code` (matching `VALID_STATUS_CODES` in the
-Python validator) and audit `status`. Full `dbt build`: **25/25 passing**
-(7 models + 18 tests).
+**Tests**: 27 data tests across staging and marts — `not_null`, `unique`,
+and `accepted_values` on `status_code` (matching `SOLAR_VALID_STATUS_CODES`/
+`VALID_STATUS_CODES` in the Python validators) and audit `status`. Full
+`dbt build`: **37/37 passing** (10 models + 27 tests).
 
 Run it: `docker compose run --rm dbt build --profiles-dir .`
 
@@ -466,27 +655,50 @@ Run it: `docker compose run --rm dbt build --profiles-dir .`
 ## 9. Dashboard
 
 `dashboard/api/main.py` (FastAPI) + `dashboard/static/` (vanilla JS +
-Chart.js, no build step). Queries the same Postgres tables the pipeline
-writes to, via the same `src.db.session`/`src.config` the pipeline uses —
-no separate data store, no caching layer.
+Chart.js, no build step). Queries Postgres via the same `src.db.session`/
+`src.config` the pipeline uses — no separate data store, no caching layer.
+Most routes read the `public` schema directly; the two `/stats` routes read
+dbt's `marts.*` tables instead (see below).
 
 | Route | Returns |
 |---|---|
 | `GET /api/health` | Liveness check |
-| `GET /api/summary` | Fleet totals, latest avg power/wind, last pipeline run |
+| `GET /api/summary` | Wind fleet totals, latest avg power/wind, last `scada_etl_pipeline` run |
 | `GET /api/turbines/latest` | One row per turbine — its newest reading |
-| `GET /api/turbines/stats` | Per-turbine aggregates: avg/max power, avg wind, anomaly count |
+| `GET /api/turbines/stats` | Per-turbine aggregates, from `marts.turbine_daily_summary` |
 | `GET /api/turbines/{id}/timeseries` | Last *n* readings for one turbine (chart source) |
 | `GET /api/anomalies` | Recent rows with `is_anomalous = true` |
 | `GET /api/rejects` | Recent `scada_readings_rejects` rows |
-| `GET /api/audit/runs` | Recent `pipeline_run_audit` rows |
-| `GET /api/external` | Latest weather + buoy reading, plus recent external DAG runs |
+| `GET /api/solar/summary` | Solar fleet totals, latest avg DC/AC power/irradiance, last `solar_etl_pipeline` run |
+| `GET /api/solar/plants/latest` | One row per plant — its newest reading |
+| `GET /api/solar/plants/stats` | Per-plant aggregates, from `marts.solar_daily_summary` |
+| `GET /api/solar/plants/{id}/timeseries` | Last *n* readings for one plant (chart source) |
+| `GET /api/solar/anomalies` | Recent solar rows with `is_anomalous = true` |
+| `GET /api/solar/rejects` | Recent `solar_readings_rejects` rows |
+| `GET /api/audit/runs` | Recent `pipeline_run_audit` rows, both fleets — `task_id` in the response is what tells them apart |
+| `GET /api/external` | Latest weather (incl. `shortwave_radiation_w_m2`) + buoy reading, plus recent external DAG runs |
+
+**Why `/stats` reads from dbt marts, not raw tables**: the per-turbine and
+per-plant aggregation logic (avg/max power, anomaly counts, capacity factor)
+already exists once, tested, in `dbt/models/marts/turbine_daily_summary.sql`
+and `solar_daily_summary.sql` ([§8](#8-analytics-layer-dbt)). The dashboard
+used to reimplement the same `GROUP BY` aggregation directly against
+`scada_readings`/`solar_readings` — two independent places that could drift
+out of sync with no test catching it. Reading the mart instead makes it a
+single source of truth: a weighted average across each mart's daily grain
+(`sum(avg_power_kw * reading_count) / sum(reading_count)`, correctly
+weighting days with more readings) rather than a second, parallel
+aggregation. The tradeoff is a real dependency: the dashboard's `/stats`
+routes are only as fresh as the last `dbt build`, which is why
+`docker-compose.yml` makes `dashboard` wait on `dbt: condition:
+service_completed_successfully` rather than just `postgres: service_healthy`.
 
 Frontend panels: KPI row, fleet overview chart (avg power per turbine +
-anomaly count), per-turbine time series (dropdown-selected), external data
-sources panel (weather/buoy KPIs + recent runs), and tables for latest
-readings / pipeline runs / anomalies / rejects. All panels poll every 15
-seconds.
+anomaly count), per-turbine time series (dropdown-selected), a parallel set
+of solar panels (KPI row, fleet chart, per-plant time series, latest/anomaly/reject
+tables), external data sources panel (weather/buoy KPIs + recent runs), and
+tables for latest readings / pipeline runs (labeled by pipeline) / anomalies
+/ rejects. All panels poll every 15 seconds.
 
 Access at **http://localhost:3000** once the stack is up.
 
@@ -500,10 +712,20 @@ colliding in one image.
 
 | Service | Image | Port | Why it's separate |
 |---|---|---|---|
-| `postgres` | postgres:16-alpine | 5432 | — |
+| `postgres` | timescale/timescaledb:2.17.2-pg16 | 5432 | Drop-in-compatible build on the same PostgreSQL 16 (same data dir format, same wire protocol) with the `timescaledb` extension pre-installed — not a different database. Needed for the hypertables in [§3](#3-schema-reference) |
 | `airflow-webserver` / `-scheduler` / `-init` | `Dockerfile` (apache/airflow:2.10.2) | 8081 | Base image pins SQLAlchemy 1.4.x for Airflow's own ORM |
-| `dashboard` | `Dockerfile.dashboard` (python:3.11-slim) | 3000 | Free to run current SQLAlchemy 2.0 + FastAPI without fighting Airflow's pin |
+| `dashboard` | `Dockerfile.dashboard` (python:3.11-slim) | 3000 | Free to run current SQLAlchemy 2.0 + FastAPI without fighting Airflow's pin. Starts only after `dbt` completes successfully (its `/stats` routes read dbt's marts — [§9](#9-dashboard)), not just after Postgres is healthy |
 | `dbt` | `Dockerfile.dbt` (python:3.11-slim) | — | Own Jinja2/click dependency graph; one-shot like `airflow-init` |
+
+**Reproducible installs**: every `requirements*.txt` is generated from a
+corresponding `requirements*.in` via `uv pip compile` (a drop-in
+`pip-compile`), so every transitive dependency is pinned to an exact
+version, not just the direct ones — `docker compose build` (or a fresh
+`pip install -r requirements.txt`) resolves identically today and a year
+from now. `apache-airflow` is deliberately excluded from the compiled set
+and pinned separately at the bottom of `requirements.txt`, since Airflow
+ships its own version-specific constraints file and compiling it alongside
+everything else risks a resolver conflict.
 
 ```bash
 git clone <your-repo-url> scada-etl-pipeline
@@ -515,7 +737,7 @@ docker compose up --build -d
 
 # Airflow UI:  http://localhost:8081  (user: admin / pass: admin)
 # Dashboard:   http://localhost:3000
-# Unpause the "scada_etl_pipeline" and "external_data_sources" DAGs to start scheduled runs
+# Unpause "scada_etl_pipeline", "solar_etl_pipeline", and "external_data_sources" to start scheduled runs
 ```
 
 Run dbt models + tests against whatever's loaded so far (also runs once
@@ -529,16 +751,20 @@ docker compose run --rm dbt build --profiles-dir .
 
 ## 11. Testing & benchmark
 
-42 pure-function tests, zero live-DB or network dependency:
+73 pure-function tests, zero live-DB or network dependency:
 
 | File | Cases | Covers |
 |---|---|---|
-| `test_validation.py` | 13 | Bounds, timeliness, batch duplicate detection, completeness check |
+| `test_validation.py` | 13 | Bounds, timeliness, batch duplicate detection, completeness check (wind) |
+| `test_solar_validation.py` | 11 | Same six dimensions for solar, plus the AC-can't-exceed-DC physical check |
 | `test_extract.py` | 12 | Power curve shape, incremental window logic, wind-speed anchoring & determinism |
-| `test_transform.py` | 7 | Status normalization, anomaly flagging |
+| `test_solar_extract.py` | 9 | Clear-sky curve shape, true-night-is-exactly-zero regression test, irradiance anchoring & determinism |
+| `test_transform.py` | 7 | Status normalization, anomaly flagging (wind) |
+| `test_solar_transform.py` | 7 | Same, for solar's sun-without-output / output-without-sun checks |
+| `test_weather_api_extractor.py` | 6 | Open-Meteo response parsing (incl. `shortwave_radiation`), validation |
 | `test_iot_buoy_extractor.py` | 5 | realtime2 parsing, missing-value handling, validation |
-| `test_weather_api_extractor.py` | 5 | Open-Meteo response parsing, validation |
-| **Total** | **42** | |
+| `test_alerting.py` | 3 | Slack failure notification: no-op when unconfigured, correct payload when configured, exceptions swallowed |
+| **Total** | **73** | |
 
 ```bash
 python -m venv .venv && source .venv/bin/activate
@@ -546,12 +772,22 @@ pip install -r requirements.txt
 pytest -v
 ```
 
+On top of pytest, `airflow dags test` runs `scada_etl_pipeline` and
+`solar_etl_pipeline` for real in CI ([§12](#12-cicd-github-actions)) — actual
+task execution against a live database, not just DagBag/schema validation,
+which is what pytest structurally can't cover for DAG wiring.
+
 **Benchmark — `scripts/benchmark.py`**: what turns "improved pipeline
 efficiency by 40%" from a claim into a reproducible number. Generates
 synthetic readings, times the naive row-by-row `INSERT` path against the
 optimized COPY+staged-UPSERT path, prints ms/row and the throughput
 multiplier. (The naive path is capped at 50,000 rows in the comparison —
 run to completion at full scale, it's too slow to be worth waiting for.)
+Every row it writes is prefixed `OPT-`/`NAIVE-` on the turbine id and is
+deleted both before the run starts (in case a previous run crashed
+mid-benchmark) and always after, via `try`/`finally` — `scada_readings` is
+also the pipeline's real curated table, and leaving synthetic rows behind
+would get counted as real pipeline data by the dashboard and dbt marts.
 
 ```bash
 python scripts/benchmark.py --rows 500000
@@ -577,11 +813,32 @@ touches this project.
 > with every step's working directory and Docker build context pointed at
 > the project subfolder explicitly.
 
-| Job | What it validates | Last run |
-|---|---|---|
-| `lint-and-test` | `ruff check .` + all 42 pytest cases (installs `requirements.txt` minus `apache-airflow`, since nothing under test imports it and it needs its own constraints file to install reliably) | ✅ 30s |
-| `migrations-and-dbt` | Spins up a real `postgres:16-alpine` service container, runs `alembic upgrade head` against it from empty, then `dbt build` — catches schema/dbt drift that pytest structurally can't since it never touches a live DB | ✅ 56s |
-| `docker-build` | Builds all three Dockerfiles (Airflow, dashboard, dbt) with GitHub Actions layer caching, to catch Dockerfile rot without running the full stack | ✅ 2m29s |
+| Job | What it validates |
+|---|---|
+| `lint-and-test` | `ruff check .` + all 73 pytest cases (installs `requirements.txt` minus `apache-airflow`, since nothing under test imports it and it needs its own constraints file to install reliably) |
+| `migrations-and-dbt` | Spins up a real `timescale/timescaledb:2.17.2-pg16` service container (plain `postgres:16-alpine` can't run migration `0004`, which needs the `timescaledb` extension), runs `alembic upgrade head` against it from empty, `dbt build`, then installs Airflow separately and runs `airflow dags test scada_etl_pipeline` + `airflow dags test solar_etl_pipeline` against that same database — real task execution, not just schema validation |
+| `docker-build` | Builds all three Dockerfiles (Airflow, dashboard, dbt) with GitHub Actions layer caching, to catch Dockerfile rot without running the full stack |
+
+**Why `airflow dags test` and not just DagBag import validation**: a DAG
+that merely *parses* can still be wrong in ways that only show up when a
+task actually runs — an XCom key that doesn't match between push and pull,
+a reference-anchoring query that's fine syntactically but returns the wrong
+shape. `dags test` executes the real task callables (`extract_transform_
+validate` → `load` → `update_watermarks_and_audit`) against the job's
+freshly-migrated Postgres, using an isolated SQLite metadata DB and
+`SequentialExecutor` (SQLite doesn't support Airflow's default
+`LocalExecutor`) so it needs nothing beyond what's already in the job.
+
+**Why `external_data_sources` is excluded from this check**: its two tasks
+make real HTTP calls to Open-Meteo and NOAA NDBC. A third-party outage —
+which has genuinely happened during this project's development (a live
+Open-Meteo `503`, [§2](#2-data-sources)) — says nothing about whether this
+codebase is correct, and a CI gate that can fail on someone else's downtime
+isn't a gate worth having. `scada_etl_pipeline` and `solar_etl_pipeline`
+have no such dependency: if `weather_api_readings` is empty (as it is in a
+freshly-migrated CI database), reference anchoring just returns `None` and
+both simulators fall back to their unanchored default — by design, not a
+CI-only workaround ([§7](#7-real-data-anchoring-wind--solar)).
 
 Pushing to GitHub also required granting the `gh` CLI's OAuth token the
 `workflow` scope (`gh auth refresh -h github.com -s workflow`) — GitHub
@@ -606,14 +863,27 @@ planting CI automation.
 | `max_power_kw` | 3500.0 | Validation ceiling |
 | `max_rotor_rpm` | 20.0 | Validation ceiling |
 | `min_nacelle_temp_c` / `max_nacelle_temp_c` | -30 / 60 | Validation range |
+| `solar_plant_count` | 8 | Fleet size the solar simulator generates |
+| `solar_capacity_kwp` | 5000.0 | Per-plant DC nameplate capacity |
+| `solar_inverter_ac_capacity_kw` | 4500.0 | Per-plant AC nameplate (inverter clipping ceiling) |
+| `max_irradiance_w_m2` | 1400.0 | Validation ceiling |
+| `min_panel_temp_c` / `max_panel_temp_c` | -20 / 90 | Validation range |
+| `max_dc_power_kw` / `max_ac_power_kw` | 5500.0 / 5000.0 | Validation ceilings (small headroom above nameplate) |
 | `max_future_skew_seconds` | 300 | Timeliness check tolerance |
 | `weather_api_base_url` | `api.open-meteo.com/v1/forecast` | HTTP source endpoint |
 | `weather_latitude` / `weather_longitude` | 53.55 / 8.09 | Bremerhaven, DE |
 | `iot_buoy_base_url` | `ndbc.noaa.gov/data/realtime2` | IoT source endpoint |
 | `iot_buoy_station_id` | `46050` | Stonewall Bank, OR |
 | `http_request_timeout_seconds` | 10 | Both external extractors |
-| `reference_wind_max_staleness_minutes` | 180 | [§7](#7-real-data-wind-anchoring) anchoring freshness cutoff |
+| `reference_wind_max_staleness_minutes` | 180 | [§7](#7-real-data-anchoring-wind--solar) wind anchoring freshness cutoff |
+| `reference_irradiance_max_staleness_minutes` | 180 | [§7](#7-real-data-anchoring-wind--solar) solar anchoring freshness cutoff |
+| `slack_webhook_url` | `None` | DAG failure alerts ([§6](#6-orchestration-airflow)); unset by default, so alerting is a safe no-op out of the box |
 | `log_level` | `INFO` | Structured JSON logging |
+
+Host-only: `POSTGRES_HOST_PORT` (default 5432, in `.env` not `src/config.py`)
+— overrides `docker-compose.yml`'s Postgres port mapping if 5432 is already
+taken on your machine. Has no effect on `POSTGRES_PORT` above, which
+containers use internally regardless.
 
 ---
 
@@ -623,36 +893,45 @@ planting CI automation.
 scada-etl-pipeline/
 ├── airflow/dags/
 │   ├── scada_etl_dag.py              # turbine SCADA — every 5 min
+│   ├── solar_etl_dag.py              # solar PV plants — every 5 min
 │   └── external_data_dag.py          # weather + buoy — every 15 min
 ├── src/
 │   ├── config.py                     # every setting, env-driven
 │   ├── extract/
 │   │   ├── scada_simulator.py        # simulated SCADA feed
+│   │   ├── solar_simulator.py        # simulated solar plant fleet
 │   │   ├── weather_api_extractor.py  # real HTTP API: Open-Meteo
 │   │   └── iot_buoy_extractor.py     # real IoT: NOAA NDBC
-│   ├── transform/transformers.py     # cleaning, derived metrics, anomaly flags
+│   ├── transform/
+│   │   ├── transformers.py           # wind: cleaning, derived metrics, anomaly flags
+│   │   └── solar_transformers.py     # solar: same shape, reuses normalize_status_code
 │   ├── validation/
-│   │   ├── validators.py             # SCADA: 6 DQ dimensions
+│   │   ├── validators.py             # wind: 6 DQ dimensions
+│   │   ├── solar_validators.py       # solar: same 6 dimensions
 │   │   └── external_validators.py    # weather/buoy bounds
 │   ├── load/
-│   │   ├── loaders.py                # batch COPY + idempotent UPSERT
+│   │   ├── loaders.py                # batch COPY + idempotent UPSERT (wind); shared record_run_audit()
+│   │   ├── solar_loaders.py          # batch COPY + idempotent UPSERT (solar)
 │   │   └── external_loaders.py       # single-row idempotent UPSERT
 │   ├── db/{models.py, session.py}    # SQLAlchemy ORM + engine/session
-│   └── utils/logging_config.py       # structured JSON logging
+│   └── utils/
+│       ├── logging_config.py         # structured JSON logging
+│       └── alerting.py               # Slack DAG-failure notification, safe no-op unconfigured
 ├── dbt/models/{staging,marts}/       # analytics models on the curated tables
 ├── dashboard/
-│   ├── api/main.py                   # FastAPI read API
+│   ├── api/main.py                   # FastAPI read API (stats routes read dbt marts)
 │   └── static/                       # vanilla JS + Chart.js frontend
 ├── docs/documentation.html           # full self-contained HTML reference doc
-├── migrations/versions/              # 0001_initial_schema, 0002_external_data_sources
+├── migrations/versions/              # 0001_initial_schema … 0004_timescaledb_hypertables
 ├── sql/init.sql                      # bootstrap DDL, mirrors Alembic
-├── scripts/benchmark.py              # naive vs optimized load benchmark
-├── tests/                            # 42 cases, 5 files
-├── docker-compose.yml                # postgres + airflow + dashboard + dbt
+├── scripts/benchmark.py              # naive vs optimized load benchmark (self-cleaning)
+├── tests/                            # 73 cases, 9 files
+├── docker-compose.yml                # timescaledb + airflow + dashboard + dbt
 ├── Dockerfile                        # Airflow image
 ├── Dockerfile.dashboard              # Dashboard API image
 ├── Dockerfile.dbt                    # dbt image
-├── requirements.txt / requirements-dashboard.txt / requirements-dbt.txt
+├── requirements.in / requirements-dashboard.in / requirements-dbt.in     # direct deps
+├── requirements.txt / requirements-dashboard.txt / requirements-dbt.txt  # pip-compile lockfiles
 └── .env.example
 ```
 
@@ -677,14 +956,43 @@ scada-etl-pipeline/
   later.
 - **Watermark-based incremental extraction over full reload**: SCADA
   archives grow unbounded; re-scanning everything every run doesn't scale.
-- **Two DAGs instead of one**: an outage at NOAA or Open-Meteo is a real,
-  external, unpredictable failure mode. Isolating it into its own DAG means
-  it can retry and eventually fail on its own schedule without ever
-  touching the turbine pipeline's SLA.
+- **Three DAGs instead of one**: an outage at NOAA or Open-Meteo is a real,
+  external, unpredictable failure mode. Isolating external sources into
+  their own DAG means they can retry and eventually fail on their own
+  schedule without touching either simulated pipeline's SLA - and wind and
+  solar are separate simulated asset classes with no reason to share a
+  schedule or a blast radius either.
+- **Share `pipeline_run_audit`, but not the readings tables**: wind and
+  solar's audit rows are identical in shape (extract/load/reject counts,
+  duration, status) so duplicating that table per fleet would just be
+  drift risk. Their readings/rejects/watermark tables are genuinely
+  different schemas, so those stay separate rather than forcing a
+  one-size-fits-all table with a pile of nullable columns.
 - **A separate image per service instead of one shared image**: Airflow's
   base image pins SQLAlchemy 1.4.x for its own ORM; the dashboard and dbt
   both want current-generation dependencies. Three Dockerfiles avoids a
   three-way dependency resolution fight inside one image.
+- **TimescaleDB over partitioning by hand**: `create_hypertable()` plus
+  `add_retention_policy()` gets automatic chunking and a self-cleaning
+  90-day window in two lines of migration SQL, on the same PostgreSQL wire
+  protocol and data format — no application code changes, no separate
+  database to operate. Hand-rolled declarative partitioning would need its
+  own cron job to drop old partitions; this needs none.
+- **Dashboard reads dbt marts instead of re-deriving the same aggregation
+  twice**: before this, `/api/turbines/stats` ran its own `GROUP BY` against
+  `scada_readings` in parallel with dbt's `turbine_daily_summary` model
+  computing the same thing — two implementations of one aggregation, with
+  nothing to catch them drifting apart. Reading the mart makes dbt's tested
+  SQL the single source of truth, at the cost of a real startup-ordering
+  dependency (dashboard now waits on `dbt` completing, not just Postgres
+  being up).
+- **Slack alerting via a plain `on_failure_callback`, not an Airflow
+  provider package**: `requests.post` to an incoming webhook is a few lines
+  and one dependency already in the project; the `apache-airflow-providers-
+  slack` package would add its own version-compatibility surface against
+  Airflow 2.10.2 for a single notification use case. Defaults to unset
+  (safe no-op) specifically so the DAGs run correctly out of the box
+  without demanding a Slack workspace to test this repo.
 
 ---
 
@@ -693,9 +1001,14 @@ scada-etl-pipeline/
 - Swap the simulator in `src/extract/scada_simulator.py` for a real
   OPC-UA / MQTT client or a historian export — the rest of the pipeline is
   source-agnostic by construction.
-- Swap PostgreSQL for TimescaleDB by adding
-  `SELECT create_hypertable('scada_readings', 'ts')` in a migration —
-  schema stays identical.
+- Extend `airflow dags test` in CI to cover `external_data_sources` too, by
+  mocking the Open-Meteo/NOAA HTTP calls (`responses` or a fixture server)
+  instead of skipping the DAG entirely — would catch wiring bugs in that
+  DAG the same way [§12](#12-cicd-github-actions) now does for the other two,
+  without depending on either service's real uptime.
+- Wire the Slack alert path to a real workspace webhook in the deployed
+  environment and confirm a forced task failure actually lands a message —
+  currently verified via mocked unit tests only ([§6](#6-orchestration-airflow)).
 - Pull additional NDBC stations (or Open-Meteo's forecast endpoint, not
   just `current`) to build a proper time series per external source instead
   of one point-in-time reading per DAG run.
@@ -707,3 +1020,11 @@ scada-etl-pipeline/
   wind speeds in `ambient_wind_daily_comparison` stay within a plausible
   delta of each other — turns the comparison mart from observational into
   an alertable data-quality gate.
+- Solar's clear-sky model uses fixed UTC sunrise/sunset hours rather than
+  computing actual solar position for the plant's latitude/date - swapping
+  in a proper solar-position calculation (e.g. via `pvlib`) would make the
+  irradiance curve accurate for a real site instead of a stylized
+  approximation.
+- Add a solar equivalent of `ambient_wind_daily_comparison` comparing fleet
+  irradiance against `weather_api_readings.shortwave_radiation_w_m2`
+  directly, the same way wind speed is checked against reality today.

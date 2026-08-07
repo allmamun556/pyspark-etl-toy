@@ -51,3 +51,22 @@ models:
       - name: ts
         data_tests:
           - not_null
+
+  - name: stg_solar_readings
+    description: Pass-through over solar_readings with a synthetic uniqueness key.
+    columns:
+      - name: plant_id
+        data_tests:
+          - not_null
+      - name: ts
+        data_tests:
+          - not_null
+      - name: reading_key
+        description: "plant_id || '-' || ts, used to test row-level uniqueness of the grain."
+        data_tests:
+          - not_null
+          - unique
+      - name: status_code
+        data_tests:
+          - accepted_values:
+              values: ["operational", "night", "curtailed", "fault", "maintenance", "offline"]

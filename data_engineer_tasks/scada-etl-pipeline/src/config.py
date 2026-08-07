@@ -33,6 +33,23 @@ class Settings(BaseSettings):
     min_nacelle_temp_c: float = -30.0
     max_nacelle_temp_c: float = 60.0
 
+    # --- Solar plant simulation + validation bounds ---
+    solar_plant_count: int = 8
+    solar_capacity_kwp: float = 5000.0
+    solar_inverter_ac_capacity_kw: float = 4500.0
+    max_irradiance_w_m2: float = 1400.0
+    min_panel_temp_c: float = -20.0
+    max_panel_temp_c: float = 90.0
+    # A little headroom above nameplate capacity - inverters can briefly
+    # exceed rated output under cool, high-irradiance conditions.
+    max_dc_power_kw: float = 5500.0
+    max_ac_power_kw: float = 5000.0
+
+    # How old the most recent weather_api_readings row may be before the
+    # solar simulator stops trusting it as an irradiance anchor and falls
+    # back to its own clear-sky model unanchored.
+    reference_irradiance_max_staleness_minutes: int = 180
+
     # --- Data quality: timeliness ---
     # How far into the future a reading's timestamp may be before it's
     # rejected as bad data rather than accepted as normal clock skew.
@@ -60,6 +77,13 @@ class Settings(BaseSettings):
 
     # --- Logging ---
     log_level: str = "INFO"
+
+    # --- Alerting ---
+    # Slack incoming-webhook URL for DAG failure notifications. Unset by
+    # default - src/utils/alerting.py no-ops (logs instead of raising) when
+    # this is empty, so the pipeline never fails *because* alerting isn't
+    # configured. Create one at https://api.slack.com/messaging/webhooks.
+    slack_webhook_url: str | None = None
 
     @property
     def sqlalchemy_url(self) -> str:

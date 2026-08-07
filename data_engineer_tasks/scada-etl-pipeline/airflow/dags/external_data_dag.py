@@ -17,18 +17,28 @@ from __future__ import annotations
 
 import sys
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 
 from airflow.operators.python import PythonOperator
 from airflow.utils.dates import days_ago
 
 from airflow import DAG
 
-sys.path.insert(0, "/opt/airflow")
+# See scada_etl_dag.py for why this checks two candidate roots instead of
+# hardcoding /opt/airflow.
+_dag_dir = Path(__file__).resolve().parent
+for _root in (_dag_dir.parent, _dag_dir.parent.parent):
+    if (_root / "src").is_dir():
+        sys.path.insert(0, str(_root))
+        break
+
+from src.utils.alerting import notify_dag_failure  # noqa: E402
 
 DEFAULT_ARGS = {
     "owner": "data-engineering",
     "depends_on_past": False,
     "email_on_failure": False,
+    "on_failure_callback": notify_dag_failure,
     "retries": 3,
     "retry_delay": timedelta(minutes=2),
     "retry_exponential_backoff": True,

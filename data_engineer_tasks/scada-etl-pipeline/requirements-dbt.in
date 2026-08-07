@@ -1,0 +1,8 @@
+# Source file for pip-compile/uv - run
+#   uv pip compile requirements-dbt.in -o requirements-dbt.txt --python-version 3.11
+# to regenerate requirements-dbt.txt. dbt has its own dependency graph
+# (jinja2, click, etc.) that can conflict with both the Airflow image's
+# pins and the dashboard's fastapi stack, so it gets its own image, same
+# reasoning as requirements-dashboard.in.
+dbt-core==1.8.2
+dbt-postgres==1.8.2

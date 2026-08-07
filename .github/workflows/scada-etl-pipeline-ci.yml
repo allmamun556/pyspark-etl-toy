@@ -38,9 +38,11 @@ jobs:
 
       # apache-airflow drags in ~150 transitive packages and needs its own
       # constraints file to install reliably outside the official image.
-      # None of the 42 pytest cases import airflow (they exercise src/
+      # None of the pytest cases import airflow (they exercise src/
       # directly), so it's excluded here the same way Dockerfile excludes
-      # it from the container build.
+      # it from the container build. (The DAGs themselves are executed
+      # end-to-end in the migrations-and-dbt job below, where Airflow is
+      # installed deliberately for that purpose.)
       - name: Install dependencies
         run: |
           grep -v '^apache-airflow==' requirements.txt > requirements.ci.txt
@@ -54,11 +56,14 @@ jobs:
         run: pytest -v
 
   migrations-and-dbt:
-    name: Alembic migration + dbt build
+    name: Alembic migration + dbt build + DAG execution test
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:16-alpine
+        # Must match docker-compose.yml: migration 0004 runs `CREATE
+        # EXTENSION timescaledb` and create_hypertable(), which a plain
+        # postgres image doesn't ship.
+        image: timescale/timescaledb:2.17.2-pg16
         env:
           POSTGRES_USER: scada_user
           POSTGRES_PASSWORD: ci_password
@@ -107,6 +112,45 @@ jobs:
       - name: dbt build (models + tests)
         working-directory: data_engineer_tasks/scada-etl-pipeline/dbt
         run: dbt build --profiles-dir .
+
+      # Installs Airflow itself (not needed by the job's other steps, so
+      # it's deliberately kept out of requirements.ci.txt above) using its
+      # official constraints file, the only way it installs reliably.
+      - name: Install Airflow for DAG execution test
+        run: |
+          pip install "apache-airflow==2.10.2" \
+            --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.10.2/constraints-${{ env.PYTHON_VERSION }}.txt"
+
+      # Runs the two simulated-fleet DAGs through Airflow's own local test
+      # runner, end to end (extract -> transform -> validate -> load ->
+      # watermark/audit) against the database just migrated above - this
+      # is real task execution, not just DagBag/schema validation, and is
+      # what actually catches wiring bugs a unit test can't (e.g. an
+      # XCom key mismatch or a broken reference-anchoring lookup).
+      #
+      # external_data_sources is deliberately NOT run here: its tasks make
+      # real HTTP calls to Open-Meteo and NOAA NDBC, and a third-party
+      # outage - which has genuinely happened during this project's
+      # development (a live Open-Meteo 503) - says nothing about whether
+      # this code is correct. CI gates should be deterministic, not
+      # dependent on an external service's uptime.
+      - name: Run scada_etl_pipeline and solar_etl_pipeline via `airflow dags test`
+        env:
+          AIRFLOW_HOME: /tmp/airflow_ci_home
+          AIRFLOW__CORE__DAGS_FOLDER: ${{ github.workspace }}/data_engineer_tasks/scada-etl-pipeline/airflow/dags
+          AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+          # SQLite (the lightest metadata DB for a throwaway CI run) only
+          # works with SequentialExecutor - LocalExecutor refuses to start
+          # against it. Set explicitly rather than relying on Airflow's
+          # default, since this bit us locally when testing against a
+          # container whose environment happened to set LocalExecutor.
+          AIRFLOW__CORE__EXECUTOR: SequentialExecutor
+          AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: sqlite:////tmp/airflow_ci_home/airflow.db
+        run: |
+          airflow db migrate
+          TEST_DATE=$(date -I)
+          airflow dags test scada_etl_pipeline "$TEST_DATE"
+          airflow dags test solar_etl_pipeline "$TEST_DATE"
 
   docker-build:
     name: Build all Docker images

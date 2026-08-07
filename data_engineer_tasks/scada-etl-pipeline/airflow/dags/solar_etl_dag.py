@@ -1,18 +1,15 @@
 """
-Airflow DAG: SCADA time-series ETL.
+Airflow DAG: solar PV plant fleet ETL.
 
-Runs every 5 minutes. Each turbine's extraction is incremental (based on
-extraction_watermark), so a scheduled run only ever processes new data —
-this keeps run time roughly constant as the historical dataset grows.
+Structurally identical to scada_etl_dag.py - same task graph, same
+incremental-extraction/watermark pattern, same reference-anchoring idea
+(this time against real shortwave_radiation instead of real wind speed).
+Kept as its own DAG rather than folded into scada_etl_pipeline: different
+simulated asset class, different curated tables, and no reason a change to
+one fleet's schedule or SLA should ever touch the other's.
 
 Task graph:
-    extract_transform_validate  >>  load  >>  update_watermarks
-
-A single upstream task does extract+transform+validate together (they're
-pure/cheap and chaining them as separate Airflow tasks would just add
-XCom serialization overhead for large batches); load and watermark updates
-are separate tasks because they're the parts worth retrying/observing
-independently.
+    extract_transform_validate  >>  load  >>  update_watermarks_and_audit
 """
 from __future__ import annotations
 
@@ -25,12 +22,9 @@ from airflow.utils.dates import days_ago
 
 from airflow import DAG
 
-# Make `src` importable. In Docker, docker-compose.yml mounts ./src to
-# /opt/airflow/src (a sibling of dags/), so /opt/airflow is the right root.
-# Outside Docker (e.g. CI running `airflow dags test` directly against the
-# repo checkout), the repo root plays the same role but sits one directory
-# further up. Try both instead of hardcoding the Docker-only path, so this
-# DAG parses correctly in either environment.
+# See scada_etl_dag.py for why this checks two candidate roots instead of
+# hardcoding /opt/airflow - it's what lets this DAG parse both inside
+# Docker and under a bare `airflow dags test` run (e.g. in CI).
 _dag_dir = Path(__file__).resolve().parent
 for _root in (_dag_dir.parent, _dag_dir.parent.parent):
     if (_root / "src").is_dir():
@@ -51,39 +45,41 @@ DEFAULT_ARGS = {
 }
 
 
-def _fetch_reference_wind_speed(conn) -> float | None:
+def _fetch_reference_irradiance(conn) -> float | None:
     """
-    Latest real wind speed from weather_api_readings (populated independently
-    by the external_data_sources DAG), used to anchor the SCADA simulator's
-    fleet instead of letting it drift on pure noise. Returns None - and the
-    simulator falls back to its unanchored default - if that DAG hasn't run
-    yet or its most recent reading is too stale to trust.
+    Latest real shortwave_radiation_w_m2 from weather_api_readings
+    (populated independently by the external_data_sources DAG), used to
+    anchor the solar simulator's cloud cover instead of an unanchored
+    clear-sky assumption. Returns None if that DAG hasn't run yet or its
+    most recent reading is too stale to trust.
     """
     from sqlalchemy import text
 
     from src.config import get_settings
 
     row = conn.execute(
-        text("SELECT wind_speed_ms, ts FROM weather_api_readings ORDER BY ts DESC LIMIT 1")
+        text(
+            "SELECT shortwave_radiation_w_m2, ts FROM weather_api_readings ORDER BY ts DESC LIMIT 1"
+        )
     ).fetchone()
-    if row is None or row.wind_speed_ms is None:
+    if row is None or row.shortwave_radiation_w_m2 is None:
         return None
 
     staleness = datetime.now(timezone.utc) - row.ts
-    max_staleness = timedelta(minutes=get_settings().reference_wind_max_staleness_minutes)
+    max_staleness = timedelta(minutes=get_settings().reference_irradiance_max_staleness_minutes)
     if staleness > max_staleness:
         return None
-    return float(row.wind_speed_ms)
+    return float(row.shortwave_radiation_w_m2)
 
 
 def _extract_transform_validate(**context) -> dict:
     from sqlalchemy import text
 
     from src.db.session import get_engine
-    from src.extract.scada_simulator import ScadaSimulator, get_incremental_window
-    from src.transform.transformers import transform_batch
+    from src.extract.solar_simulator import SolarPlantSimulator, get_incremental_window
+    from src.transform.solar_transformers import transform_solar_batch
     from src.utils.logging_config import get_logger
-    from src.validation.validators import check_batch_completeness, validate_batch
+    from src.validation.solar_validators import check_solar_batch_completeness, validate_solar_batch
 
     logger = get_logger(__name__)
     run_started_at = datetime.now(timezone.utc)
@@ -92,27 +88,27 @@ def _extract_transform_validate(**context) -> dict:
     engine = get_engine()
     with engine.connect() as conn:
         rows = conn.execute(
-            text("SELECT turbine_id, last_extracted_ts FROM extraction_watermark")
+            text("SELECT plant_id, last_extracted_ts FROM solar_extraction_watermark")
         ).fetchall()
-        reference_wind_speed_ms = _fetch_reference_wind_speed(conn)
-    watermarks = {r.turbine_id: r.last_extracted_ts for r in rows}
+        reference_irradiance_w_m2 = _fetch_reference_irradiance(conn)
+    watermarks = {r.plant_id: r.last_extracted_ts for r in rows}
 
-    if reference_wind_speed_ms is not None:
+    if reference_irradiance_w_m2 is not None:
         logger.info(
-            "anchoring simulator to reference_wind_speed_ms=%.2f from weather_api_readings",
-            reference_wind_speed_ms,
+            "anchoring simulator to reference_irradiance_w_m2=%.1f from weather_api_readings",
+            reference_irradiance_w_m2,
         )
 
     window_start, window_end = get_incremental_window(watermarks)
 
-    simulator = ScadaSimulator(reference_wind_speed_ms=reference_wind_speed_ms)
+    simulator = SolarPlantSimulator(reference_irradiance_w_m2=reference_irradiance_w_m2)
     raw = list(simulator.extract(window_start, window_end))
 
-    for warning in check_batch_completeness(len(raw), window_start, window_end):
+    for warning in check_solar_batch_completeness(len(raw), window_start, window_end):
         logger.warning(warning, extra={"dq_check": "completeness", "run_id": context["run_id"]})
 
-    transformed = transform_batch(raw)
-    valid, failed = validate_batch(transformed)
+    transformed = transform_solar_batch(raw)
+    valid, failed = validate_solar_batch(transformed)
 
     context["ti"].xcom_push(key="window_end", value=window_end.isoformat())
     context["ti"].xcom_push(key="rows_extracted", value=len(raw))
@@ -123,14 +119,12 @@ def _extract_transform_validate(**context) -> dict:
             for r in valid
         ],
     )
-    context["ti"].xcom_push(
-        key="failed_count", value=len(failed)
-    )
+    context["ti"].xcom_push(key="failed_count", value=len(failed))
     context["ti"].xcom_push(
         key="failed_readings",
         value=[
             {
-                "turbine_id": f.reading.turbine_id,
+                "plant_id": f.reading.plant_id,
                 "ts": f.reading.ts.isoformat(),
                 "raw_payload": str(f.reading.as_dict()),
                 "reasons": f.reasons,
@@ -145,22 +139,22 @@ def _load(**context) -> dict:
     from datetime import datetime as dt
 
     from src.db.session import get_engine
-    from src.load.loaders import load_batch_optimized
-    from src.transform.transformers import TransformedReading
+    from src.load.solar_loaders import load_solar_batch_optimized
+    from src.transform.solar_transformers import TransformedSolarReading
 
     ti = context["ti"]
     valid_dicts = ti.xcom_pull(key="valid_readings", task_ids="extract_transform_validate") or []
     failed_dicts = ti.xcom_pull(key="failed_readings", task_ids="extract_transform_validate") or []
 
     readings = [
-        TransformedReading(
-            turbine_id=d["turbine_id"],
+        TransformedSolarReading(
+            plant_id=d["plant_id"],
             ts=dt.fromisoformat(d["ts"]),
-            wind_speed_ms=d["wind_speed_ms"],
-            power_kw=d["power_kw"],
-            rotor_rpm=d["rotor_rpm"],
-            nacelle_temp_c=d["nacelle_temp_c"],
-            pitch_angle_deg=d["pitch_angle_deg"],
+            irradiance_w_m2=d["irradiance_w_m2"],
+            panel_temp_c=d["panel_temp_c"],
+            dc_power_kw=d["dc_power_kw"],
+            ac_power_kw=d["ac_power_kw"],
+            inverter_efficiency_pct=d["inverter_efficiency_pct"],
             status_code=d["status_code"],
             is_anomalous=d["is_anomalous"],
             ingested_at=dt.fromisoformat(d["ingested_at"]),
@@ -172,7 +166,7 @@ def _load(**context) -> dict:
     rows_loaded = 0
     with engine.begin() as conn:
         for i in range(0, len(readings), 5000):
-            rows_loaded += load_batch_optimized(conn, readings[i : i + 5000])
+            rows_loaded += load_solar_batch_optimized(conn, readings[i : i + 5000])
 
         if failed_dicts:
             from sqlalchemy import text
@@ -180,14 +174,14 @@ def _load(**context) -> dict:
             conn.execute(
                 text(
                     """
-                    INSERT INTO scada_readings_rejects
-                        (turbine_id, ts, raw_payload, reject_reason, rejected_at)
-                    VALUES (:turbine_id, :ts, :raw_payload, :reject_reason, :rejected_at)
+                    INSERT INTO solar_readings_rejects
+                        (plant_id, ts, raw_payload, reject_reason, rejected_at)
+                    VALUES (:plant_id, :ts, :raw_payload, :reject_reason, :rejected_at)
                     """
                 ),
                 [
                     {
-                        "turbine_id": f["turbine_id"],
+                        "plant_id": f["plant_id"],
                         "ts": dt.fromisoformat(f["ts"]),
                         "raw_payload": f["raw_payload"],
                         "reject_reason": "; ".join(f["reasons"]),
@@ -205,7 +199,8 @@ def _update_watermarks_and_audit(**context) -> None:
     from sqlalchemy import text
 
     from src.db.session import get_engine
-    from src.load.loaders import update_watermark
+    from src.load.loaders import record_run_audit
+    from src.load.solar_loaders import update_solar_watermark
 
     ti = context["ti"]
     window_end = ti.xcom_pull(key="window_end", task_ids="extract_transform_validate")
@@ -220,53 +215,41 @@ def _update_watermarks_and_audit(**context) -> None:
 
     engine = get_engine()
     with engine.begin() as conn:
-        turbine_ids = [
-            r.turbine_id
-            for r in conn.execute(text("SELECT DISTINCT turbine_id FROM scada_readings"))
+        plant_ids = [
+            r.plant_id for r in conn.execute(text("SELECT DISTINCT plant_id FROM solar_readings"))
         ]
-        # First run: no rows yet, so fall back to a fixed turbine range.
-        if not turbine_ids:
+        # First run: no rows yet, so fall back to a fixed plant range.
+        if not plant_ids:
             from src.config import get_settings
 
-            turbine_ids = [f"WT-{i:03d}" for i in range(1, get_settings().turbine_count + 1)]
+            plant_ids = [f"SP-{i:03d}" for i in range(1, get_settings().solar_plant_count + 1)]
 
-        for turbine_id in turbine_ids:
-            update_watermark(conn, turbine_id, datetime.fromisoformat(window_end))
+        for plant_id in plant_ids:
+            update_solar_watermark(conn, plant_id, datetime.fromisoformat(window_end))
 
-        conn.execute(
-            text(
-                """
-                INSERT INTO pipeline_run_audit
-                    (dag_run_id, task_id, rows_extracted, rows_loaded, rows_rejected,
-                     duration_seconds, status, started_at, finished_at)
-                VALUES
-                    (:dag_run_id, :task_id, :rows_extracted, :rows_loaded, :rows_rejected,
-                     :duration_seconds, :status, :started_at, :finished_at)
-                """
-            ),
-            {
-                "dag_run_id": context["run_id"],
-                "task_id": "scada_etl_pipeline",
-                "rows_extracted": rows_extracted,
-                "rows_loaded": rows_loaded,
-                "rows_rejected": failed_count,
-                "duration_seconds": duration_seconds,
-                "status": "success",
-                "started_at": run_started_at,
-                "finished_at": finished_at,
-            },
+        record_run_audit(
+            conn,
+            dag_run_id=context["run_id"],
+            task_id="solar_etl_pipeline",
+            rows_extracted=rows_extracted,
+            rows_loaded=rows_loaded,
+            rows_rejected=failed_count,
+            duration_seconds=duration_seconds,
+            status="success",
+            started_at=run_started_at,
+            finished_at=finished_at,
         )
 
 
 with DAG(
-    dag_id="scada_etl_pipeline",
-    description="Incremental ETL for wind turbine SCADA time-series data",
+    dag_id="solar_etl_pipeline",
+    description="Incremental ETL for simulated solar PV plant time-series data",
     default_args=DEFAULT_ARGS,
     schedule_interval=timedelta(minutes=5),
     start_date=days_ago(1),
     catchup=False,
-    max_active_runs=1,          # avoid overlapping runs racing on the same watermark
-    tags=["scada", "etl", "time-series"],
+    max_active_runs=1,
+    tags=["solar", "etl", "time-series"],
 ) as dag:
 
     extract_transform_validate = PythonOperator(

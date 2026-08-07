@@ -1,0 +1,14 @@
+# Source file for pip-compile/uv - run
+#   uv pip compile requirements-dashboard.in -o requirements-dashboard.txt --python-version 3.11
+# to regenerate requirements-dashboard.txt with every transitive dependency
+# pinned. Kept separate from requirements.in / the Airflow image: that
+# image pins sqlalchemy==1.4.x for Airflow's own ORM (see Dockerfile),
+# while this service is free to run current sqlalchemy - no reason to drag
+# fastapi/uvicorn into the Airflow container or fight that pin.
+fastapi==0.115.4
+uvicorn[standard]==0.32.0
+sqlalchemy==2.0.35
+psycopg2-binary==2.9.9
+pydantic==2.9.2
+pydantic-settings==2.5.2
+python-dotenv==1.0.1

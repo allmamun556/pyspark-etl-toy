@@ -29,3 +29,23 @@ models:
         data_tests:
           - not_null
           - unique
+
+  - name: solar_daily_summary
+    description: One row per plant per day - averages, capacity factor, anomaly count.
+    columns:
+      - name: plant_id
+        data_tests:
+          - not_null
+      - name: reading_date
+        data_tests:
+          - not_null
+
+  - name: renewable_fleet_daily_summary
+    description: >
+      One row per calendar day combining both simulated fleets - wind and
+      solar total average output side by side, plus a combined total.
+    columns:
+      - name: reading_date
+        data_tests:
+          - not_null
+          - unique

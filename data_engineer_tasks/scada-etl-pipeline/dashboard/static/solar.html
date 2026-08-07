@@ -3,48 +3,48 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SCADA Fleet Dashboard</title>
+  <title>Solar Fleet Dashboard</title>
   <link rel="stylesheet" href="/style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 </head>
 <body>
   <header>
     <div class="header-top">
-      <h1>SCADA Fleet Dashboard</h1>
+      <h1>Solar Fleet Dashboard</h1>
       <nav class="top-nav">
-        <a href="/" class="active">Wind fleet</a>
-        <a href="/solar.html">Solar fleet</a>
+        <a href="/">Wind fleet</a>
+        <a href="/solar.html" class="active">Solar fleet</a>
       </nav>
     </div>
     <div id="last-updated">loading...</div>
   </header>
 
-  <section class="kpi-row" id="kpi-row"></section>
+  <section class="kpi-row" id="solar-kpi-row"></section>
 
   <section class="panel">
     <div class="panel-header">
       <h2>Fleet overview</h2>
     </div>
-    <canvas id="fleet-chart" height="90"></canvas>
+    <canvas id="solar-fleet-chart" height="90"></canvas>
   </section>
 
   <section class="panel">
     <div class="panel-header">
-      <h2>Turbine time series</h2>
-      <select id="turbine-select"></select>
+      <h2>Plant time series</h2>
+      <select id="plant-select"></select>
     </div>
-    <canvas id="timeseries-chart" height="90"></canvas>
+    <canvas id="solar-timeseries-chart" height="90"></canvas>
   </section>
 
   <section class="grid-2">
     <div class="panel">
-      <h2>Latest reading per turbine</h2>
+      <h2>Latest reading per plant</h2>
       <div class="table-scroll">
-        <table id="latest-table">
+        <table id="solar-latest-table">
           <thead>
             <tr>
-              <th>Turbine</th><th>Timestamp</th><th>Wind (m/s)</th><th>Power (kW)</th>
-              <th>RPM</th><th>Temp (°C)</th><th>Status</th><th>Anomaly</th>
+              <th>Plant</th><th>Timestamp</th><th>Irradiance (W/m&sup2;)</th><th>DC (kW)</th>
+              <th>AC (kW)</th><th>Panel &deg;C</th><th>Status</th><th>Anomaly</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -55,7 +55,7 @@
     <div class="panel">
       <h2>Recent pipeline runs</h2>
       <div class="table-scroll">
-        <table id="runs-table">
+        <table id="solar-runs-table">
           <thead>
             <tr>
               <th>Run</th><th>Status</th><th>Extracted</th><th>Loaded</th>
@@ -72,9 +72,9 @@
     <div class="panel">
       <h2>Recent anomalies</h2>
       <div class="table-scroll">
-        <table id="anomalies-table">
+        <table id="solar-anomalies-table">
           <thead>
-            <tr><th>Turbine</th><th>Timestamp</th><th>Wind (m/s)</th><th>Power (kW)</th><th>RPM</th><th>Status</th></tr>
+            <tr><th>Plant</th><th>Timestamp</th><th>Irradiance (W/m&sup2;)</th><th>DC (kW)</th><th>AC (kW)</th><th>Status</th></tr>
           </thead>
           <tbody></tbody>
         </table>
@@ -84,9 +84,9 @@
     <div class="panel">
       <h2>Recent rejects</h2>
       <div class="table-scroll">
-        <table id="rejects-table">
+        <table id="solar-rejects-table">
           <thead>
-            <tr><th>Turbine</th><th>Timestamp</th><th>Reason</th><th>Rejected at</th></tr>
+            <tr><th>Plant</th><th>Timestamp</th><th>Reason</th><th>Rejected at</th></tr>
           </thead>
           <tbody></tbody>
         </table>
@@ -98,7 +98,7 @@
     <div class="panel-header">
       <h2>External data sources (real, live)</h2>
     </div>
-    <p class="panel-note">Feeds both this fleet's wind-speed anchoring and the <a href="/solar.html">solar fleet</a>'s irradiance anchoring — see README §7.</p>
+    <p class="panel-note">Feeds this fleet's irradiance anchoring and the <a href="/">wind fleet</a>'s wind-speed anchoring — see README §7.</p>
     <div class="kpi-row" id="external-kpi-row"></div>
     <div class="table-scroll">
       <table id="external-runs-table">
@@ -111,6 +111,6 @@
   </section>
 
   <script src="/common.js"></script>
-  <script src="/wind.js"></script>
+  <script src="/solar.js"></script>
 </body>
 </html>

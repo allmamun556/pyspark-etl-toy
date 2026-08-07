@@ -25,9 +25,16 @@ class ScadaReading(Base):
     __tablename__ = "scada_readings"
     __table_args__ = (UniqueConstraint("turbine_id", "ts", name="uq_turbine_ts"),)
 
+    # Composite (id, ts) primary key, not just id: this table is a
+    # TimescaleDB hypertable partitioned on ts (see
+    # migrations/versions/0004_timescaledb_hypertables.py), and TimescaleDB
+    # requires every unique index/primary key on a hypertable to include
+    # the partitioning column.
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     turbine_id: Mapped[str] = mapped_column(String(20), nullable=False, index=True)
-    ts: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
+    ts: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), primary_key=True, nullable=False, index=True
+    )
     wind_speed_ms: Mapped[float] = mapped_column(Numeric(6, 2))
     power_kw: Mapped[float] = mapped_column(Numeric(8, 2))
     rotor_rpm: Mapped[float] = mapped_column(Numeric(5, 2))
@@ -71,6 +78,7 @@ class WeatherApiReading(Base):
     wind_direction_deg: Mapped[float] = mapped_column(Numeric(5, 1))
     temperature_c: Mapped[float] = mapped_column(Numeric(5, 2))
     pressure_hpa: Mapped[float] = mapped_column(Numeric(7, 2))
+    shortwave_radiation_w_m2: Mapped[float] = mapped_column(Numeric(6, 1))
     ingested_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
@@ -107,6 +115,47 @@ class ExternalDataRunAudit(Base):
     status: Mapped[str] = mapped_column(String(20))
     started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     finished_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class SolarReading(Base):
+    """Curated schema for the simulated solar PV plant fleet."""
+
+    __tablename__ = "solar_readings"
+    __table_args__ = (UniqueConstraint("plant_id", "ts", name="uq_plant_ts"),)
+
+    # Composite (id, ts) primary key - see the identical comment on
+    # ScadaReading above; same TimescaleDB hypertable requirement applies.
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    plant_id: Mapped[str] = mapped_column(String(20), nullable=False, index=True)
+    ts: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), primary_key=True, nullable=False, index=True
+    )
+    irradiance_w_m2: Mapped[float] = mapped_column(Numeric(6, 2))
+    panel_temp_c: Mapped[float] = mapped_column(Numeric(5, 2))
+    dc_power_kw: Mapped[float] = mapped_column(Numeric(8, 2))
+    ac_power_kw: Mapped[float] = mapped_column(Numeric(8, 2))
+    inverter_efficiency_pct: Mapped[float] = mapped_column(Numeric(5, 2))
+    status_code: Mapped[str] = mapped_column(String(20), default="operational")
+    is_anomalous: Mapped[bool] = mapped_column(Boolean, default=False)
+    ingested_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class SolarReadingReject(Base):
+    __tablename__ = "solar_readings_rejects"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    plant_id: Mapped[str] = mapped_column(String(20))
+    ts: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    raw_payload: Mapped[str] = mapped_column(Text)
+    reject_reason: Mapped[str] = mapped_column(Text)
+    rejected_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class SolarExtractionWatermark(Base):
+    __tablename__ = "solar_extraction_watermark"
+
+    plant_id: Mapped[str] = mapped_column(String(20), primary_key=True)
+    last_extracted_ts: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
 class PipelineRunAudit(Base):

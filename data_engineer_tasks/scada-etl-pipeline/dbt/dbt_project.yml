@@ -9,11 +9,13 @@ macro-paths: ["macros"]
 target-path: "target"
 clean-targets: ["target", "dbt_packages"]
 
-# Rated power for the simulated turbine fleet - mirrors RATED_POWER_KW in
-# src/extract/scada_simulator.py. Kept as a var (not hardcoded per-model)
-# so it only needs updating in one place if the fleet's turbine spec changes.
+# Rated capacity for the simulated fleets - mirrors RATED_POWER_KW in
+# scada_simulator.py and solar_capacity_kwp in src/config.py. Kept as vars
+# (not hardcoded per-model) so they only need updating in one place if a
+# fleet's spec changes.
 vars:
   rated_power_kw: 3300
+  solar_capacity_kwp: 5000
 
 models:
   scada_analytics:

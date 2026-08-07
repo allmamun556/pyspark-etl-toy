@@ -21,15 +21,18 @@ def load_weather_reading(conn: Connection, reading: WeatherReading, ingested_at:
             """
             INSERT INTO weather_api_readings
                 (source, latitude, longitude, ts, wind_speed_ms,
-                 wind_direction_deg, temperature_c, pressure_hpa, ingested_at)
+                 wind_direction_deg, temperature_c, pressure_hpa,
+                 shortwave_radiation_w_m2, ingested_at)
             VALUES
                 (:source, :latitude, :longitude, :ts, :wind_speed_ms,
-                 :wind_direction_deg, :temperature_c, :pressure_hpa, :ingested_at)
+                 :wind_direction_deg, :temperature_c, :pressure_hpa,
+                 :shortwave_radiation_w_m2, :ingested_at)
             ON CONFLICT (latitude, longitude, ts) DO UPDATE SET
                 wind_speed_ms = EXCLUDED.wind_speed_ms,
                 wind_direction_deg = EXCLUDED.wind_direction_deg,
                 temperature_c = EXCLUDED.temperature_c,
                 pressure_hpa = EXCLUDED.pressure_hpa,
+                shortwave_radiation_w_m2 = EXCLUDED.shortwave_radiation_w_m2,
                 ingested_at = EXCLUDED.ingested_at
             """
         ),
@@ -42,6 +45,7 @@ def load_weather_reading(conn: Connection, reading: WeatherReading, ingested_at:
             "wind_direction_deg": reading.wind_direction_deg,
             "temperature_c": reading.temperature_c,
             "pressure_hpa": reading.pressure_hpa,
+            "shortwave_radiation_w_m2": reading.shortwave_radiation_w_m2,
             "ingested_at": ingested_at,
         },
     )

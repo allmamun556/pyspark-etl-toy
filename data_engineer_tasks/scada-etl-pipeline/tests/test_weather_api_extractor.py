@@ -15,6 +15,7 @@ SAMPLE_PAYLOAD = {
         "wind_direction_10m": 326,
         "temperature_2m": 21.2,
         "surface_pressure": 1014.0,
+        "shortwave_radiation": 446.0,
     },
 }
 
@@ -28,6 +29,7 @@ def test_parse_current_weather_maps_fields():
     assert reading.wind_direction_deg == 326
     assert reading.temperature_c == 21.2
     assert reading.pressure_hpa == 1014.0
+    assert reading.shortwave_radiation_w_m2 == 446.0
 
 
 def test_parse_current_weather_ts_is_utc_aware():
@@ -56,3 +58,14 @@ def test_out_of_range_temperature_fails():
     result = validate_weather_reading(reading)
     assert not result.is_valid
     assert any("temperature_c" in r for r in result.reasons)
+
+
+def test_out_of_range_shortwave_radiation_fails():
+    payload = {
+        **SAMPLE_PAYLOAD,
+        "current": {**SAMPLE_PAYLOAD["current"], "shortwave_radiation": 5000},
+    }
+    reading = parse_current_weather(payload)
+    result = validate_weather_reading(reading)
+    assert not result.is_valid
+    assert any("shortwave_radiation_w_m2" in r for r in result.reasons)

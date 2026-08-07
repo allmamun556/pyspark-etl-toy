@@ -289,9 +289,11 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
 
 /* ---------- cards / grids ---------- */
 .card-grid { display: grid; gap: 14px; margin: 4px 0 24px; }
+.card-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
 .card-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
 .card-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
-@media (max-width: 760px) { .card-grid.cols-3, .card-grid.cols-2 { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .card-grid.cols-4 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 760px) { .card-grid.cols-3, .card-grid.cols-2, .card-grid.cols-4 { grid-template-columns: 1fr; } }
 
 .card {
   background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
@@ -334,6 +336,8 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
 .diagram { margin: 6px 0 10px; border: 1px solid var(--line); border-radius: 14px; padding: 26px clamp(14px,3vw,34px) 20px; background: var(--surface); box-shadow: var(--shadow); }
 .d-row { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; position: relative; }
 .d-row.single { grid-template-columns: 1fr; }
+.d-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+@media (max-width: 760px) { .d-row.triple { grid-template-columns: 1fr; } }
 .d-box {
   border: 1.5px solid var(--line); border-radius: 10px; padding: 12px 14px;
   background: var(--surface-2); position: relative; z-index: 2;
@@ -353,6 +357,9 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
 }
 .d-connectors i.a { left: 25%; }
 .d-connectors i.b { left: 75%; }
+.d-connectors.triple i.a { left: 16.6%; }
+.d-connectors.triple i.b { left: 50%; }
+.d-connectors.triple i.c { left: 83.3%; }
 .d-connectors i::after {
   content: ""; position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%);
   width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent;
@@ -411,7 +418,7 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
       <li><a href="#pipeline"><span class="n">04</span>Pipeline internals</a></li>
       <li><a href="#dq"><span class="n">05</span>Data quality</a></li>
       <li><a href="#orchestration"><span class="n">06</span>Orchestration</a></li>
-      <li><a href="#anchoring"><span class="n">07</span>Wind anchoring</a></li>
+      <li><a href="#anchoring"><span class="n">07</span>Real-data anchoring</a></li>
       <li><a href="#dbt"><span class="n">08</span>Analytics (dbt)</a></li>
       <li><a href="#dashboard"><span class="n">09</span>Dashboard</a></li>
       <li><a href="#deployment"><span class="n">10</span>Deployment</a></li>
@@ -429,18 +436,18 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
       <div class="eyebrow-row"><span class="eyebrow">Technical documentation · rev. current</span></div>
       <h1>SCADA Time-Series<br>ETL Pipeline</h1>
       <p class="tagline">
-        An incremental, data-quality-first ETL system for wind-turbine telemetry —
-        orchestrated with Apache Airflow, stored in PostgreSQL, modeled with dbt,
-        and served through a FastAPI + vanilla JS dashboard. Three sources feed it:
-        one physically-realistic simulator and two genuinely real, live, free
-        external feeds.
+        An incremental, data-quality-first ETL system for wind-turbine and solar-plant
+        telemetry — orchestrated with Apache Airflow, stored in PostgreSQL, modeled with dbt,
+        and served through a FastAPI + vanilla JS dashboard. Four sources feed it:
+        two physically-realistic simulators (both anchored to real data) and two genuinely
+        real, live, free external feeds.
       </p>
       <div class="chip-row">
-        <span class="chip good"><span class="sw"></span>42 / 42 tests passing</span>
+        <span class="chip good"><span class="sw"></span>73 / 73 tests passing</span>
         <span class="chip real"><span class="sw"></span>2 real live sources</span>
-        <span class="chip sim"><span class="sw"></span>1 simulated source</span>
+        <span class="chip sim"><span class="sw"></span>2 simulated fleets</span>
         <span class="chip">Airflow 2.10</span>
-        <span class="chip">PostgreSQL 16</span>
+        <span class="chip">TimescaleDB / PG16</span>
         <span class="chip">dbt-core 1.8</span>
         <span class="chip">FastAPI</span>
         <span class="chip">Docker Compose</span>
@@ -461,17 +468,20 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
 
       <p>
         The system ingests wind-turbine SCADA (Supervisory Control and Data Acquisition)
-        readings on a 5-minute cadence, validates them against physical and statistical
-        rules before they ever reach the curated table, and loads them idempotently at
-        batch throughput. A second, independent DAG pulls in real ambient weather and
-        real ocean-buoy telemetry every 15 minutes, purely to give the pipeline something
-        external and true to check itself against. dbt turns the curated tables into
-        tested analytics marts; a small dashboard makes the whole system's health and
-        output visible without a SQL client.
+        and solar PV plant readings on a 5-minute cadence each, validates them against
+        physical and statistical rules before they ever reach the curated tables, and
+        loads them idempotently at batch throughput into TimescaleDB hypertables with a
+        90-day retention policy. A third, independent DAG pulls in real ambient weather
+        and real ocean-buoy telemetry every 15 minutes, purely to give both simulated
+        fleets something external and true to check themselves against — and to anchor
+        their output to (§07). dbt turns the curated tables into tested analytics marts,
+        which the dashboard's per-asset stats endpoints read directly rather than
+        re-deriving the same aggregation a second time; DAG failures optionally notify a
+        Slack webhook (§06).
       </p>
 
-      <h3>Three sources, one warehouse</h3>
-      <div class="card-grid cols-3">
+      <h3>Four sources, one warehouse</h3>
+      <div class="card-grid cols-4">
         <div class="card">
           <div class="card-top">
             <h4>SCADA simulator</h4>
@@ -482,7 +492,19 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
             12&nbsp;m/s, cut-out 25&nbsp;m/s, ~3.3&nbsp;MW), Ornstein-Uhlenbeck wind drift,
             and ~0.5% injected sensor faults. Real per-turbine SCADA telemetry is
             proprietary to wind-farm operators — nothing like it is published openly,
-            so this is the one source that has to be simulated.
+            so this and the solar fleet below have to be simulated.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-top">
+            <h4>Solar plant simulator</h4>
+            <span class="badge sim">Simulated</span>
+          </div>
+          <p>
+            8 PV plants (5&nbsp;MWp DC / 4.5&nbsp;MW AC each), a clear-sky irradiance
+            curve, NOCT panel heating, temperature derating, and inverter clipping.
+            Same reasoning as the SCADA simulator — real per-plant inverter telemetry
+            isn't published anywhere either.
           </p>
         </div>
         <div class="card">
@@ -492,8 +514,8 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
           </div>
           <p>
             Free weather API, no key required. Polled every 15 minutes for current wind
-            speed, direction, temperature, and pressure at Bremerhaven, Germany — a real
-            North Sea wind-energy hub.
+            speed, direction, temperature, pressure, and solar irradiance
+            (<code>shortwave_radiation</code>) at Bremerhaven, Germany.
           </p>
         </div>
         <div class="card">
@@ -510,12 +532,12 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
       </div>
 
       <div class="stat-row">
-        <div class="stat"><div class="v">1,493</div><div class="l">SCADA readings loaded</div></div>
-        <div class="stat"><div class="v">20</div><div class="l">Simulated turbines</div></div>
-        <div class="stat"><div class="v">7</div><div class="l">Rows rejected (of 1,500)</div></div>
-        <div class="stat"><div class="v">17 / 16</div><div class="l">Weather / buoy fetches</div></div>
-        <div class="stat"><div class="v">9</div><div class="l">Postgres tables</div></div>
-        <div class="stat"><div class="v">42</div><div class="l">pytest cases</div></div>
+        <div class="stat"><div class="v">22,306</div><div class="l">SCADA readings loaded</div></div>
+        <div class="stat"><div class="v">20 / 8</div><div class="l">Turbines / solar plants</div></div>
+        <div class="stat"><div class="v">54</div><div class="l">Wind rows rejected</div></div>
+        <div class="stat"><div class="v">real</div><div class="l">Weather + buoy fetches</div></div>
+        <div class="stat"><div class="v">13</div><div class="l">Postgres tables</div></div>
+        <div class="stat"><div class="v">73</div><div class="l">pytest cases</div></div>
       </div>
       <p style="font-size:12.5px;color:var(--muted);margin-top:-10px;">Live figures from the running instance at time of writing — see §11 for how they're produced.</p>
     </section>
@@ -525,22 +547,30 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
       <div class="eyebrow-row"><span class="eyebrow">01 · Architecture</span></div>
       <h2>System diagram</h2>
       <p class="section-dek">
-        Two independent Airflow DAGs write into one PostgreSQL instance. dbt reads the
-        curated tables into tested analytics marts; the dashboard reads the curated
-        tables directly. Nothing but the DAGs writes to Postgres, and nothing but
-        Postgres is shared state between them.
+        Three independent Airflow DAGs write into one TimescaleDB instance. dbt reads the
+        curated tables into tested analytics marts; the dashboard reads the marts for its
+        per-asset stats and the curated tables directly for everything else. Nothing but
+        the DAGs writes to the database, and nothing but the database is shared state
+        between them.
       </p>
 
       <div class="diagram">
         <div class="d-row">
-          <div class="d-box accent-sim">
-            <div class="t">SCADA SIMULATOR</div>
-            <div class="d">src/extract/scada_simulator.py — physically modeled, fault-injecting</div>
+          <div class="d-stack">
+            <div class="d-box accent-sim">
+              <div class="t">SCADA SIMULATOR</div>
+              <div class="d">src/extract/scada_simulator.py — physically modeled, fault-injecting</div>
+            </div>
+            <div class="joiner"></div>
+            <div class="d-box accent-sim">
+              <div class="t">SOLAR PLANT SIMULATOR</div>
+              <div class="d">src/extract/solar_simulator.py — clear-sky + NOCT + inverter clipping</div>
+            </div>
           </div>
           <div class="d-stack">
             <div class="d-box accent-real">
               <div class="t">OPEN-METEO API</div>
-              <div class="d">HTTP · current weather · Bremerhaven, DE</div>
+              <div class="d">HTTP · current weather + irradiance · Bremerhaven, DE</div>
             </div>
             <div class="joiner"></div>
             <div class="d-box accent-real">
@@ -550,11 +580,20 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
           </div>
         </div>
 
-        <div class="d-connectors"><i class="a"></i><i class="b"></i></div>
+        <div class="d-connectors triple"><i class="a"></i><i class="b"></i><i class="c"></i></div>
 
-        <div class="d-row">
+        <div class="d-row triple">
           <div class="d-box accent-sim">
             <div class="t">scada_etl_pipeline</div>
+            <div class="d">Airflow DAG · every 5 min · incremental (watermark)</div>
+            <div class="sub-chips">
+              <span class="sub-chip">extract_transform_validate</span>
+              <span class="sub-chip">load</span>
+              <span class="sub-chip">update_watermarks_and_audit</span>
+            </div>
+          </div>
+          <div class="d-box accent-sim">
+            <div class="t">solar_etl_pipeline</div>
             <div class="d">Airflow DAG · every 5 min · incremental (watermark)</div>
             <div class="sub-chips">
               <span class="sub-chip">extract_transform_validate</span>
@@ -574,18 +613,19 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
 
         <div class="d-crosslink">
           <div class="bar"></div>
-          <div class="lbl">reference_wind_speed_ms read-back — anchors the simulator, §07</div>
+          <div class="lbl">reference wind speed / irradiance read-back — anchors both simulators, §07</div>
         </div>
 
-        <div class="d-connectors"><i class="a"></i><i class="b"></i></div>
+        <div class="d-connectors triple"><i class="a"></i><i class="b"></i><i class="c"></i></div>
 
         <div class="d-row single">
           <div class="d-box store d-wide">
-            <div class="t">POSTGRESQL — public schema</div>
-            <div class="d">Curated tables + audit trail, written only by the two DAGs above</div>
+            <div class="t">TIMESCALEDB (POSTGRESQL) — public schema</div>
+            <div class="d">Curated tables + audit trail, written only by the three DAGs above. scada_readings / solar_readings are hypertables with a 90-day retention policy</div>
             <div class="mono-list">
-              scada_readings<br>scada_readings_rejects<br>extraction_watermark<br>pipeline_run_audit<br>
-              weather_api_readings<br>iot_buoy_readings<br>external_data_run_audit
+              scada_readings<br>scada_readings_rejects<br>extraction_watermark<br>
+              solar_readings<br>solar_readings_rejects<br>solar_extraction_watermark<br>
+              pipeline_run_audit (shared)<br>weather_api_readings<br>iot_buoy_readings<br>external_data_run_audit
             </div>
           </div>
         </div>
@@ -598,20 +638,22 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
             <div class="d">Own Postgres schemas: <code>staging</code>, <code>marts</code></div>
             <div class="sub-chips">
               <span class="sub-chip">turbine_daily_summary</span>
-              <span class="sub-chip">pipeline_run_daily_summary</span>
+              <span class="sub-chip">solar_daily_summary</span>
+              <span class="sub-chip">renewable_fleet_daily_summary</span>
               <span class="sub-chip">ambient_wind_daily_comparison</span>
             </div>
           </div>
           <div class="d-box">
             <div class="t">FastAPI dashboard</div>
-            <div class="d">:3000 · reads the public schema directly (not the dbt marts)</div>
+            <div class="d">:3000 · /stats routes read dbt marts, everything else reads public schema directly</div>
             <div class="sub-chips">
-              <span class="sub-chip">9 JSON endpoints</span>
+              <span class="sub-chip">14 JSON endpoints</span>
               <span class="sub-chip">vanilla JS + Chart.js</span>
             </div>
           </div>
         </div>
       </div>
+      <p style="font-size:12.5px;color:var(--muted);margin-top:-10px;">Not pictured: every <code>on_failure_callback</code> across the three DAGs also posts to a Slack webhook when one is configured — see §06.</p>
 
       <h3>Design principles applied</h3>
       <div class="table-wrap">
@@ -620,14 +662,16 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
           <tbody>
             <tr><td>Separation of concerns</td><td><code>extract/</code>, <code>transform/</code>, <code>validation/</code>, <code>load/</code> are independent, unit-testable modules with no cross-imports of internals.</td></tr>
             <tr><td>Idempotency</td><td>Every load path is an <code>INSERT ... ON CONFLICT ... DO UPDATE</code> keyed on the natural grain, so replaying a DAG run (e.g. after a retry) converges instead of duplicating.</td></tr>
-            <tr><td>Incremental extraction</td><td>The SCADA extractor tracks a per-turbine high-water mark in <code>extraction_watermark</code>; each run only generates data since that mark.</td></tr>
+            <tr><td>Incremental extraction</td><td>Both simulated fleets track a high-water mark per asset (<code>extraction_watermark</code> / <code>solar_extraction_watermark</code>); each run only generates data since that mark.</td></tr>
             <tr><td>Data quality as a first-class step</td><td>Six dimensions checked before load — see §05. Failures are routed to reject tables with a reason, never silently dropped.</td></tr>
-            <tr><td>Decoupled failure domains</td><td>The external-source DAG is separate from the SCADA DAG specifically so a NOAA/Open-Meteo outage can't retry-storm the turbine pipeline.</td></tr>
-            <tr><td>Observability</td><td>Structured JSON logging, two audit tables (<code>pipeline_run_audit</code>, <code>external_data_run_audit</code>) recording real elapsed duration, and Airflow SLAs + exponential-backoff retries.</td></tr>
+            <tr><td>Decoupled failure domains</td><td>The external-source DAG is separate from both simulated-fleet DAGs specifically so a NOAA/Open-Meteo outage can't retry-storm either pipeline.</td></tr>
+            <tr><td>Observability</td><td>Structured JSON logging, two audit tables (<code>pipeline_run_audit</code>, <code>external_data_run_audit</code>) recording real elapsed duration, Airflow SLAs + exponential-backoff retries, and Slack failure alerts (safe no-op when unconfigured — §06).</td></tr>
             <tr><td>Config as code</td><td>Every threshold, URL, and credential is a <code>pydantic-settings</code> field in <code>src/config.py</code>, overridable by environment variable — nothing hardcoded.</td></tr>
             <tr><td>Schema migrations</td><td>Alembic is the source of truth for schema (<code>migrations/versions/</code>); <code>sql/init.sql</code> mirrors it for zero-dependency local bootstrap.</td></tr>
-            <tr><td>Reproducibility</td><td><code>docker compose up --build -d</code> brings up Postgres, both DAGs, the dashboard, and a one-shot dbt build with no manual steps.</td></tr>
-            <tr><td>Testability</td><td>42 pytest cases across extract/transform/validation, all pure-function — no live DB required to run them.</td></tr>
+            <tr><td>Bounded storage growth</td><td><code>scada_readings</code>/<code>solar_readings</code> are TimescaleDB hypertables with a 90-day retention policy — old chunks drop on TimescaleDB's own schedule instead of the tables growing forever (§03).</td></tr>
+            <tr><td>Single source of truth for aggregates</td><td>The dashboard's per-turbine/per-plant stats read dbt's <code>marts.*</code> tables instead of re-deriving the same aggregation SQL a second time (§09).</td></tr>
+            <tr><td>Reproducibility</td><td><code>docker compose up --build -d</code> brings up TimescaleDB, all three DAGs, the dashboard, and a one-shot dbt build with no manual steps; every dependency set is pinned via a <code>pip-compile</code>-generated lockfile.</td></tr>
+            <tr><td>Testability</td><td>73 pytest cases across extract/transform/validation/alerting, all pure-function; <code>airflow dags test</code> runs the real DAGs end-to-end in CI (§12).</td></tr>
           </tbody>
         </table>
       </div>
@@ -651,22 +695,34 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
         <li><b>Reference-wind anchoring</b>: since §07, each run's starting wind speed is anchored to the latest real Open-Meteo reading rather than drawn uniformly from <code>[4, 14]</code> — see §07 for the full mechanism.</li>
       </ul>
 
+      <h3>Solar plant simulator <span class="badge sim" style="margin-left:8px;">Simulated</span></h3>
+      <p><code>src/extract/solar_simulator.py</code> — same reasoning and same shape as the wind simulator above; real per-plant inverter telemetry is proprietary, so this simulates a fleet of 8 PV plants (5&nbsp;MWp DC / 4.5&nbsp;MW AC each by default).</p>
+      <ul>
+        <li><b>Clear-sky irradiance model</b>: sinusoidal curve between fixed sunrise (06:00 UTC) and sunset (18:00 UTC), peaking at 950 W/m² — a deliberate simplification (no solar-position math for the plant's actual latitude/date), noted rather than left silently wrong.</li>
+        <li><b>Panel heating</b>: NOCT model (45°C at 800 W/m², 20°C ambient, 1 m/s wind — a standard PV datasheet spec), then a crystalline-silicon temperature derate of 0.4%/°C above the 25°C STC baseline.</li>
+        <li><b>Cloud cover</b>: an Ornstein-Uhlenbeck-style <code>cloud_factor</code> per plant (same drift pattern as wind's <code>base_wind_ms</code>), so output wanders realistically instead of following the clear-sky curve exactly.</li>
+        <li><b>True night is exactly zero</b> — irradiance, DC power, and AC power all read <code>0.0</code> outside daylight hours, not a noise-driven near-zero value. (An earlier version added sensor noise unconditionally and occasionally produced ~75 kW of "output" at 2&nbsp;AM; fixed by gating noise on <code>clear_sky &gt; 0</code>.)</li>
+        <li><b>Injected faults (~0.5% of ticks)</b>: a stuck irradiance sensor (comms glitch, 2-5 ticks), and an inverter trip — full sun available but AC output drops to zero from a simulated grid fault.</li>
+        <li><b>Reference-irradiance anchoring</b>: mirrors the wind simulator exactly (§07), anchored to Open-Meteo's real <code>shortwave_radiation</code> field instead of its wind speed.</li>
+      </ul>
+
       <h3>Open-Meteo <span class="badge real" style="margin-left:8px;">Real · HTTP API</span></h3>
       <p><code>src/extract/weather_api_extractor.py</code> — a plain HTTP GET, no auth, split into <code>fetch_current_weather_raw()</code> (network) and <code>parse_current_weather()</code> (pure), specifically so tests exercise the parser against a fixed JSON fixture and never touch the network.</p>
       <div class="code-panel">
-        <span class="cap">GET https://api.open-meteo.com/v1/forecast — real response, captured 2026-07-31</span>
+        <span class="cap">GET https://api.open-meteo.com/v1/forecast — real response</span>
         <pre>{
   "latitude": 53.54, "longitude": 8.1,
   "current": {
-    "time": "2026-07-31T12:15",
-    "wind_speed_10m": 3.61,
-    "wind_direction_10m": 326,
-    "temperature_2m": 21.2,
-    "surface_pressure": 1014.0
+    "time": "2026-08-07T13:30",
+    "wind_speed_10m": 3.72,
+    "wind_direction_10m": 310,
+    "temperature_2m": 19.8,
+    "surface_pressure": 1016.0,
+    "shortwave_radiation": 605.0
   }
 }</pre>
       </div>
-      <p class="tight">Query params: <code>latitude=53.55</code>, <code>longitude=8.09</code> (Bremerhaven, DE), <code>current=wind_speed_10m,wind_direction_10m,temperature_2m,surface_pressure</code>, <code>wind_speed_unit=ms</code>, <code>timezone=UTC</code>.</p>
+      <p class="tight">Query params: <code>latitude=53.55</code>, <code>longitude=8.09</code> (Bremerhaven, DE), <code>current=wind_speed_10m,wind_direction_10m,temperature_2m,surface_pressure,shortwave_radiation</code>, <code>wind_speed_unit=ms</code>, <code>timezone=UTC</code>. <code>shortwave_radiation</code> is the field that anchors the solar simulator — one HTTP fetch feeds both pipelines' reference values.</p>
 
       <h3>NOAA NDBC buoy 46050 <span class="badge real" style="margin-left:8px;">Real · IoT</span></h3>
       <p><code>src/extract/iot_buoy_extractor.py</code> — fetches NOAA's <code>realtime2</code> text feed and parses the newest (first) data row. <code>MM</code> marks a missing sensor reading and is parsed to <code>None</code>, not zero.</p>
@@ -680,7 +736,7 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
 
       <div class="callout">
         <span class="lbl">Why the split matters</span>
-        <p>Both real extractors separate "fetch bytes over HTTP" from "parse bytes into a dataclass." Tests only ever exercise the parser against a frozen fixture — the pipeline's test suite has zero network dependency even though two of its three sources are live internet calls in production.</p>
+        <p>Both real extractors separate "fetch bytes over HTTP" from "parse bytes into a dataclass." Tests only ever exercise the parser against a frozen fixture — the pipeline's test suite has zero network dependency even though two of its four sources are live internet calls in production. This isn't theoretical: while building this, Open-Meteo returned a genuine <code>503 Service Unavailable</code> mid-session — the DAG recorded <code>status="failed"</code> accurately and Airflow's own retry picked it up automatically, without touching either simulated pipeline's schedule (§06).</p>
       </div>
     </section>
 
@@ -689,18 +745,18 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
       <div class="eyebrow-row"><span class="eyebrow">03 · Schema reference</span></div>
       <h2>Every table, every column</h2>
       <p class="section-dek">
-        Nine tables in the <code>public</code> schema, managed by Alembic (<code>migrations/versions/0001_initial_schema.py</code>, <code>0002_external_data_sources.py</code>), mirrored in <code>sql/init.sql</code> for a zero-dependency local bootstrap.
+        Thirteen tables in the <code>public</code> schema, managed by Alembic (<code>migrations/versions/0001_initial_schema.py</code>, <code>0002_external_data_sources.py</code>, <code>0003_solar_energy_source.py</code>, <code>0004_timescaledb_hypertables.py</code>), mirrored in <code>sql/init.sql</code> for a zero-dependency local bootstrap.
       </p>
 
       <div class="schema-block">
         <div class="schema-head"><span class="name">scada_readings</span><span class="pk">curated — one row per turbine per timestamp</span></div>
-        <p class="schema-note">Unique on <code>(turbine_id, ts)</code> — this is what makes the load path's <code>ON CONFLICT</code> upsert idempotent.</p>
+        <p class="schema-note"><b>TimescaleDB hypertable</b>, chunked automatically on <code>ts</code>, with a 90-day retention policy — old chunks drop entirely on TimescaleDB's own background schedule rather than the table growing without bound. Primary key is composite <code>(id, ts)</code>, not <code>id</code> alone: TimescaleDB requires every unique index/primary key on a hypertable to include the partitioning column. Unique on <code>(turbine_id, ts)</code> is what makes the load path's <code>ON CONFLICT</code> upsert idempotent.</p>
         <div class="table-wrap"><table>
           <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
           <tbody>
-            <tr><td><code>id</code></td><td>bigserial pk</td><td></td></tr>
+            <tr><td><code>id</code></td><td>bigserial</td><td>part of the composite primary key</td></tr>
             <tr><td><code>turbine_id</code></td><td>varchar(20)</td><td>e.g. <code>WT-014</code>, indexed</td></tr>
-            <tr><td><code>ts</code></td><td>timestamptz</td><td>reading timestamp, UTC, indexed</td></tr>
+            <tr><td><code>ts</code></td><td>timestamptz</td><td>reading timestamp, UTC, indexed; hypertable partitioning column</td></tr>
             <tr><td><code>wind_speed_ms</code></td><td>numeric(6,2)</td><td></td></tr>
             <tr><td><code>power_kw</code></td><td>numeric(8,2)</td><td>active power output</td></tr>
             <tr><td><code>rotor_rpm</code></td><td>numeric(5,2)</td><td></td></tr>
@@ -713,22 +769,43 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
         </table></div>
       </div>
 
+      <div class="schema-block">
+        <div class="schema-head"><span class="name">solar_readings</span><span class="pk">curated — one row per plant per timestamp</span></div>
+        <p class="schema-note">Also a <b>TimescaleDB hypertable</b> with the same 90-day retention policy and composite <code>(id, ts)</code> primary key as <code>scada_readings</code>, for the same reason. Unique on <code>(plant_id, ts)</code>.</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td><code>id</code></td><td>bigserial</td><td>part of the composite primary key</td></tr>
+            <tr><td><code>plant_id</code></td><td>varchar(20)</td><td>e.g. <code>SP-004</code>, indexed</td></tr>
+            <tr><td><code>ts</code></td><td>timestamptz</td><td>reading timestamp, UTC, indexed; hypertable partitioning column</td></tr>
+            <tr><td><code>irradiance_w_m2</code></td><td>numeric(6,2)</td><td></td></tr>
+            <tr><td><code>panel_temp_c</code></td><td>numeric(5,2)</td><td>NOCT-modeled</td></tr>
+            <tr><td><code>dc_power_kw</code></td><td>numeric(8,2)</td><td>before inverter conversion</td></tr>
+            <tr><td><code>ac_power_kw</code></td><td>numeric(8,2)</td><td>after inverter conversion + clipping</td></tr>
+            <tr><td><code>inverter_efficiency_pct</code></td><td>numeric(5,2)</td><td></td></tr>
+            <tr><td><code>status_code</code></td><td>varchar(20)</td><td>operational / night / curtailed / fault / maintenance / offline</td></tr>
+            <tr><td><code>is_anomalous</code></td><td>boolean</td><td>set by the transform layer's cross-field check</td></tr>
+            <tr><td><code>ingested_at</code></td><td>timestamptz</td><td>pipeline load time</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
       <div class="two-col">
         <div class="schema-block">
-          <div class="schema-head"><span class="name">scada_readings_rejects</span></div>
-          <p class="schema-note">Rows that failed validation, with a human-readable reason — nothing is silently discarded.</p>
+          <div class="schema-head"><span class="name">scada_readings_rejects</span> / <span class="name">solar_readings_rejects</span></div>
+          <p class="schema-note">Rows that failed validation, with a human-readable reason — nothing is silently discarded. Identical shape, keyed on <code>turbine_id</code> vs. <code>plant_id</code>.</p>
           <div class="table-wrap"><table><tbody>
-            <tr><td><code>turbine_id</code>, <code>ts</code></td><td>as submitted, unvalidated</td></tr>
+            <tr><td><code>turbine_id</code> / <code>plant_id</code>, <code>ts</code></td><td>as submitted, unvalidated</td></tr>
             <tr><td><code>raw_payload</code></td><td>text — full <code>str(dict)</code> of the rejected reading</td></tr>
             <tr><td><code>reject_reason</code></td><td>text — <code>"; "</code>-joined failure reasons</td></tr>
             <tr><td><code>rejected_at</code></td><td>timestamptz</td></tr>
           </tbody></table></div>
         </div>
         <div class="schema-block">
-          <div class="schema-head"><span class="name">extraction_watermark</span></div>
-          <p class="schema-note">Per-turbine high-water mark driving incremental extraction.</p>
+          <div class="schema-head"><span class="name">extraction_watermark</span> / <span class="name">solar_extraction_watermark</span></div>
+          <p class="schema-note">Per-asset high-water mark driving incremental extraction, one table per fleet.</p>
           <div class="table-wrap"><table><tbody>
-            <tr><td><code>turbine_id</code></td><td>varchar(20) pk</td></tr>
+            <tr><td><code>turbine_id</code> / <code>plant_id</code></td><td>varchar(20) pk</td></tr>
             <tr><td><code>last_extracted_ts</code></td><td>timestamptz, not null</td></tr>
           </tbody></table></div>
         </div>
@@ -737,7 +814,7 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
       <div class="two-col">
         <div class="schema-block">
           <div class="schema-head"><span class="name">pipeline_run_audit</span></div>
-          <p class="schema-note">One row per <code>scada_etl_pipeline</code> run.</p>
+          <p class="schema-note">One row per <code>scada_etl_pipeline</code> <b>or</b> <code>solar_etl_pipeline</code> run — shared between both fleets since the shape is identical either way; <code>task_id</code> is what attributes a row to one fleet or the other.</p>
           <div class="table-wrap"><table><tbody>
             <tr><td><code>dag_run_id</code>, <code>task_id</code></td><td>varchar</td></tr>
             <tr><td><code>rows_extracted / loaded / rejected</code></td><td>integer</td></tr>
@@ -760,7 +837,7 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
       <div class="two-col">
         <div class="schema-block">
           <div class="schema-head"><span class="name">weather_api_readings</span><span class="badge real">real</span></div>
-          <p class="schema-note">Unique on <code>(latitude, longitude, ts)</code>.</p>
+          <p class="schema-note">Unique on <code>(latitude, longitude, ts)</code>. <code>shortwave_radiation_w_m2</code> (added in <code>0003_solar_energy_source.py</code>) is the solar simulator's anchor field.</p>
           <div class="table-wrap"><table><tbody>
             <tr><td><code>source</code></td><td>varchar(30), default <code>open-meteo</code></td></tr>
             <tr><td><code>latitude</code>, <code>longitude</code></td><td>numeric(6,3)</td></tr>
@@ -769,6 +846,7 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
             <tr><td><code>wind_direction_deg</code></td><td>numeric(5,1)</td></tr>
             <tr><td><code>temperature_c</code></td><td>numeric(5,2)</td></tr>
             <tr><td><code>pressure_hpa</code></td><td>numeric(7,2)</td></tr>
+            <tr><td><code>shortwave_radiation_w_m2</code></td><td>numeric(6,1)</td></tr>
             <tr><td><code>ingested_at</code></td><td>timestamptz</td></tr>
           </tbody></table></div>
         </div>
@@ -817,6 +895,9 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
 
       <h3>External loaders — <code>src/load/external_loaders.py</code></h3>
       <p>One row per fetch, so this is a plain idempotent <code>INSERT ... ON CONFLICT ... DO UPDATE</code> — there's no throughput problem to solve at this volume, unlike the SCADA batch path.</p>
+
+      <h3>Solar plant fleet — <code>solar_transformers.py</code> / <code>solar_validators.py</code> / <code>solar_loaders.py</code></h3>
+      <p>Structurally identical to the wind path above (<code>RawSolarReading → TransformedSolarReading → validate_solar_batch() → load_solar_batch_optimized() → solar_readings</code>), reusing <code>normalize_status_code()</code> from <code>transformers.py</code> since status-code cleanup isn't source-specific. <code>flag_solar_anomaly()</code> is the solar equivalent of <code>flag_statistical_anomaly()</code>: meaningful irradiance with no output, or output with no irradiance, is physically inconsistent.</p>
     </section>
 
     <!-- 05 DATA QUALITY -->
@@ -824,7 +905,7 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
       <div class="eyebrow-row"><span class="eyebrow">05 · Data quality</span></div>
       <h2>Six dimensions, checked before load</h2>
       <p class="section-dek">
-        Every dimension below is enforced in <code>src/validation/validators.py</code> (SCADA) or <code>external_validators.py</code> (weather/buoy) — and every row-level failure lands in a reject table with a specific reason string, never a silent drop.
+        Every dimension below is enforced in <code>src/validation/validators.py</code> (SCADA), <code>solar_validators.py</code> (solar — same six dimensions, <code>plant_id</code> instead of <code>turbine_id</code>), or <code>external_validators.py</code> (weather/buoy) — and every row-level failure lands in a reject table with a specific reason string, never a silent drop.
       </p>
 
       <div class="dq-grid">
@@ -850,9 +931,9 @@ rejected:   2026-07-31 11:38:27+00</pre>
     <!-- 06 ORCHESTRATION -->
     <section class="doc-section" id="orchestration">
       <div class="eyebrow-row"><span class="eyebrow">06 · Orchestration</span></div>
-      <h2>Two DAGs, two cadences, two failure domains</h2>
+      <h2>Three DAGs, two cadences, three failure domains</h2>
       <p class="section-dek">
-        Kept as separate DAGs rather than one bigger graph specifically so an outage in one upstream system can't retry-storm the other's schedule.
+        Kept as separate DAGs rather than one bigger graph specifically so an outage in one upstream system can't retry-storm another DAG's schedule.
       </p>
 
       <h3><code>scada_etl_pipeline</code> — every 5 minutes</h3>
@@ -866,6 +947,9 @@ rejected:   2026-07-31 11:38:27+00</pre>
         </tbody>
       </table></div>
 
+      <h3><code>solar_etl_pipeline</code> — every 5 minutes</h3>
+      <p>Structurally identical task graph and SLAs to <code>scada_etl_pipeline</code> above. The only real differences: it reads/writes <code>solar_extraction_watermark</code> instead of <code>extraction_watermark</code>, and its <code>update_watermarks_and_audit</code> task calls the <i>same</i> <code>record_run_audit()</code> function as the wind DAG rather than a duplicated one, writing to the shared <code>pipeline_run_audit</code> table with <code>task_id="solar_etl_pipeline"</code>.</p>
+
       <h3><code>external_data_sources</code> — every 15 minutes</h3>
       <p>Two independent tasks, no ordering dependency — <code>extract_load_weather</code> and <code>extract_load_buoy</code> each do fetch → validate → idempotent upsert → audit row, wrapped in their own try/finally so a failure in one never blocks the other's audit trail.</p>
 
@@ -878,15 +962,32 @@ rejected:   2026-07-31 11:38:27+00</pre>
         <span class="pill">max_active_runs: 1</span>
         <span class="pill">catchup: False</span>
       </div>
-      <p><code>max_active_runs: 1</code> specifically prevents overlapping <code>scada_etl_pipeline</code> runs from racing on the same watermark row.</p>
+      <p><code>max_active_runs: 1</code> specifically prevents overlapping runs of the same DAG from racing on the same watermark row.</p>
+
+      <h3>Failure alerting</h3>
+      <p>All three DAGs set <code>on_failure_callback: notify_dag_failure</code> (<code>src/utils/alerting.py</code>) in their shared <code>DEFAULT_ARGS</code>. When a task exhausts its retries, it posts the DAG id, task id, run id, and Airflow log URL to a Slack incoming webhook.</p>
+      <div class="code-panel">
+        <span class="cap">src/utils/alerting.py</span>
+        <pre><span class="k">def</span> notify_dag_failure(context: dict) -> None:
+    settings = get_settings()
+    <span class="k">if not</span> settings.slack_webhook_url:
+        logger.info(<span class="s">"slack_webhook_url not configured - skipping"</span>)
+        <span class="k">return</span>
+    ...
+    requests.post(settings.slack_webhook_url, json={<span class="s">"text"</span>: text}, timeout=...)</pre>
+      </div>
+      <div class="callout">
+        <span class="lbl">Safe by default</span>
+        <p>With <code>SLACK_WEBHOOK_URL</code> unset (the default — §13), this is a no-op logged at <code>INFO</code>, not a crash or a silently-swallowed exception. Any error posting to Slack itself (webhook down, network blip) is caught and logged, never re-raised — a notification failure must never fail the task that triggered it. Covered by <code>tests/test_alerting.py</code> (3 cases: no-op when unconfigured, correct payload when configured, exceptions swallowed).</p>
+      </div>
     </section>
 
     <!-- 07 WIND ANCHORING -->
     <section class="doc-section" id="anchoring">
       <div class="eyebrow-row"><span class="eyebrow">07 · Real-data anchoring</span></div>
-      <h2>Making the simulator agree with reality</h2>
+      <h2>Making both simulators agree with reality</h2>
       <p class="section-dek">
-        The simulator doesn't just happen to be in the same range as the real sources — each run reads the latest real wind speed back out of Postgres and anchors the fleet to it.
+        Neither simulator just happens to be in the same range as the real sources — each run reads the latest matching real value back out of Postgres and anchors its fleet to it. Both fleets follow the identical pattern; wind is shown first, solar right after.
       </p>
 
       <p>Before generating a batch, <code>_extract_transform_validate</code> calls <code>_fetch_reference_wind_speed(conn)</code>, which reads the newest row from <code>weather_api_readings</code>:</p>
@@ -917,7 +1018,7 @@ rejected:   2026-07-31 11:38:27+00</pre>
 
       <p>If <code>weather_api_readings</code> is empty or stale, this returns <code>None</code> and the simulator falls back to its original unanchored behavior — the two DAGs stay fully decoupled; a weather-API outage degrades the simulator's realism, never its ability to run.</p>
 
-      <h3>Verified effect</h3>
+      <h3>Verified effect — wind</h3>
       <p>Triggered live while the real weather reading was 3.77 m/s: new SCADA readings landed at 1.75–6.04 m/s (mean 3.65), against the old unanchored 4–14 m/s free range.</p>
       <div class="stat-row">
         <div class="stat"><div class="v">3.77</div><div class="l">Real weather at trigger (m/s)</div></div>
@@ -926,9 +1027,37 @@ rejected:   2026-07-31 11:38:27+00</pre>
         <div class="stat"><div class="v">180 min</div><div class="l">Staleness fallback threshold</div></div>
       </div>
       <div class="callout warn">
-        <span class="lbl">Known lag in the daily rollup</span>
-        <p><code>ambient_wind_daily_comparison</code> (§08) still shows the fleet average well above the real sources on any given day, because it averages the <i>whole day's</i> history — including readings generated before anchoring went live. Of 1,493 total readings, only the newest batch reflects anchoring; the daily mean converges as more anchored rows accumulate. A rolling window instead of a calendar-day grain would remove this lag — see §15.</p>
+        <span class="lbl">Same-day blending, observed converging</span>
+        <p><code>ambient_wind_daily_comparison</code> (§08) averages the <i>whole calendar day's</i> history, including readings generated before anchoring went live, so a day mixing old and new data reads closer to the unanchored range than the anchor itself. This isn't hypothetical — the day this was shipped, the fleet average started at 8.58 m/s (only 20 of 1,493 rows were anchored) and had converged to 5.02 m/s by the same evening (vs. 3.99 real weather / 4.74 real buoy) as anchored rows came to dominate the day's average. A rolling window instead of a calendar-day grain would remove the lag entirely — see §16.</p>
       </div>
+
+      <h3>Solar</h3>
+      <p>Same mechanism, anchoring to <code>shortwave_radiation_w_m2</code> instead of <code>wind_speed_ms</code>, and expressed as a cloud-cover factor rather than a direct value (since the simulator models clear-sky irradiance as a function of time-of-day, not a flat number):</p>
+      <div class="code-panel">
+        <span class="cap">airflow/dags/solar_etl_dag.py</span>
+        <pre><span class="k">def</span> _fetch_reference_irradiance(conn) -> float | None:
+    row = conn.execute(text(
+        <span class="s">"SELECT shortwave_radiation_w_m2, ts FROM weather_api_readings "</span>
+        <span class="s">"ORDER BY ts DESC LIMIT 1"</span>
+    )).fetchone()
+    <span class="k">if</span> row <span class="k">is</span> None <span class="k">or</span> row.shortwave_radiation_w_m2 <span class="k">is</span> None:
+        <span class="k">return</span> None
+    staleness = now() - row.ts
+    <span class="k">if</span> staleness > max_staleness:  <span class="c"># default 180 min</span>
+        <span class="k">return</span> None
+    <span class="k">return</span> float(row.shortwave_radiation_w_m2)</pre>
+      </div>
+      <div class="code-panel">
+        <span class="cap">src/extract/solar_simulator.py</span>
+        <pre><span class="k">def</span> _initial_cloud_factor(self) -> float:
+    <span class="k">if</span> self._reference_irradiance_w_m2 <span class="k">is</span> None <span class="k">or</span> self._reference_irradiance_w_m2 &lt;= <span class="s">0</span>:
+        <span class="k">return</span> self._rng.uniform(<span class="s">0.6</span>, <span class="s">1.0</span>)  <span class="c"># unanchored fallback</span>
+    implied = self._reference_irradiance_w_m2 / PEAK_CLEAR_SKY_W_M2
+    spread = self._rng.uniform(-<span class="s">0.1</span>, <span class="s">0.1</span>)
+    <span class="k">return</span> max(<span class="s">0.15</span>, min(implied + spread, <span class="s">1.05</span>))</pre>
+      </div>
+      <h3>Verified effect — solar</h3>
+      <p>Triggered live while the real irradiance reading was 605.0 W/m²: the fleet's irradiance landed at 421–590 W/m² (implied cloud factor ≈ 0.64), squarely aligned with reality rather than following an unanchored clear-sky assumption.</p>
     </section>
 
     <!-- 08 DBT -->
@@ -946,6 +1075,7 @@ rejected:   2026-07-31 11:38:27+00</pre>
       <h3>Staging models</h3>
       <div class="pill-list">
         <span class="pill">stg_scada_readings</span>
+        <span class="pill">stg_solar_readings</span>
         <span class="pill">stg_pipeline_run_audit</span>
         <span class="pill">stg_weather_api_readings</span>
         <span class="pill">stg_iot_buoy_readings</span>
@@ -957,21 +1087,23 @@ rejected:   2026-07-31 11:38:27+00</pre>
         <thead><tr><th>Mart</th><th>Grain</th><th>What it answers</th></tr></thead>
         <tbody>
           <tr><td><code>turbine_daily_summary</code></td><td>turbine × day</td><td>Avg/max/min power, reading count, anomaly count, % operational, and <b>capacity factor</b> (avg power ÷ rated 3,300 kW).</td></tr>
-          <tr><td><code>pipeline_run_daily_summary</code></td><td>day</td><td>Run count, success rate, total rows extracted/loaded/rejected, avg/max duration — the DAG-health trend a single run can't show.</td></tr>
-          <tr><td><code>ambient_wind_daily_comparison</code></td><td>day</td><td>The payoff mart: fleet avg wind speed vs. real Open-Meteo vs. real NOAA buoy, joined by day — a plausibility check against independent, externally-sourced ground truth.</td></tr>
+          <tr><td><code>solar_daily_summary</code></td><td>plant × day</td><td>Same shape as above for solar: avg irradiance/DC/AC power, capacity factor (avg DC power ÷ 5,000 kWp).</td></tr>
+          <tr><td><code>pipeline_run_daily_summary</code></td><td>day</td><td>Run count, success rate, total rows extracted/loaded/rejected, avg/max duration — both fleets combined, since it reads the shared <code>pipeline_run_audit</code>.</td></tr>
+          <tr><td><code>ambient_wind_daily_comparison</code></td><td>day</td><td>Fleet avg wind speed vs. real Open-Meteo vs. real NOAA buoy, joined by day — a plausibility check against independent, externally-sourced ground truth.</td></tr>
+          <tr><td><code>renewable_fleet_daily_summary</code></td><td>day</td><td>The payoff mart: wind + solar total average output side by side plus a combined total — the portfolio-level view a mixed-fleet operator would actually want.</td></tr>
         </tbody>
       </table></div>
 
       <h3>Live output</h3>
       <div class="code-panel">
-        <span class="cap">SELECT * FROM marts.ambient_wind_daily_comparison;</span>
-        <pre> reading_date | fleet_avg_wind_speed_ms | weather_avg_wind_speed_ms | buoy_avg_wind_speed_ms
---------------+--------------------------+----------------------------+-------------------------
- 2026-07-31   |                     8.58 |                       3.69 |                    3.00</pre>
+        <span class="cap">SELECT * FROM marts.renewable_fleet_daily_summary ORDER BY reading_date DESC LIMIT 1;</span>
+        <pre> reading_date | turbine_count | wind_total_avg_power_kw | plant_count | solar_total_avg_dc_power_kw | combined_total_avg_power_kw
+--------------+---------------+--------------------------+-------------+-------------------------------+------------------------------
+ 2026-08-07   |            20 |                 36780.15 |           8 |                      25752.93 |                     62533.08</pre>
       </div>
 
       <h3>Test coverage</h3>
-      <p>18 data tests across staging and marts — <code>not_null</code>, <code>unique</code>, and <code>accepted_values</code> on <code>status_code</code> (matching <code>VALID_STATUS_CODES</code> in the Python validator, not duplicated by coincidence) and on audit <code>status</code>. Full <code>dbt build</code> run: <b>25/25 passing</b> (7 models + 18 tests).</p>
+      <p>27 data tests across staging and marts — <code>not_null</code>, <code>unique</code>, and <code>accepted_values</code> on <code>status_code</code> (matching <code>SOLAR_VALID_STATUS_CODES</code>/<code>VALID_STATUS_CODES</code> in the Python validators, not duplicated by coincidence) and on audit <code>status</code>. Full <code>dbt build</code> run: <b>37/37 passing</b> (10 models + 27 tests).</p>
     </section>
 
     <!-- 09 DASHBOARD -->
@@ -979,7 +1111,7 @@ rejected:   2026-07-31 11:38:27+00</pre>
       <div class="eyebrow-row"><span class="eyebrow">09 · Dashboard</span></div>
       <h2>FastAPI read API + vanilla JS frontend</h2>
       <p class="section-dek">
-        No build step, no framework, no separate data store — <code>dashboard/api/main.py</code> queries the same Postgres tables the pipeline writes to, via the same <code>src.db.session</code>/<code>src.config</code> the pipeline uses.
+        No build step, no framework, no separate data store — <code>dashboard/api/main.py</code> queries Postgres via the same <code>src.db.session</code>/<code>src.config</code> the pipeline uses. Most routes read the <code>public</code> schema directly; the two <code>/stats</code> routes read dbt's <code>marts.*</code> tables instead.
       </p>
 
       <h3>Endpoints</h3>
@@ -987,24 +1119,36 @@ rejected:   2026-07-31 11:38:27+00</pre>
         <thead><tr><th>Route</th><th>Returns</th></tr></thead>
         <tbody>
           <tr><td><code>GET /api/health</code></td><td>Liveness check</td></tr>
-          <tr><td><code>GET /api/summary</code></td><td>Fleet totals, latest avg power/wind, last pipeline run</td></tr>
+          <tr><td><code>GET /api/summary</code></td><td>Wind fleet totals, latest avg power/wind, last <code>scada_etl_pipeline</code> run</td></tr>
           <tr><td><code>GET /api/turbines/latest</code></td><td>One row per turbine — its newest reading</td></tr>
-          <tr><td><code>GET /api/turbines/stats</code></td><td>Per-turbine aggregates: avg/max power, avg wind, anomaly count</td></tr>
+          <tr><td><code>GET /api/turbines/stats</code></td><td>Per-turbine aggregates, from <code>marts.turbine_daily_summary</code></td></tr>
           <tr><td><code>GET /api/turbines/{id}/timeseries</code></td><td>Last <i>n</i> readings for one turbine (chart source)</td></tr>
           <tr><td><code>GET /api/anomalies</code></td><td>Recent rows with <code>is_anomalous = true</code></td></tr>
           <tr><td><code>GET /api/rejects</code></td><td>Recent <code>scada_readings_rejects</code> rows</td></tr>
-          <tr><td><code>GET /api/audit/runs</code></td><td>Recent <code>pipeline_run_audit</code> rows</td></tr>
-          <tr><td><code>GET /api/external</code></td><td>Latest weather + buoy reading, plus recent external DAG runs</td></tr>
+          <tr><td><code>GET /api/solar/summary</code></td><td>Solar fleet totals, latest avg DC/AC power/irradiance, last <code>solar_etl_pipeline</code> run</td></tr>
+          <tr><td><code>GET /api/solar/plants/latest</code></td><td>One row per plant — its newest reading</td></tr>
+          <tr><td><code>GET /api/solar/plants/stats</code></td><td>Per-plant aggregates, from <code>marts.solar_daily_summary</code></td></tr>
+          <tr><td><code>GET /api/solar/plants/{id}/timeseries</code></td><td>Last <i>n</i> readings for one plant (chart source)</td></tr>
+          <tr><td><code>GET /api/solar/anomalies</code></td><td>Recent solar rows with <code>is_anomalous = true</code></td></tr>
+          <tr><td><code>GET /api/solar/rejects</code></td><td>Recent <code>solar_readings_rejects</code> rows</td></tr>
+          <tr><td><code>GET /api/audit/runs</code></td><td>Recent <code>pipeline_run_audit</code> rows, both fleets — <code>task_id</code> tells them apart</td></tr>
+          <tr><td><code>GET /api/external</code></td><td>Latest weather (incl. <code>shortwave_radiation_w_m2</code>) + buoy reading, plus recent external DAG runs</td></tr>
         </tbody>
       </table></div>
+
+      <div class="callout">
+        <span class="lbl">Why /stats reads dbt marts, not raw tables</span>
+        <p>The per-turbine/per-plant aggregation logic (avg/max power, anomaly counts, capacity factor) already exists once, tested, in <code>turbine_daily_summary.sql</code> / <code>solar_daily_summary.sql</code> (§08). The dashboard used to reimplement the same <code>GROUP BY</code> directly against <code>scada_readings</code>/<code>solar_readings</code> — two independent places that could drift out of sync with nothing to catch it. Reading the mart makes it a single source of truth: a weighted average across each mart's daily grain, not a second parallel aggregation. The tradeoff is a real dependency — <code>docker-compose.yml</code> makes <code>dashboard</code> wait on <code>dbt: condition: service_completed_successfully</code>, not just <code>postgres: service_healthy</code>.</p>
+      </div>
 
       <h3>Frontend panels</h3>
       <ul>
         <li><b>KPI row</b> — turbine count, total readings, fleet avg power/wind, anomaly/reject counts, last run status and duration.</li>
         <li><b>Fleet overview chart</b> — avg power per turbine (bar) overlaid with anomaly count (line), Chart.js dual-axis.</li>
         <li><b>Turbine time series</b> — dropdown-selected turbine, wind speed vs. power over its recent readings.</li>
+        <li><b>Solar panels</b> — a parallel set (KPI row, fleet chart, per-plant time series, latest/anomaly/reject tables) mirroring the wind panels above.</li>
         <li><b>External data sources panel</b> — latest weather + buoy readings as KPI cards, plus a table of recent external DAG runs.</li>
-        <li><b>Tables</b> — latest reading per turbine, recent pipeline runs, recent anomalies, recent rejects.</li>
+        <li><b>Tables</b> — latest reading per turbine, recent pipeline runs (labeled by pipeline), recent anomalies, recent rejects.</li>
       </ul>
       <p>All panels poll every 15 seconds; no websockets, no state beyond what a page refresh would already give you.</p>
     </section>
@@ -1018,12 +1162,17 @@ rejected:   2026-07-31 11:38:27+00</pre>
       <div class="table-wrap"><table>
         <thead><tr><th>Service</th><th>Image</th><th>Port</th><th>Why it's separate</th></tr></thead>
         <tbody>
-          <tr><td><code>postgres</code></td><td>postgres:16-alpine</td><td class="num">5432</td><td>—</td></tr>
+          <tr><td><code>postgres</code></td><td>timescale/timescaledb:2.17.2-pg16</td><td class="num">5432</td><td>Drop-in-compatible build on the same PostgreSQL 16 with the <code>timescaledb</code> extension pre-installed — needed for the hypertables in §03</td></tr>
           <tr><td><code>airflow-webserver</code> / <code>-scheduler</code> / <code>-init</code></td><td><code>Dockerfile</code> (apache/airflow:2.10.2)</td><td class="num">8081</td><td>Base image pins SQLAlchemy 1.4.x for Airflow's own ORM</td></tr>
-          <tr><td><code>dashboard</code></td><td><code>Dockerfile.dashboard</code> (python:3.11-slim)</td><td class="num">3000</td><td>Free to run current SQLAlchemy 2.0 + FastAPI without fighting Airflow's pin</td></tr>
+          <tr><td><code>dashboard</code></td><td><code>Dockerfile.dashboard</code> (python:3.11-slim)</td><td class="num">3000</td><td>Free to run current SQLAlchemy 2.0 + FastAPI without fighting Airflow's pin. Starts only after <code>dbt</code> completes successfully, not just after Postgres is healthy (§09)</td></tr>
           <tr><td><code>dbt</code></td><td><code>Dockerfile.dbt</code> (python:3.11-slim)</td><td class="num">—</td><td>Its own Jinja2/click dependency graph; one-shot like <code>airflow-init</code></td></tr>
         </tbody>
       </table></div>
+
+      <div class="callout">
+        <span class="lbl">Reproducible installs</span>
+        <p>Every <code>requirements*.txt</code> is generated from a corresponding <code>requirements*.in</code> via <code>uv pip compile</code> (a drop-in <code>pip-compile</code>), so every transitive dependency is pinned to an exact version, not just the direct ones. <code>apache-airflow</code> is deliberately excluded from the compiled set and pinned separately, since Airflow ships its own version-specific constraints file and compiling it alongside everything else risks a resolver conflict.</p>
+      </div>
 
       <h3>Bootstrap sequence</h3>
       <div class="code-panel">
@@ -1033,7 +1182,7 @@ docker compose up --build -d
 
 <span class="c"># Airflow UI:  http://localhost:8081  (admin / admin)</span>
 <span class="c"># Dashboard:   http://localhost:3000</span>
-<span class="c"># unpause scada_etl_pipeline + external_data_sources to start scheduled runs</span>
+<span class="c"># unpause scada_etl_pipeline + solar_etl_pipeline + external_data_sources to start scheduled runs</span>
 
 docker compose run --rm dbt build --profiles-dir .</pre>
       </div>
@@ -1042,19 +1191,24 @@ docker compose run --rm dbt build --profiles-dir .</pre>
     <!-- 11 TESTING -->
     <section class="doc-section" id="testing">
       <div class="eyebrow-row"><span class="eyebrow">11 · Testing &amp; benchmark</span></div>
-      <h2>42 pure-function tests, one reproducible benchmark</h2>
+      <h2>73 pure-function tests, one reproducible benchmark</h2>
 
       <div class="table-wrap"><table>
         <thead><tr><th>File</th><th class="num">Cases</th><th>Covers</th></tr></thead>
         <tbody>
-          <tr><td><code>test_validation.py</code></td><td class="num">13</td><td>Bounds, timeliness, batch duplicate detection, completeness check</td></tr>
+          <tr><td><code>test_validation.py</code></td><td class="num">13</td><td>Bounds, timeliness, batch duplicate detection, completeness check (wind)</td></tr>
+          <tr><td><code>test_solar_validation.py</code></td><td class="num">11</td><td>Same six dimensions for solar, plus the AC-can't-exceed-DC physical check</td></tr>
           <tr><td><code>test_extract.py</code></td><td class="num">12</td><td>Power curve shape, incremental window logic, wind-speed anchoring &amp; determinism</td></tr>
-          <tr><td><code>test_transform.py</code></td><td class="num">7</td><td>Status normalization, anomaly flagging</td></tr>
+          <tr><td><code>test_solar_extract.py</code></td><td class="num">9</td><td>Clear-sky curve shape, true-night-is-exactly-zero regression test, irradiance anchoring &amp; determinism</td></tr>
+          <tr><td><code>test_transform.py</code></td><td class="num">7</td><td>Status normalization, anomaly flagging (wind)</td></tr>
+          <tr><td><code>test_solar_transform.py</code></td><td class="num">7</td><td>Same, for solar's sun-without-output / output-without-sun checks</td></tr>
+          <tr><td><code>test_weather_api_extractor.py</code></td><td class="num">6</td><td>Open-Meteo response parsing (incl. <code>shortwave_radiation</code>), validation</td></tr>
           <tr><td><code>test_iot_buoy_extractor.py</code></td><td class="num">5</td><td>realtime2 parsing, missing-value handling, validation</td></tr>
-          <tr><td><code>test_weather_api_extractor.py</code></td><td class="num">5</td><td>Open-Meteo response parsing, validation</td></tr>
-          <tr><td><b>Total</b></td><td class="num"><b>42</b></td><td>All pure functions — zero live DB or network dependency</td></tr>
+          <tr><td><code>test_alerting.py</code></td><td class="num">3</td><td>Slack failure notification: no-op unconfigured, correct payload, exceptions swallowed</td></tr>
+          <tr><td><b>Total</b></td><td class="num"><b>73</b></td><td>All pure functions — zero live DB or network dependency</td></tr>
         </tbody>
       </table></div>
+      <p style="font-size:12.5px;color:var(--muted);">On top of pytest, <code>airflow dags test</code> runs <code>scada_etl_pipeline</code> and <code>solar_etl_pipeline</code> for real in CI (§12) — actual task execution, not just DagBag/schema validation.</p>
 
       <h3>Benchmark — <code>scripts/benchmark.py</code></h3>
       <p>What turns "improved pipeline efficiency by 40%" from a claim into a reproducible number: generates synthetic readings, times the naive row-by-row <code>INSERT</code> path against the optimized COPY+staged-UPSERT path, and prints ms/row and the throughput multiplier.</p>
@@ -1064,7 +1218,7 @@ docker compose run --rm dbt build --profiles-dir .</pre>
 Optimized: N.NNN ms/row  (NN,NNN rows/sec)
 Improvement: NN.N% lower latency per row (N.Nx throughput)</pre>
       </div>
-      <p style="font-size:12.5px;color:var(--muted);">The naive path is capped at 50,000 rows in the comparison — run to completion at full scale, it's too slow to be worth waiting for.</p>
+      <p style="font-size:12.5px;color:var(--muted);">The naive path is capped at 50,000 rows in the comparison — run to completion at full scale, it's too slow to be worth waiting for. Every row it writes is prefixed <code>OPT-</code>/<code>NAIVE-</code> on the turbine id and is deleted both before the run starts and always after, via <code>try</code>/<code>finally</code> — <code>scada_readings</code> is also the pipeline's real curated table, and leaving synthetic rows behind would get counted as real data by the dashboard and dbt marts.</p>
     </section>
 
     <!-- 12 CI/CD -->
@@ -1082,13 +1236,23 @@ Improvement: NN.N% lower latency per row (N.Nx throughput)</pre>
       </div>
 
       <div class="table-wrap"><table>
-        <thead><tr><th>Job</th><th>What it validates</th><th>Last run</th></tr></thead>
+        <thead><tr><th>Job</th><th>What it validates</th></tr></thead>
         <tbody>
-          <tr><td><code>lint-and-test</code></td><td><code>ruff check .</code> + all 42 pytest cases (installs <code>requirements.txt</code> minus <code>apache-airflow</code> — nothing under test imports it, and it needs its own constraints file to install reliably)</td><td class="num" style="color:var(--good);">✓ 30s</td></tr>
-          <tr><td><code>migrations-and-dbt</code></td><td>Spins up a real <code>postgres:16-alpine</code> service container, runs <code>alembic upgrade head</code> against it from empty, then <code>dbt build</code> — catches schema/dbt drift that pytest structurally can't since it never touches a live DB</td><td class="num" style="color:var(--good);">✓ 56s</td></tr>
-          <tr><td><code>docker-build</code></td><td>Builds all three Dockerfiles (Airflow, dashboard, dbt) with GitHub Actions layer caching, to catch Dockerfile rot without running the full stack</td><td class="num" style="color:var(--good);">✓ 2m29s</td></tr>
+          <tr><td><code>lint-and-test</code></td><td><code>ruff check .</code> + all 73 pytest cases (installs <code>requirements.txt</code> minus <code>apache-airflow</code> — nothing under test imports it, and it needs its own constraints file to install reliably)</td></tr>
+          <tr><td><code>migrations-and-dbt</code></td><td>Spins up a real <code>timescale/timescaledb:2.17.2-pg16</code> service container (plain <code>postgres:16-alpine</code> can't run migration <code>0004</code>, which needs the <code>timescaledb</code> extension), runs <code>alembic upgrade head</code> from empty, <code>dbt build</code>, then installs Airflow separately and runs <code>airflow dags test</code> for both simulated-fleet DAGs against that same database</td></tr>
+          <tr><td><code>docker-build</code></td><td>Builds all three Dockerfiles (Airflow, dashboard, dbt) with GitHub Actions layer caching, to catch Dockerfile rot without running the full stack</td></tr>
         </tbody>
       </table></div>
+
+      <div class="callout">
+        <span class="lbl">Why airflow dags test, not just DagBag import validation</span>
+        <p>A DAG that merely <i>parses</i> can still be wrong in ways that only show up when a task actually runs — an XCom key that doesn't match between push and pull, a reference-anchoring query that's fine syntactically but returns the wrong shape. <code>dags test</code> executes the real task callables (<code>extract_transform_validate</code> → <code>load</code> → <code>update_watermarks_and_audit</code>) against the job's freshly-migrated database, using an isolated SQLite metadata DB and <code>SequentialExecutor</code> (SQLite doesn't support Airflow's default <code>LocalExecutor</code>) so it needs nothing beyond what's already in the job.</p>
+      </div>
+
+      <div class="callout warn">
+        <span class="lbl">Why external_data_sources is excluded from this check</span>
+        <p>Its two tasks make real HTTP calls to Open-Meteo and NOAA NDBC. A third-party outage — which has genuinely happened during this project's development (a live Open-Meteo <code>503</code>, §02) — says nothing about whether this codebase is correct, and a CI gate that can fail on someone else's downtime isn't a gate worth having. <code>scada_etl_pipeline</code> and <code>solar_etl_pipeline</code> have no such dependency: if <code>weather_api_readings</code> is empty (as it is in a freshly-migrated CI database), reference anchoring just returns <code>None</code> and both simulators fall back to their unanchored default — by design, not a CI-only workaround (§07).</p>
+      </div>
 
       <p style="font-size:12.5px;color:var(--muted);">Pushing also required granting the <code>gh</code> CLI's OAuth token the <code>workflow</code> scope (<code>gh auth refresh -h github.com -s workflow</code>) — GitHub requires that scope specifically to create or modify anything under <code>.github/workflows/</code>, as a deliberate guard against an app silently planting CI automation.</p>
     </section>
@@ -1110,13 +1274,21 @@ Improvement: NN.N% lower latency per row (N.Nx throughput)</pre>
           <tr><td><code>max_power_kw</code></td><td class="num">3500.0</td><td>Validation ceiling</td></tr>
           <tr><td><code>max_rotor_rpm</code></td><td class="num">20.0</td><td>Validation ceiling</td></tr>
           <tr><td><code>min/max_nacelle_temp_c</code></td><td class="num">-30 / 60</td><td>Validation range</td></tr>
+          <tr><td><code>solar_plant_count</code></td><td class="num">8</td><td>Fleet size the solar simulator generates</td></tr>
+          <tr><td><code>solar_capacity_kwp</code></td><td class="num">5000.0</td><td>Per-plant DC nameplate capacity</td></tr>
+          <tr><td><code>solar_inverter_ac_capacity_kw</code></td><td class="num">4500.0</td><td>Per-plant AC nameplate (inverter clipping ceiling)</td></tr>
+          <tr><td><code>max_irradiance_w_m2</code></td><td class="num">1400.0</td><td>Validation ceiling</td></tr>
+          <tr><td><code>min/max_panel_temp_c</code></td><td class="num">-20 / 90</td><td>Validation range</td></tr>
+          <tr><td><code>max_dc_power_kw / max_ac_power_kw</code></td><td class="num">5500.0 / 5000.0</td><td>Validation ceilings (small headroom above nameplate)</td></tr>
           <tr><td><code>max_future_skew_seconds</code></td><td class="num">300</td><td>Timeliness check tolerance</td></tr>
           <tr><td><code>weather_api_base_url</code></td><td><code>api.open-meteo.com/…</code></td><td>HTTP source endpoint</td></tr>
           <tr><td><code>weather_latitude / longitude</code></td><td class="num">53.55 / 8.09</td><td>Bremerhaven, DE</td></tr>
           <tr><td><code>iot_buoy_base_url</code></td><td><code>ndbc.noaa.gov/data/realtime2</code></td><td>IoT source endpoint</td></tr>
           <tr><td><code>iot_buoy_station_id</code></td><td><code>46050</code></td><td>Stonewall Bank, OR</td></tr>
           <tr><td><code>http_request_timeout_seconds</code></td><td class="num">10</td><td>Both external extractors</td></tr>
-          <tr><td><code>reference_wind_max_staleness_minutes</code></td><td class="num">180</td><td>§07 anchoring freshness cutoff</td></tr>
+          <tr><td><code>reference_wind_max_staleness_minutes</code></td><td class="num">180</td><td>§07 wind anchoring freshness cutoff</td></tr>
+          <tr><td><code>reference_irradiance_max_staleness_minutes</code></td><td class="num">180</td><td>§07 solar anchoring freshness cutoff</td></tr>
+          <tr><td><code>slack_webhook_url</code></td><td><code>None</code></td><td>DAG failure alerts (§06); unset by default, so alerting is a safe no-op out of the box</td></tr>
           <tr><td><code>log_level</code></td><td><code>INFO</code></td><td>Structured JSON logging</td></tr>
         </tbody>
       </table></div>
@@ -1130,28 +1302,39 @@ Improvement: NN.N% lower latency per row (N.Nx throughput)</pre>
         <pre>scada-etl-pipeline/
 ├── airflow/dags/
 │   ├── scada_etl_dag.py              <span class="c"># turbine SCADA — every 5 min</span>
+│   ├── solar_etl_dag.py              <span class="c"># solar PV plants — every 5 min</span>
 │   └── external_data_dag.py          <span class="c"># weather + buoy — every 15 min</span>
 ├── src/
 │   ├── config.py                     <span class="c"># every setting, env-driven</span>
 │   ├── extract/
 │   │   ├── scada_simulator.py
+│   │   ├── solar_simulator.py
 │   │   ├── weather_api_extractor.py
 │   │   └── iot_buoy_extractor.py
-│   ├── transform/transformers.py
+│   ├── transform/
+│   │   ├── transformers.py           <span class="c"># wind: cleaning, anomaly flags</span>
+│   │   └── solar_transformers.py     <span class="c"># solar: same shape</span>
 │   ├── validation/
-│   │   ├── validators.py             <span class="c"># SCADA: 6 DQ dimensions</span>
+│   │   ├── validators.py             <span class="c"># wind: 6 DQ dimensions</span>
+│   │   ├── solar_validators.py       <span class="c"># solar: same 6 dimensions</span>
 │   │   └── external_validators.py    <span class="c"># weather/buoy bounds</span>
 │   ├── load/
-│   │   ├── loaders.py                <span class="c"># batch COPY + UPSERT</span>
+│   │   ├── loaders.py                <span class="c"># batch COPY + UPSERT (wind)</span>
+│   │   ├── solar_loaders.py          <span class="c"># batch COPY + UPSERT (solar)</span>
 │   │   └── external_loaders.py       <span class="c"># single-row UPSERT</span>
-│   └── db/{models.py, session.py}
+│   ├── db/{models.py, session.py}
+│   └── utils/
+│       ├── logging_config.py
+│       └── alerting.py               <span class="c"># Slack DAG-failure notification</span>
 ├── dbt/models/{staging,marts}/
-├── dashboard/{api/main.py, static/}
-├── migrations/versions/              <span class="c"># 0001_initial_schema, 0002_external_data_sources</span>
+├── dashboard/{api/main.py, static/}  <span class="c"># stats routes read dbt marts</span>
+├── migrations/versions/              <span class="c"># 0001_initial_schema … 0004_timescaledb_hypertables</span>
 ├── sql/init.sql                      <span class="c"># bootstrap DDL, mirrors Alembic</span>
-├── scripts/benchmark.py
-├── tests/                            <span class="c"># 42 cases, 5 files</span>
-├── docker-compose.yml                <span class="c"># postgres + airflow + dashboard + dbt</span>
+├── scripts/benchmark.py              <span class="c"># naive vs optimized load benchmark, self-cleaning</span>
+├── tests/                            <span class="c"># 73 cases, 9 files</span>
+├── docker-compose.yml                <span class="c"># timescaledb + airflow + dashboard + dbt</span>
+├── requirements.in / -dashboard.in / -dbt.in    <span class="c"># direct deps</span>
+├── requirements.txt / -dashboard.txt / -dbt.txt <span class="c"># pip-compile lockfiles</span>
 └── Dockerfile / Dockerfile.dashboard / Dockerfile.dbt</pre>
       </div>
       <p style="font-size:12.5px;color:var(--muted);">Not shown above: <code>.github/workflows/scada-etl-pipeline-ci.yml</code> — it has to live at the true git repository root, one level up from this project (see <a href="#cicd">§12</a> for why), so it isn't part of this directory's own tree.</p>
@@ -1174,11 +1357,23 @@ Improvement: NN.N% lower latency per row (N.Nx throughput)</pre>
       <h3>Watermark-based incremental extraction over full reload</h3>
       <p>SCADA archives grow unbounded; re-scanning everything every run doesn't scale.</p>
 
-      <h3>Two DAGs instead of one</h3>
-      <p>An outage at NOAA or Open-Meteo is a real, external, unpredictable failure mode. Isolating it into its own DAG means it can retry and eventually fail on its own schedule without ever touching the turbine pipeline's SLA.</p>
+      <h3>Three DAGs instead of one</h3>
+      <p>An outage at NOAA or Open-Meteo is a real, external, unpredictable failure mode. Isolating external sources into their own DAG means they can retry and eventually fail on their own schedule without touching either simulated pipeline's SLA — and wind and solar are separate simulated asset classes with no reason to share a schedule or a blast radius either.</p>
+
+      <h3>Share <code>pipeline_run_audit</code>, but not the readings tables</h3>
+      <p>Wind and solar's audit rows are identical in shape (extract/load/reject counts, duration, status) so duplicating that table per fleet would just be drift risk. Their readings/rejects/watermark tables are genuinely different schemas, so those stay separate rather than forcing a one-size-fits-all table with a pile of nullable columns.</p>
 
       <h3>A separate image per service instead of one shared image</h3>
       <p>Airflow's base image pins SQLAlchemy 1.4.x for its own ORM; the dashboard and dbt both want current-generation dependencies. Three Dockerfiles avoids three-way dependency resolution fights inside one image.</p>
+
+      <h3>TimescaleDB over partitioning by hand</h3>
+      <p><code>create_hypertable()</code> plus <code>add_retention_policy()</code> gets automatic chunking and a self-cleaning 90-day window in two lines of migration SQL, on the same PostgreSQL wire protocol and data format — no application code changes, no separate database to operate. Hand-rolled declarative partitioning would need its own cron job to drop old partitions; this needs none.</p>
+
+      <h3>Dashboard reads dbt marts instead of re-deriving the same aggregation twice</h3>
+      <p>Before this, <code>/api/turbines/stats</code> ran its own <code>GROUP BY</code> against <code>scada_readings</code> in parallel with dbt's <code>turbine_daily_summary</code> model computing the same thing — two implementations of one aggregation, with nothing to catch them drifting apart. Reading the mart makes dbt's tested SQL the single source of truth, at the cost of a real startup-ordering dependency.</p>
+
+      <h3>Slack alerting via a plain <code>on_failure_callback</code>, not an Airflow provider package</h3>
+      <p><code>requests.post</code> to an incoming webhook is a few lines and one dependency already in the project; the <code>apache-airflow-providers-slack</code> package would add its own version-compatibility surface against Airflow 2.10.2 for a single notification use case. Defaults to unset (safe no-op) specifically so the DAGs run correctly out of the box without demanding a Slack workspace to test this repo.</p>
     </section>
 
     <!-- 16 ROADMAP -->
@@ -1187,10 +1382,13 @@ Improvement: NN.N% lower latency per row (N.Nx throughput)</pre>
       <h2>Extending this</h2>
       <ul>
         <li>Swap <code>scada_simulator.py</code> for a real OPC-UA/MQTT client or historian export — the rest of the pipeline is source-agnostic by construction.</li>
-        <li>Swap PostgreSQL for TimescaleDB via <code>SELECT create_hypertable('scada_readings', 'ts')</code> in a migration — schema stays identical.</li>
+        <li>Extend <code>airflow dags test</code> in CI to cover <code>external_data_sources</code> too, by mocking the Open-Meteo/NOAA HTTP calls instead of skipping the DAG entirely — would catch wiring bugs in that DAG the same way §12 now does for the other two.</li>
+        <li>Wire the Slack alert path to a real workspace webhook in the deployed environment and confirm a forced task failure actually lands a message — currently verified via mocked unit tests only (§06).</li>
         <li>Pull additional NDBC stations, or Open-Meteo's forecast endpoint (not just <code>current</code>), to build a proper time series per external source instead of one point-in-time reading per DAG run.</li>
         <li>Switch <code>ambient_wind_daily_comparison</code> from a calendar-day grain to a rolling window (e.g. "last 2 hours") so the §07 anchoring effect is visible immediately instead of waiting for the daily mean to converge.</li>
         <li>Add a dbt test (or <code>dbt-expectations</code>) asserting the fleet/weather/buoy wind speeds stay within a plausible delta of each other — turns the comparison mart from observational into an alertable data-quality gate.</li>
+        <li>Solar's clear-sky model uses fixed UTC sunrise/sunset hours rather than computing actual solar position for the plant's latitude/date — swapping in a proper solar-position calculation (e.g. via <code>pvlib</code>) would make the irradiance curve accurate for a real site.</li>
+        <li>Add a solar equivalent of <code>ambient_wind_daily_comparison</code> comparing fleet irradiance against <code>weather_api_readings.shortwave_radiation_w_m2</code> directly.</li>
       </ul>
     </section>
 

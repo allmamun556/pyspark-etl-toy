@@ -34,6 +34,13 @@ def validate_weather_reading(reading: WeatherReading) -> ExternalValidationResul
     if reading.pressure_hpa is not None and not (800 <= reading.pressure_hpa <= 1100):
         reasons.append(f"pressure_hpa {reading.pressure_hpa} outside [800, 1100]")
 
+    if reading.shortwave_radiation_w_m2 is not None and not (
+        0 <= reading.shortwave_radiation_w_m2 <= 1400
+    ):
+        reasons.append(
+            f"shortwave_radiation_w_m2 {reading.shortwave_radiation_w_m2} outside [0, 1400]"
+        )
+
     return ExternalValidationResult(is_valid=not reasons, reasons=reasons)
 
 

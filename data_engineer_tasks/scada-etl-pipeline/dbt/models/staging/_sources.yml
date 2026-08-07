@@ -20,3 +20,10 @@ sources:
         description: Real IoT sensor telemetry from a NOAA NDBC ocean buoy (no key required).
       - name: external_data_run_audit
         description: One row per external_data_sources DAG task run - fetch/load/reject counts, duration, status.
+      - name: solar_readings
+        description: One row per solar plant per timestamp - simulated fleet, anchored to real irradiance.
+        loaded_at_field: ingested_at
+      - name: solar_readings_rejects
+        description: Solar rows that failed pipeline validation, with the failure reason.
+      - name: solar_extraction_watermark
+        description: Per-plant high-water mark used for incremental extraction.

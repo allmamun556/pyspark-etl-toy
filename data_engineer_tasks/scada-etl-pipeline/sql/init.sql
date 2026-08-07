@@ -1,9 +1,20 @@
 -- Bootstrap schema. In practice this is applied via Alembic
 -- (migrations/versions/0001_initial_schema.py); this file exists as a
 -- human-readable reference and for quick local `psql -f` setup.
+--
+-- Requires a Postgres image with the timescaledb extension available
+-- (see docker-compose.yml - timescale/timescaledb, not plain postgres).
 
+CREATE EXTENSION IF NOT EXISTS timescaledb;
+
+-- scada_readings and solar_readings are TimescaleDB hypertables (chunked
+-- automatically by ts) with a 90-day retention policy - see
+-- migrations/versions/0004_timescaledb_hypertables.py for the reasoning.
+-- Their primary key is (id, ts), not just id: TimescaleDB requires every
+-- unique index/primary key on a hypertable to include the partitioning
+-- column.
 CREATE TABLE IF NOT EXISTS scada_readings (
-    id              BIGSERIAL PRIMARY KEY,
+    id              BIGSERIAL,
     turbine_id      VARCHAR(20)  NOT NULL,
     ts              TIMESTAMPTZ  NOT NULL,
     wind_speed_ms   NUMERIC(6,2),
@@ -14,10 +25,13 @@ CREATE TABLE IF NOT EXISTS scada_readings (
     status_code     VARCHAR(20) DEFAULT 'operational',
     is_anomalous    BOOLEAN     DEFAULT FALSE,
     ingested_at     TIMESTAMPTZ,
+    PRIMARY KEY (id, ts),
     CONSTRAINT uq_turbine_ts UNIQUE (turbine_id, ts)
 );
 CREATE INDEX IF NOT EXISTS ix_scada_readings_turbine_id ON scada_readings (turbine_id);
 CREATE INDEX IF NOT EXISTS ix_scada_readings_ts ON scada_readings (ts);
+SELECT create_hypertable('scada_readings', 'ts', if_not_exists => TRUE);
+SELECT add_retention_policy('scada_readings', INTERVAL '90 days', if_not_exists => TRUE);
 
 CREATE UNLOGGED TABLE IF NOT EXISTS scada_readings_staging (
     turbine_id      VARCHAR(20),
@@ -71,6 +85,7 @@ CREATE TABLE IF NOT EXISTS weather_api_readings (
     wind_direction_deg NUMERIC(5,1),
     temperature_c      NUMERIC(5,2),
     pressure_hpa       NUMERIC(7,2),
+    shortwave_radiation_w_m2 NUMERIC(6,1),
     ingested_at        TIMESTAMPTZ,
     CONSTRAINT uq_weather_loc_ts UNIQUE (latitude, longitude, ts)
 );
@@ -103,4 +118,54 @@ CREATE TABLE IF NOT EXISTS external_data_run_audit (
     status            VARCHAR(20),
     started_at        TIMESTAMPTZ,
     finished_at       TIMESTAMPTZ
+);
+
+-- Solar energy source: simulated PV plant fleet, anchored to the real
+-- shortwave_radiation_w_m2 column above. See
+-- migrations/versions/0003_solar_energy_source.py.
+CREATE TABLE IF NOT EXISTS solar_readings (
+    id                      BIGSERIAL,
+    plant_id                VARCHAR(20)  NOT NULL,
+    ts                      TIMESTAMPTZ  NOT NULL,
+    irradiance_w_m2         NUMERIC(6,2),
+    panel_temp_c            NUMERIC(5,2),
+    dc_power_kw             NUMERIC(8,2),
+    ac_power_kw             NUMERIC(8,2),
+    inverter_efficiency_pct NUMERIC(5,2),
+    status_code             VARCHAR(20) DEFAULT 'operational',
+    is_anomalous            BOOLEAN     DEFAULT FALSE,
+    ingested_at             TIMESTAMPTZ,
+    PRIMARY KEY (id, ts),
+    CONSTRAINT uq_plant_ts UNIQUE (plant_id, ts)
+);
+CREATE INDEX IF NOT EXISTS ix_solar_readings_plant_id ON solar_readings (plant_id);
+CREATE INDEX IF NOT EXISTS ix_solar_readings_ts ON solar_readings (ts);
+SELECT create_hypertable('solar_readings', 'ts', if_not_exists => TRUE);
+SELECT add_retention_policy('solar_readings', INTERVAL '90 days', if_not_exists => TRUE);
+
+CREATE UNLOGGED TABLE IF NOT EXISTS solar_readings_staging (
+    plant_id                VARCHAR(20),
+    ts                      TIMESTAMPTZ,
+    irradiance_w_m2         NUMERIC(6,2),
+    panel_temp_c            NUMERIC(5,2),
+    dc_power_kw             NUMERIC(8,2),
+    ac_power_kw             NUMERIC(8,2),
+    inverter_efficiency_pct NUMERIC(5,2),
+    status_code             VARCHAR(20),
+    is_anomalous            BOOLEAN,
+    ingested_at             TIMESTAMPTZ
+);
+
+CREATE TABLE IF NOT EXISTS solar_readings_rejects (
+    id             BIGSERIAL PRIMARY KEY,
+    plant_id       VARCHAR(20),
+    ts             TIMESTAMPTZ,
+    raw_payload    TEXT,
+    reject_reason  TEXT,
+    rejected_at    TIMESTAMPTZ
+);
+
+CREATE TABLE IF NOT EXISTS solar_extraction_watermark (
+    plant_id          VARCHAR(20) PRIMARY KEY,
+    last_extracted_ts TIMESTAMPTZ NOT NULL
 );

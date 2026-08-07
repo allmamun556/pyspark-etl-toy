@@ -30,6 +30,7 @@ class WeatherReading:
     wind_direction_deg: float | None
     temperature_c: float | None
     pressure_hpa: float | None
+    shortwave_radiation_w_m2: float | None
 
 
 def fetch_current_weather_raw() -> dict:
@@ -40,7 +41,10 @@ def fetch_current_weather_raw() -> dict:
         params={
             "latitude": settings.weather_latitude,
             "longitude": settings.weather_longitude,
-            "current": "wind_speed_10m,wind_direction_10m,temperature_2m,surface_pressure",
+            "current": (
+                "wind_speed_10m,wind_direction_10m,temperature_2m,"
+                "surface_pressure,shortwave_radiation"
+            ),
             "wind_speed_unit": "ms",
             "timezone": "UTC",
         },
@@ -65,6 +69,7 @@ def parse_current_weather(payload: dict) -> WeatherReading:
         wind_direction_deg=current.get("wind_direction_10m"),
         temperature_c=current.get("temperature_2m"),
         pressure_hpa=current.get("surface_pressure"),
+        shortwave_radiation_w_m2=current.get("shortwave_radiation"),
     )
 
 
