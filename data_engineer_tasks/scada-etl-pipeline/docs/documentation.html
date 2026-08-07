@@ -1153,14 +1153,16 @@ rejected:   2026-07-31 11:38:27+00</pre>
         <p>The per-turbine/per-plant aggregation logic (avg/max power, anomaly counts, capacity factor) already exists once, tested, in <code>turbine_daily_summary.sql</code> / <code>solar_daily_summary.sql</code> (§08). The dashboard used to reimplement the same <code>GROUP BY</code> directly against <code>scada_readings</code>/<code>solar_readings</code> — two independent places that could drift out of sync with nothing to catch it. Reading the mart makes it a single source of truth: a weighted average across each mart's daily grain, not a second parallel aggregation. The tradeoff is a real dependency — <code>docker-compose.yml</code> makes <code>dashboard</code> wait on <code>dbt: condition: service_completed_successfully</code>, not just <code>postgres: service_healthy</code>.</p>
       </div>
 
-      <h3>Frontend panels</h3>
+      <h3>Frontend panels — four charts, two tables, per fleet page</h3>
       <ul>
         <li><b>KPI row</b> — turbine count, total readings, fleet avg power/wind, anomaly/reject counts, last run status and duration.</li>
         <li><b>Fleet overview chart</b> — avg power per turbine (bar) overlaid with anomaly count (line), Chart.js dual-axis.</li>
         <li><b>Turbine time series</b> — dropdown-selected turbine, wind speed vs. power over its recent readings.</li>
-        <li><b>Solar panels</b> — a parallel set (KPI row, fleet chart, per-plant time series, latest/anomaly/reject tables) mirroring the wind panels above.</li>
-        <li><b>External data sources panel</b> — latest weather + buoy readings as KPI cards, plus a table of recent external DAG runs.</li>
-        <li><b>Tables</b> — latest reading per turbine, recent pipeline runs (labeled by pipeline), recent anomalies, recent rejects.</li>
+        <li><b>Power curve chart (scatter)</b> — wind speed (x) vs. power (y), one point per turbine from <code>/api/turbines/latest</code>, red = anomalous. Replaces what used to be a "latest reading per turbine" table: a scatter of these two fields <i>is</i> the classic wind-turbine power curve, so it's a physically meaningful view of the same data, and an anomalous reading visibly falls off the curve instead of needing to be read out of a column.</li>
+        <li><b>Recent pipeline run health chart</b> — rows loaded/rejected per run (bars) + duration (line), dual-axis, last 10 runs. Replaces the "recent pipeline runs" table — a duration or rejection-rate trend is visible at a glance in a way scanning table rows isn't.</li>
+        <li><b>Recent data quality events table</b> — anomalies and rejects merged into one table (a <code>type</code> column distinguishes them), newest first. Merged specifically to keep the total table count at two per page rather than four, now that the two panels above converted to charts.</li>
+        <li><b>External data sources panel</b> — latest weather + buoy readings as KPI cards, plus a table of recent external DAG runs (the second of the two tables).</li>
+        <li><b>Solar page</b> — the identical seven-panel layout, mirrored: irradiance vs. DC power for the scatter, <code>solar_etl_pipeline</code> runs for the health chart.</li>
       </ul>
       <p>All panels poll every 15 seconds; no websockets, no state beyond what a page refresh would already give you.</p>
     </section>

@@ -22,7 +22,7 @@ function renderKpis(summary) {
     .join("");
 }
 
-let fleetChart, timeseriesChart;
+let fleetChart, timeseriesChart, powerCurveChart, runsChart;
 
 function renderFleetChart(stats) {
   const ctx = document.getElementById("fleet-chart");
@@ -120,49 +120,26 @@ async function refresh() {
     const selectedTurbine = await populateTurbineSelect();
     if (selectedTurbine) await renderTimeseries(selectedTurbine);
 
-    renderTable(
-      "latest-table",
-      latest,
-      (r) => `
-        <tr class="${r.is_anomalous ? "anomalous" : ""}">
-          <td>${r.turbine_id}</td><td>${fmtTime(r.ts)}</td><td>${fmtNum(r.wind_speed_ms, 2)}</td>
-          <td>${fmtNum(r.power_kw)}</td><td>${fmtNum(r.rotor_rpm, 2)}</td><td>${fmtNum(r.nacelle_temp_c, 1)}</td>
-          <td>${r.status_code}</td><td>${r.is_anomalous ? "yes" : ""}</td>
-        </tr>`,
-      "No readings yet"
+    powerCurveChart = renderScatterChart(
+      powerCurveChart,
+      "power-curve-chart",
+      latest.map((r) => ({
+        x: Number(r.wind_speed_ms),
+        y: Number(r.power_kw),
+        label: r.turbine_id,
+        anomalous: r.is_anomalous,
+      })),
+      { xLabel: "Wind speed (m/s)", yLabel: "Power (kW)" }
     );
 
-    renderTable(
-      "runs-table",
-      runs,
-      (r) => `
-        <tr>
-          <td>${r.dag_run_id}</td><td>${r.status}</td><td>${r.rows_extracted}</td>
-          <td>${r.rows_loaded}</td><td>${r.rows_rejected}</td><td>${fmtNum(r.duration_seconds, 2)}</td>
-          <td>${fmtTime(r.finished_at)}</td>
-        </tr>`,
-      "No pipeline runs yet"
-    );
+    runsChart = renderRunsHealthChart(runsChart, "runs-chart", runs);
 
-    renderTable(
-      "anomalies-table",
+    renderDqEventsTable(
+      "dq-events-table",
       anomalies,
-      (r) => `
-        <tr class="anomalous">
-          <td>${r.turbine_id}</td><td>${fmtTime(r.ts)}</td><td>${fmtNum(r.wind_speed_ms, 2)}</td>
-          <td>${fmtNum(r.power_kw)}</td><td>${fmtNum(r.rotor_rpm, 2)}</td><td>${r.status_code}</td>
-        </tr>`,
-      "No anomalies detected"
-    );
-
-    renderTable(
-      "rejects-table",
       rejects,
-      (r) => `
-        <tr>
-          <td>${r.turbine_id}</td><td>${fmtTime(r.ts)}</td><td>${r.reject_reason}</td><td>${fmtTime(r.rejected_at)}</td>
-        </tr>`,
-      "No rejects - all rows have passed validation"
+      "turbine_id",
+      (r) => `wind=${fmtNum(r.wind_speed_ms, 2)} power=${fmtNum(r.power_kw)} rpm=${fmtNum(r.rotor_rpm, 2)} status=${r.status_code}`
     );
 
     document.getElementById("last-updated").textContent = `updated ${new Date().toLocaleTimeString()}`;

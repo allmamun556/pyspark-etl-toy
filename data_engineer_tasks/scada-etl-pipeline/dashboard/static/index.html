@@ -38,43 +38,29 @@
 
   <section class="grid-2">
     <div class="panel">
-      <h2>Latest reading per turbine</h2>
-      <div class="table-scroll">
-        <table id="latest-table">
-          <thead>
-            <tr>
-              <th>Turbine</th><th>Timestamp</th><th>Wind (m/s)</th><th>Power (kW)</th>
-              <th>RPM</th><th>Temp (°C)</th><th>Status</th><th>Anomaly</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      <div class="panel-header">
+        <h2>Power curve (latest reading per turbine)</h2>
       </div>
+      <p class="panel-note">Wind speed vs. power output, one point per turbine — the physical relationship the simulator's power curve encodes. Red points are flagged anomalous.</p>
+      <canvas id="power-curve-chart" height="220"></canvas>
     </div>
 
     <div class="panel">
-      <h2>Recent pipeline runs</h2>
-      <div class="table-scroll">
-        <table id="runs-table">
-          <thead>
-            <tr>
-              <th>Run</th><th>Status</th><th>Extracted</th><th>Loaded</th>
-              <th>Rejected</th><th>Duration (s)</th><th>Finished</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      <div class="panel-header">
+        <h2>Recent pipeline run health</h2>
       </div>
+      <p class="panel-note">Rows loaded/rejected per run (bars) and run duration (line) — the last 10 <code>scada_etl_pipeline</code> runs.</p>
+      <canvas id="runs-chart" height="220"></canvas>
     </div>
   </section>
 
   <section class="grid-2">
     <div class="panel">
-      <h2>Recent anomalies</h2>
+      <h2>Recent data quality events</h2>
       <div class="table-scroll">
-        <table id="anomalies-table">
+        <table id="dq-events-table">
           <thead>
-            <tr><th>Turbine</th><th>Timestamp</th><th>Wind (m/s)</th><th>Power (kW)</th><th>RPM</th><th>Status</th></tr>
+            <tr><th>Turbine</th><th>Timestamp</th><th>Type</th><th>Detail</th></tr>
           </thead>
           <tbody></tbody>
         </table>
@@ -82,31 +68,19 @@
     </div>
 
     <div class="panel">
-      <h2>Recent rejects</h2>
+      <div class="panel-header">
+        <h2>External data sources (real, live)</h2>
+      </div>
+      <p class="panel-note">Feeds both this fleet's wind-speed anchoring and the <a href="/solar.html">solar fleet</a>'s irradiance anchoring — see README §7.</p>
+      <div class="kpi-row" id="external-kpi-row"></div>
       <div class="table-scroll">
-        <table id="rejects-table">
+        <table id="external-runs-table">
           <thead>
-            <tr><th>Turbine</th><th>Timestamp</th><th>Reason</th><th>Rejected at</th></tr>
+            <tr><th>Source</th><th>Status</th><th>Fetched</th><th>Loaded</th><th>Rejected</th><th>Duration (s)</th><th>Finished</th></tr>
           </thead>
           <tbody></tbody>
         </table>
       </div>
-    </div>
-  </section>
-
-  <section class="panel">
-    <div class="panel-header">
-      <h2>External data sources (real, live)</h2>
-    </div>
-    <p class="panel-note">Feeds both this fleet's wind-speed anchoring and the <a href="/solar.html">solar fleet</a>'s irradiance anchoring — see README §7.</p>
-    <div class="kpi-row" id="external-kpi-row"></div>
-    <div class="table-scroll">
-      <table id="external-runs-table">
-        <thead>
-          <tr><th>Source</th><th>Status</th><th>Fetched</th><th>Loaded</th><th>Rejected</th><th>Duration (s)</th><th>Finished</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
     </div>
   </section>
 

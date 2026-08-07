@@ -23,7 +23,7 @@ function renderSolarKpis(summary) {
     .join("");
 }
 
-let solarFleetChart, solarTimeseriesChart;
+let solarFleetChart, solarTimeseriesChart, solarPowerCurveChart, solarRunsChart;
 
 function renderSolarFleetChart(stats) {
   const ctx = document.getElementById("solar-fleet-chart");
@@ -105,10 +105,11 @@ async function populatePlantSelect() {
 
 async function refresh() {
   try {
-    const [solarSummary, solarLatest, solarStats, solarAnomalies, solarRejects] = await Promise.all([
+    const [solarSummary, solarLatest, solarStats, solarRuns, solarAnomalies, solarRejects] = await Promise.all([
       getJSON("/api/solar/summary"),
       getJSON("/api/solar/plants/latest"),
       getJSON("/api/solar/plants/stats"),
+      getJSON("/api/audit/runs?limit=10&task_id=solar_etl_pipeline"),
       getJSON("/api/solar/anomalies?limit=20"),
       getJSON("/api/solar/rejects?limit=20"),
     ]);
@@ -120,49 +121,26 @@ async function refresh() {
     const selectedPlant = await populatePlantSelect();
     if (selectedPlant) await renderSolarTimeseries(selectedPlant);
 
-    renderTable(
-      "solar-latest-table",
-      solarLatest,
-      (r) => `
-        <tr class="${r.is_anomalous ? "anomalous" : ""}">
-          <td>${r.plant_id}</td><td>${fmtTime(r.ts)}</td><td>${fmtNum(r.irradiance_w_m2, 1)}</td>
-          <td>${fmtNum(r.dc_power_kw)}</td><td>${fmtNum(r.ac_power_kw)}</td><td>${fmtNum(r.panel_temp_c, 1)}</td>
-          <td>${r.status_code}</td><td>${r.is_anomalous ? "yes" : ""}</td>
-        </tr>`,
-      "No readings yet"
+    solarPowerCurveChart = renderScatterChart(
+      solarPowerCurveChart,
+      "solar-power-curve-chart",
+      solarLatest.map((r) => ({
+        x: Number(r.irradiance_w_m2),
+        y: Number(r.dc_power_kw),
+        label: r.plant_id,
+        anomalous: r.is_anomalous,
+      })),
+      { xLabel: "Irradiance (W/m²)", yLabel: "DC power (kW)" }
     );
 
-    renderTable(
-      "solar-runs-table",
-      await getJSON("/api/audit/runs?limit=10&task_id=solar_etl_pipeline"),
-      (r) => `
-        <tr>
-          <td>${r.dag_run_id}</td><td>${r.status}</td><td>${r.rows_extracted}</td>
-          <td>${r.rows_loaded}</td><td>${r.rows_rejected}</td><td>${fmtNum(r.duration_seconds, 2)}</td>
-          <td>${fmtTime(r.finished_at)}</td>
-        </tr>`,
-      "No pipeline runs yet"
-    );
+    solarRunsChart = renderRunsHealthChart(solarRunsChart, "solar-runs-chart", solarRuns);
 
-    renderTable(
-      "solar-anomalies-table",
+    renderDqEventsTable(
+      "solar-dq-events-table",
       solarAnomalies,
-      (r) => `
-        <tr class="anomalous">
-          <td>${r.plant_id}</td><td>${fmtTime(r.ts)}</td><td>${fmtNum(r.irradiance_w_m2, 1)}</td>
-          <td>${fmtNum(r.dc_power_kw)}</td><td>${fmtNum(r.ac_power_kw)}</td><td>${r.status_code}</td>
-        </tr>`,
-      "No anomalies detected"
-    );
-
-    renderTable(
-      "solar-rejects-table",
       solarRejects,
-      (r) => `
-        <tr>
-          <td>${r.plant_id}</td><td>${fmtTime(r.ts)}</td><td>${r.reject_reason}</td><td>${fmtTime(r.rejected_at)}</td>
-        </tr>`,
-      "No rejects - all rows have passed validation"
+      "plant_id",
+      (r) => `irradiance=${fmtNum(r.irradiance_w_m2, 1)} dc=${fmtNum(r.dc_power_kw)} ac=${fmtNum(r.ac_power_kw)} status=${r.status_code}`
     );
 
     document.getElementById("last-updated").textContent = `updated ${new Date().toLocaleTimeString()}`;

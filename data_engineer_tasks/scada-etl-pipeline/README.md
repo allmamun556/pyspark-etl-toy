@@ -710,12 +710,30 @@ routes are only as fresh as the last `dbt build`, which is why
 `docker-compose.yml` makes `dashboard` wait on `dbt: condition:
 service_completed_successfully` rather than just `postgres: service_healthy`.
 
-Frontend panels: KPI row, fleet overview chart (avg power per turbine +
-anomaly count), per-turbine time series (dropdown-selected), a parallel set
-of solar panels (KPI row, fleet chart, per-plant time series, latest/anomaly/reject
-tables), external data sources panel (weather/buoy KPIs + recent runs), and
-tables for latest readings / pipeline runs (labeled by pipeline) / anomalies
-/ rejects. All panels poll every 15 seconds.
+**Frontend — one wind page, one solar page (`index.html` / `solar.html`), each with four charts and two tables:**
+
+| Panel | Type | Source |
+|---|---|---|
+| KPI row | 8 stat cards | `/api/summary` |
+| Fleet overview | Bar (avg power per turbine) + line (anomaly count), dual-axis | `/api/turbines/stats` |
+| Turbine time series | Line, dropdown-selected turbine | `/api/turbines/{id}/timeseries` |
+| **Power curve** | **Scatter** — wind speed (x) vs. power (y), one point per turbine, red = anomalous | `/api/turbines/latest` |
+| **Recent pipeline run health** | **Bar** (rows loaded/rejected) + **line** (duration), dual-axis, last 10 runs | `/api/audit/runs` |
+| Recent data quality events | Table — merged anomalies + rejects, newest first | `/api/anomalies` + `/api/rejects` |
+| External data sources | KPI cards + table | `/api/external` |
+
+The two bolded panels replace what used to be two more raw tables ("latest
+reading per turbine" and "recent pipeline runs") — a scatter plot of wind
+speed against power *is* the classic wind-turbine power curve, so it's a
+more physically meaningful view of the same latest-reading data than a
+table of numbers, and it's where an anomalous reading (icing spike, stuck
+sensor) visibly falls off the expected curve rather than needing to be
+read out of a column. The pipeline-runs chart makes a duration or
+rejection-rate trend across recent runs visible at a glance in a way
+scanning a table of numbers doesn't. The anomalies and rejects tables were
+merged into one (`type` column distinguishes them) specifically to keep the
+total table count to two per page rather than four, now that two panels
+converted to charts. All panels poll every 15 seconds.
 
 Access at **http://localhost:3000** once the stack is up.
 

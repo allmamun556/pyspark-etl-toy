@@ -138,5 +138,6 @@ th, td {
 th { color: var(--muted); font-weight: 500; position: sticky; top: 0; background: var(--panel); }
 
 tr.anomalous td { color: var(--danger); }
+tr.anomalous td:nth-child(3)::before { content: "⚠ "; }
 
 .empty-row td { color: var(--muted); text-align: center; padding: 20px; }

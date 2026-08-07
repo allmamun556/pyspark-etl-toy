@@ -21,6 +21,105 @@ function renderTable(tableId, rows, rowFn, emptyText) {
   tbody.innerHTML = rows.map(rowFn).join("");
 }
 
+// Wind and solar fleets both want a "power curve" scatter (x = the driving
+// physical input, y = power output) built from the same /latest endpoint
+// each page already fetches - shared here so the chart logic exists once.
+// `existing` is the Chart instance from the previous call (or null on
+// first render); returns the instance to keep for next time, Chart.js-style.
+function renderScatterChart(existing, canvasId, points, opts) {
+  const normal = points.filter((p) => !p.anomalous);
+  const anomalous = points.filter((p) => p.anomalous);
+
+  if (existing) {
+    existing.data.datasets[0].data = normal;
+    existing.data.datasets[1].data = anomalous;
+    existing.update();
+    return existing;
+  }
+
+  const ctx = document.getElementById(canvasId);
+  return new Chart(ctx, {
+    type: "scatter",
+    data: {
+      datasets: [
+        { label: "Normal", data: normal, backgroundColor: "#2563eb" },
+        { label: "Anomalous", data: anomalous, backgroundColor: "#dc2626" },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        tooltip: { callbacks: { label: (item) => `${item.raw.label}: (${item.raw.x}, ${item.raw.y})` } },
+      },
+      scales: {
+        x: { title: { display: true, text: opts.xLabel } },
+        y: { title: { display: true, text: opts.yLabel } },
+      },
+    },
+  });
+}
+
+// Same idea for the "recent pipeline runs" chart - rows loaded/rejected as
+// bars, duration as a line on a secondary axis. Both fleets' /api/audit/runs
+// responses have identical shape, so this is shared as-is.
+function renderRunsHealthChart(existing, canvasId, runs) {
+  const ordered = [...runs].reverse(); // oldest -> newest, left to right
+  const labels = ordered.map((r) => fmtTime(r.finished_at));
+  const loaded = ordered.map((r) => r.rows_loaded);
+  const rejected = ordered.map((r) => r.rows_rejected);
+  const duration = ordered.map((r) => Number(r.duration_seconds));
+
+  if (existing) {
+    existing.data.labels = labels;
+    existing.data.datasets[0].data = loaded;
+    existing.data.datasets[1].data = rejected;
+    existing.data.datasets[2].data = duration;
+    existing.update();
+    return existing;
+  }
+
+  const ctx = document.getElementById(canvasId);
+  return new Chart(ctx, {
+    data: {
+      labels,
+      datasets: [
+        { type: "bar", label: "Rows loaded", data: loaded, backgroundColor: "#16a34a", yAxisID: "y" },
+        { type: "bar", label: "Rows rejected", data: rejected, backgroundColor: "#dc2626", yAxisID: "y" },
+        { type: "line", label: "Duration (s)", data: duration, borderColor: "#f59e0b", yAxisID: "y1", tension: 0.3, pointRadius: 2 },
+      ],
+    },
+    options: {
+      responsive: true,
+      interaction: { mode: "index", intersect: false },
+      scales: {
+        y: { position: "left", title: { display: true, text: "rows" }, ticks: { precision: 0 } },
+        y1: { position: "right", grid: { drawOnChartArea: false }, title: { display: true, text: "seconds" } },
+      },
+    },
+  });
+}
+
+// Anomalies (from readings) and rejects (from validation) have different
+// shapes, so each fleet passes its own `anomalyDetailFn` to format the
+// anomaly side into the same "Detail" column rejects already use
+// (reject_reason is already a plain string).
+function renderDqEventsTable(tableId, anomalies, rejects, idField, anomalyDetailFn) {
+  const events = [
+    ...anomalies.map((r) => ({ id: r[idField], ts: r.ts, type: "anomaly", detail: anomalyDetailFn(r) })),
+    ...rejects.map((r) => ({ id: r[idField], ts: r.rejected_at, type: "reject", detail: r.reject_reason })),
+  ].sort((a, b) => new Date(b.ts) - new Date(a.ts));
+
+  renderTable(
+    tableId,
+    events,
+    (e) => `
+      <tr class="${e.type === "anomaly" ? "anomalous" : ""}">
+        <td>${e.id}</td><td>${fmtTime(e.ts)}</td><td>${e.type}</td><td>${e.detail}</td>
+      </tr>`,
+    "No data quality events"
+  );
+}
+
 // Relevant to both dashboards - it's what anchors both the wind and solar
 // simulators to reality (see README §7), so both pages show it.
 async function refreshExternalPanel() {

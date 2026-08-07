@@ -38,43 +38,29 @@
 
   <section class="grid-2">
     <div class="panel">
-      <h2>Latest reading per plant</h2>
-      <div class="table-scroll">
-        <table id="solar-latest-table">
-          <thead>
-            <tr>
-              <th>Plant</th><th>Timestamp</th><th>Irradiance (W/m&sup2;)</th><th>DC (kW)</th>
-              <th>AC (kW)</th><th>Panel &deg;C</th><th>Status</th><th>Anomaly</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      <div class="panel-header">
+        <h2>Power curve (latest reading per plant)</h2>
       </div>
+      <p class="panel-note">Irradiance vs. DC power output, one point per plant — the physical relationship the simulator's clear-sky model encodes. Red points are flagged anomalous.</p>
+      <canvas id="solar-power-curve-chart" height="220"></canvas>
     </div>
 
     <div class="panel">
-      <h2>Recent pipeline runs</h2>
-      <div class="table-scroll">
-        <table id="solar-runs-table">
-          <thead>
-            <tr>
-              <th>Run</th><th>Status</th><th>Extracted</th><th>Loaded</th>
-              <th>Rejected</th><th>Duration (s)</th><th>Finished</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      <div class="panel-header">
+        <h2>Recent pipeline run health</h2>
       </div>
+      <p class="panel-note">Rows loaded/rejected per run (bars) and run duration (line) — the last 10 <code>solar_etl_pipeline</code> runs.</p>
+      <canvas id="solar-runs-chart" height="220"></canvas>
     </div>
   </section>
 
   <section class="grid-2">
     <div class="panel">
-      <h2>Recent anomalies</h2>
+      <h2>Recent data quality events</h2>
       <div class="table-scroll">
-        <table id="solar-anomalies-table">
+        <table id="solar-dq-events-table">
           <thead>
-            <tr><th>Plant</th><th>Timestamp</th><th>Irradiance (W/m&sup2;)</th><th>DC (kW)</th><th>AC (kW)</th><th>Status</th></tr>
+            <tr><th>Plant</th><th>Timestamp</th><th>Type</th><th>Detail</th></tr>
           </thead>
           <tbody></tbody>
         </table>
@@ -82,31 +68,19 @@
     </div>
 
     <div class="panel">
-      <h2>Recent rejects</h2>
+      <div class="panel-header">
+        <h2>External data sources (real, live)</h2>
+      </div>
+      <p class="panel-note">Feeds this fleet's irradiance anchoring and the <a href="/">wind fleet</a>'s wind-speed anchoring — see README §7.</p>
+      <div class="kpi-row" id="external-kpi-row"></div>
       <div class="table-scroll">
-        <table id="solar-rejects-table">
+        <table id="external-runs-table">
           <thead>
-            <tr><th>Plant</th><th>Timestamp</th><th>Reason</th><th>Rejected at</th></tr>
+            <tr><th>Source</th><th>Status</th><th>Fetched</th><th>Loaded</th><th>Rejected</th><th>Duration (s)</th><th>Finished</th></tr>
           </thead>
           <tbody></tbody>
         </table>
       </div>
-    </div>
-  </section>
-
-  <section class="panel">
-    <div class="panel-header">
-      <h2>External data sources (real, live)</h2>
-    </div>
-    <p class="panel-note">Feeds this fleet's irradiance anchoring and the <a href="/">wind fleet</a>'s wind-speed anchoring — see README §7.</p>
-    <div class="kpi-row" id="external-kpi-row"></div>
-    <div class="table-scroll">
-      <table id="external-runs-table">
-        <thead>
-          <tr><th>Source</th><th>Status</th><th>Fetched</th><th>Loaded</th><th>Rejected</th><th>Duration (s)</th><th>Finished</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
     </div>
   </section>
 
