@@ -113,13 +113,32 @@ jobs:
         working-directory: data_engineer_tasks/scada-etl-pipeline/dbt
         run: dbt build --profiles-dir .
 
-      # Installs Airflow itself (not needed by the job's other steps, so
-      # it's deliberately kept out of requirements.ci.txt above) using its
-      # official constraints file, the only way it installs reliably.
-      - name: Install Airflow for DAG execution test
+      # Airflow gets its own virtualenv rather than installing into the
+      # job's shared site-packages: its constraints-pinned transitive deps
+      # (e.g. typing_extensions) can conflict with whatever dbt/alembic
+      # just installed above - installing it there produced a real
+      # `ImportError: cannot import name 'Sentinel' from 'typing_extensions'`
+      # in CI, since pip left the already-installed version in place
+      # instead of resolving to the one Airflow's constraints want. This
+      # mirrors why this repo already runs Airflow in its own Docker image
+      # locally instead of sharing one with the dashboard/dbt.
+      - name: Install Airflow for DAG execution test (isolated venv)
         run: |
-          pip install "apache-airflow==2.10.2" \
+          python -m venv /tmp/airflow_venv
+          /tmp/airflow_venv/bin/pip install "apache-airflow==2.10.2" \
             --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.10.2/constraints-${{ env.PYTHON_VERSION }}.txt"
+          # DAG files import `from src...`, so the pipeline's own
+          # dependencies (psycopg2-binary, pydantic, ...) need to be
+          # importable from this venv too - except sqlalchemy, which is
+          # deliberately excluded and left at whatever 1.4.x Airflow's own
+          # constraints installed. This is the exact same exclusion (and
+          # the exact same reason) as Dockerfile's own build: Airflow's
+          # ORM models (e.g. TaskInstance) are written against SQLAlchemy
+          # 1.4's declarative style and break under 2.0's stricter
+          # Annotated Declarative mapping - confirmed locally with the
+          # real error before adding this exclusion.
+          grep -v '^sqlalchemy==' requirements.ci.txt > requirements.airflow_venv.txt
+          /tmp/airflow_venv/bin/pip install -r requirements.airflow_venv.txt
 
       # Runs the two simulated-fleet DAGs through Airflow's own local test
       # runner, end to end (extract -> transform -> validate -> load ->
@@ -147,6 +166,7 @@ jobs:
           AIRFLOW__CORE__EXECUTOR: SequentialExecutor
           AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: sqlite:////tmp/airflow_ci_home/airflow.db
         run: |
+          export PATH="/tmp/airflow_venv/bin:$PATH"
           airflow db migrate
           TEST_DATE=$(date -I)
           airflow dags test scada_etl_pipeline "$TEST_DATE"
