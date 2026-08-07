@@ -152,8 +152,10 @@ the data-flow diagram readable; see §6.
 | Schema migrations | Alembic manages schema changes (`migrations/versions/`); `sql/init.sql` mirrors it for a zero-dependency local bootstrap |
 | Bounded storage growth | `scada_readings`/`solar_readings` are TimescaleDB hypertables with a 90-day retention policy — old chunks drop themselves on TimescaleDB's own schedule instead of the tables growing forever ([§3](#3-schema-reference)) |
 | Single source of truth for aggregates | The dashboard's per-turbine/per-plant stats endpoints read dbt's `marts.*` tables instead of re-deriving the same aggregation SQL a second time ([§9](#9-dashboard)) |
-| Reproducibility | `docker compose up --build -d` brings up Postgres, all three DAGs, the dashboard, and a one-shot dbt build with no manual steps; every dependency set is pinned via a `pip-compile`-generated lockfile ([§10](#10-deployment)) |
-| Testability | 73 pytest cases across extract/transform/validation/alerting, all pure-function — no live DB required; `airflow dags test` runs the real DAGs end-to-end in CI ([§12](#12-cicd-github-actions)) |
+| Reproducibility | `docker compose up --build -d` brings up Postgres, all three DAGs, the dashboard, and a one-shot dbt build with no manual steps; every dependency set is pinned via a `pip-compile`-generated lockfile; CI publishes built images to GHCR on every `master` push ([§10](#10-deployment)) |
+| Testability | 73 pytest cases across extract/transform/validation/alerting (89% coverage, gated at 85% — [§11](#11-testing--benchmark)), all pure-function — no live DB required; `airflow dags test` runs the real DAGs end-to-end in CI, and `scripts/verify_idempotency.py` proves the upsert claim against a real database rather than leaving it as a design assertion ([§12](#12-cicd-github-actions)) |
+| Silent-failure detection | dbt source freshness on `scada_readings`/`solar_readings` catches "the DAG stopped running" - a failure mode with zero bad rows, just zero rows, that row-level validation structurally can't see ([§8](#8-analytics-layer-dbt)) |
+| Fast local feedback | Pre-commit hooks run the same `ruff check`/`ruff format` CI runs, before a push instead of after - scoped to this directory, since the repo is a monorepo ([§10](#10-deployment)) |
 
 ---
 
@@ -531,10 +533,9 @@ shown first, solar right after.
 ```python
 # airflow/dags/scada_etl_dag.py
 def _fetch_reference_wind_speed(conn) -> float | None:
-    row = conn.execute(text(
-        "SELECT wind_speed_ms, ts FROM weather_api_readings "
-        "ORDER BY ts DESC LIMIT 1"
-    )).fetchone()
+    row = conn.execute(
+        text("SELECT wind_speed_ms, ts FROM weather_api_readings ORDER BY ts DESC LIMIT 1")
+    ).fetchone()
     if row is None or row.wind_speed_ms is None:
         return None
     staleness = now() - row.ts
@@ -582,10 +583,11 @@ time-of-day, not a flat number):
 ```python
 # airflow/dags/solar_etl_dag.py
 def _fetch_reference_irradiance(conn) -> float | None:
-    row = conn.execute(text(
-        "SELECT shortwave_radiation_w_m2, ts FROM weather_api_readings "
-        "ORDER BY ts DESC LIMIT 1"
-    )).fetchone()
+    row = conn.execute(
+        text(
+            "SELECT shortwave_radiation_w_m2, ts FROM weather_api_readings ORDER BY ts DESC LIMIT 1"
+        )
+    ).fetchone()
     if row is None or row.shortwave_radiation_w_m2 is None:
         return None
     staleness = now() - row.ts
@@ -648,7 +650,22 @@ and `accepted_values` on `status_code` (matching `SOLAR_VALID_STATUS_CODES`/
 `VALID_STATUS_CODES` in the Python validators) and audit `status`. Full
 `dbt build`: **37/37 passing** (10 models + 27 tests).
 
-Run it: `docker compose run --rm dbt build --profiles-dir .`
+**Source freshness**: `scada_readings`/`solar_readings` also have a
+`freshness` block in `_sources.yml` (`warn_after: 15 min`, `error_after: 30
+min` — three and six missed 5-minute DAG cycles respectively). This catches
+a failure mode none of the row-level validation in [§5](#5-data-quality-framework)
+can: an absent pipeline produces zero *bad* rows, just zero rows, and
+freshness is the only check here that's actually looking for silence rather
+than for badly-shaped data. Run it: `dbt source freshness --profiles-dir .`
+
+**Docs site**: `dbt docs generate` produces a self-contained static site —
+an interactive lineage graph (`public.scada_readings → stg_scada_readings →
+turbine_daily_summary → renewable_fleet_daily_summary`) plus a column-level
+schema browser sourced from the same `description:` fields used throughout
+this repo's `.yml` files. CI publishes it to GitHub Pages on every push to
+`master`: **https://allmamun556.github.io/pyspark-etl-toy/**
+
+Run it locally: `docker compose run --rm dbt build --profiles-dir .`
 
 ---
 
@@ -727,6 +744,20 @@ and pinned separately at the bottom of `requirements.txt`, since Airflow
 ships its own version-specific constraints file and compiling it alongside
 everything else risks a resolver conflict.
 
+**CD**: on every push to `master`, CI also builds and pushes all three
+images to GitHub Container Registry — `ghcr.io/allmamun556/scada-etl-pipeline-{airflow,dashboard,dbt}`,
+tagged both `:latest` and `:<commit-sha>` for traceability. PR builds still
+build every image (to prove the Dockerfile works) but never push — an
+unreviewed branch shouldn't be able to publish an artifact.
+
+**Pre-commit hooks**: `pip install pre-commit && pre-commit install` runs
+`ruff check --fix` and `ruff format` on every commit — the same checks CI
+runs, but before a push instead of after. Since this project lives inside a
+monorepo, every hook is scoped to `data_engineer_tasks/scada-etl-pipeline/`
+specifically (`.pre-commit-config.yaml`'s `files:` pattern) — confirmed
+necessary the hard way, since an unscoped first run reformatted 35 files
+belonging to other, unrelated projects sharing the same `.git`.
+
 ```bash
 git clone <your-repo-url> scada-etl-pipeline
 cd scada-etl-pipeline
@@ -772,10 +803,35 @@ pip install -r requirements.txt
 pytest -v
 ```
 
+**Coverage**: `pyproject.toml` bakes `--cov` into pytest's default
+`addopts`, scoped to `extract`/`transform`/`validation`/`utils`/`config` —
+not all of `src/`. `src/db` and `src/load` are deliberately excluded from
+that scope: they're DB-touching code, validated by the live `airflow dags
+test` run below instead of by pytest, so folding them into the same
+percentage would either be permanently 0% (misleading — they *are* tested,
+just differently) or require mocking a database to inflate the number
+without adding real coverage. `--cov-fail-under=85` makes this a real gate,
+not just a report: **currently 89%**.
+
 On top of pytest, `airflow dags test` runs `scada_etl_pipeline` and
 `solar_etl_pipeline` for real in CI ([§12](#12-cicd-github-actions)) — actual
 task execution against a live database, not just DagBag/schema validation,
 which is what pytest structurally can't cover for DAG wiring.
+
+**Idempotency — `scripts/verify_idempotency.py`**: the claim, repeated
+throughout this doc, that replaying a load never duplicates rows rests on
+one line of SQL (`ON CONFLICT (turbine_id, ts) DO UPDATE`) — this script is
+what actually exercises it against a real database instead of leaving it as
+an assertion about that SQL's design. Two scenarios: (1) load the same
+batch twice, assert the row count doesn't grow; (2) load two batches whose
+time windows partially overlap (simulating overlapping/retried DAG runs),
+assert the final count equals the deduplicated union, not the sum. Runs in
+CI ([§12](#12-cicd-github-actions)) against the freshly-migrated database,
+right after the Alembic step.
+
+```bash
+python scripts/verify_idempotency.py
+```
 
 **Benchmark — `scripts/benchmark.py`**: what turns "improved pipeline
 efficiency by 40%" from a claim into a reproducible number. Generates
@@ -815,9 +871,10 @@ touches this project.
 
 | Job | What it validates |
 |---|---|
-| `lint-and-test` | `ruff check .` + all 73 pytest cases (installs `requirements.txt` minus `apache-airflow`, since nothing under test imports it and it needs its own constraints file to install reliably) |
-| `migrations-and-dbt` | Spins up a real `timescale/timescaledb:2.17.2-pg16` service container (plain `postgres:16-alpine` can't run migration `0004`, which needs the `timescaledb` extension), runs `alembic upgrade head` against it from empty, `dbt build`, then installs Airflow separately and runs `airflow dags test scada_etl_pipeline` + `airflow dags test solar_etl_pipeline` against that same database — real task execution, not just schema validation |
-| `docker-build` | Builds all three Dockerfiles (Airflow, dashboard, dbt) with GitHub Actions layer caching, to catch Dockerfile rot without running the full stack |
+| `lint-and-test` | `ruff check .` + all 73 pytest cases with an 85%-coverage gate ([§11](#11-testing--benchmark)) (installs `requirements.txt` minus `apache-airflow`, since nothing under test imports it and it needs its own constraints file to install reliably) |
+| `migrations-and-dbt` | Spins up a real `timescale/timescaledb:2.17.2-pg16` service container (plain `postgres:16-alpine` can't run migration `0004`, which needs the `timescaledb` extension), runs `alembic upgrade head` against it from empty, `scripts/verify_idempotency.py`, `dbt build`, `dbt source freshness` + `dbt docs generate` (published to Pages below), then installs Airflow separately and runs `airflow dags test scada_etl_pipeline` + `airflow dags test solar_etl_pipeline` against that same database — real task execution, not just schema validation |
+| `docker-build` | Builds all three Dockerfiles (Airflow, dashboard, dbt) with GitHub Actions layer caching; on `master` pushes only, also pushes them to GHCR ([§10](#10-deployment)) |
+| `deploy-dbt-docs` | On `master` pushes only: publishes the dbt docs site generated above to GitHub Pages — **https://allmamun556.github.io/pyspark-etl-toy/** |
 
 **Why `airflow dags test` and not just DagBag import validation**: a DAG
 that merely *parses* can still be wrong in ways that only show up when a
@@ -839,6 +896,24 @@ have no such dependency: if `weather_api_readings` is empty (as it is in a
 freshly-migrated CI database), reference anchoring just returns `None` and
 both simulators fall back to their unanchored default — by design, not a
 CI-only workaround ([§7](#7-real-data-anchoring-wind--solar)).
+
+> **Another real gotcha, caught by the first actual CI run**: Airflow was
+> first installed straight into the job's shared Python environment
+> (already populated by the `dbt`/`alembic` step), and CI immediately broke
+> with `ImportError: cannot import name 'Sentinel' from 'typing_extensions'`
+> — pip left an already-installed, incompatible version in place instead of
+> resolving to what Airflow's constraints file wanted. Isolating Airflow
+> into its own virtualenv fixed that, but surfaced the *next* layer of the
+> same problem: installing the pipeline's own lockfile (`sqlalchemy==2.0.35`)
+> into that venv upgraded SQLAlchemy out from under Airflow's ORM models,
+> which are written for 1.4's declarative style and raise `ArgumentError`
+> under 2.0's stricter Annotated Declarative mapping. Fixed by excluding
+> `sqlalchemy` from what's installed into the Airflow venv — the exact same
+> exclusion (and reason) `Dockerfile` already uses for the production
+> Airflow image. Both fixes were verified locally (isolated venv + real
+> Postgres + isolated SQLite Airflow metadata) before pushing again — this
+> project's whole "verify live before calling it done" pattern, applied to
+> its own CI pipeline.
 
 Pushing to GitHub also required granting the `gh` CLI's OAuth token the
 `workflow` scope (`gh auth refresh -h github.com -s workflow`) — GitHub
@@ -924,12 +999,16 @@ scada-etl-pipeline/
 ├── docs/documentation.html           # full self-contained HTML reference doc
 ├── migrations/versions/              # 0001_initial_schema … 0004_timescaledb_hypertables
 ├── sql/init.sql                      # bootstrap DDL, mirrors Alembic
-├── scripts/benchmark.py              # naive vs optimized load benchmark (self-cleaning)
+├── scripts/
+│   ├── benchmark.py                  # naive vs optimized load benchmark (self-cleaning)
+│   └── verify_idempotency.py         # replay + overlapping-window dedup check (self-cleaning)
 ├── tests/                            # 73 cases, 9 files
 ├── docker-compose.yml                # timescaledb + airflow + dashboard + dbt
 ├── Dockerfile                        # Airflow image
 ├── Dockerfile.dashboard              # Dashboard API image
 ├── Dockerfile.dbt                    # dbt image
+├── .pre-commit-config.yaml           # ruff lint + format, scoped to this directory
+├── pyproject.toml                    # ruff + pytest + coverage config (85% gate)
 ├── requirements.in / requirements-dashboard.in / requirements-dbt.in     # direct deps
 ├── requirements.txt / requirements-dashboard.txt / requirements-dbt.txt  # pip-compile lockfiles
 └── .env.example
@@ -1009,6 +1088,16 @@ scada-etl-pipeline/
 - Wire the Slack alert path to a real workspace webhook in the deployed
   environment and confirm a forced task failure actually lands a message —
   currently verified via mocked unit tests only ([§6](#6-orchestration-airflow)).
+- CI's `dbt source freshness` step only proves the config is valid, since
+  the freshly-migrated CI database has no data to check freshness *of*
+  ([§8](#8-analytics-layer-dbt)). The real check needs to run on a schedule
+  against the live pipeline's data (e.g. a periodic GitHub Actions
+  `workflow_dispatch`/cron hitting the production database, or an Airflow
+  sensor task) - wiring that up would make freshness an actual alertable
+  gate instead of a config smoke-test.
+- GHCR images publish successfully but are **private by default** even on
+  a public repo — visibility has to be flipped once, manually, in the
+  repo's Packages settings before `docker pull` works for someone else.
 - Pull additional NDBC stations (or Open-Meteo's forecast endpoint, not
   just `current`) to build a proper time series per external source instead
   of one point-in-time reading per DAG run.

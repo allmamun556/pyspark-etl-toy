@@ -14,6 +14,7 @@ data, they only operate on what extract hands them. This is what makes it
 easy to later swap the simulator for a real SCADA client without touching
 anything else.
 """
+
 from __future__ import annotations
 
 import random
@@ -52,7 +53,7 @@ def _power_curve_kw(wind_speed_ms: float) -> float:
     if wind_speed_ms >= RATED_MS:
         return RATED_POWER_KW
     fraction = (wind_speed_ms - CUT_IN_MS) / (RATED_MS - CUT_IN_MS)
-    return RATED_POWER_KW * (fraction ** 3)
+    return RATED_POWER_KW * (fraction**3)
 
 
 @dataclass
@@ -104,9 +105,7 @@ class ScadaSimulator:
         spread = self._rng.uniform(-REFERENCE_WIND_SPREAD_MS, REFERENCE_WIND_SPREAD_MS)
         return max(0.0, min(reference_wind_speed_ms + spread, 28.0))
 
-    def extract(
-        self, window_start: datetime, window_end: datetime
-    ) -> Iterator[RawScadaReading]:
+    def extract(self, window_start: datetime, window_end: datetime) -> Iterator[RawScadaReading]:
         """
         Yield raw readings for every turbine at each configured interval
         within [window_start, window_end).

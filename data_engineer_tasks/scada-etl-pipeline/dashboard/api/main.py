@@ -8,6 +8,7 @@ their reject tables. Reuses `src.db.session` / `src.config` so connection
 settings stay identical to the pipelines' (same env vars, same pooled
 engine pattern).
 """
+
 from __future__ import annotations
 
 from pathlib import Path

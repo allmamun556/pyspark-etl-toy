@@ -2,6 +2,7 @@
 Structured (JSON) logging so pipeline logs are directly queryable in
 log aggregators (CloudWatch, ELK, Loki, etc.) instead of being free-text.
 """
+
 import logging
 import sys
 

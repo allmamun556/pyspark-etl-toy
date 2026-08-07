@@ -4,6 +4,7 @@ fetch, so this is a plain idempotent UPSERT rather than the batch COPY path
 in src/load/loaders.py - there's no throughput problem to solve at this
 volume.
 """
+
 from __future__ import annotations
 
 from datetime import datetime

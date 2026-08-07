@@ -10,6 +10,7 @@ first, with "MM" marking a missing sensor value. As with the weather
 extractor, fetching is separate from parsing so tests can exercise
 `parse_realtime2` against a fixed text fixture with no network access.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass

@@ -6,6 +6,7 @@ validators.py since it's typed against TransformedSolarReading, not
 TransformedReading, and the two sources shouldn't need to know about each
 other's dataclass.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass

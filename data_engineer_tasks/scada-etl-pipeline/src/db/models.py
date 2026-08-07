@@ -4,6 +4,7 @@ the Alembic migration exactly — the migration is the source of truth for
 what's actually deployed; these models are used for read/write access and
 for the (rare) case where we build queries with the ORM rather than raw SQL.
 """
+
 from datetime import datetime
 
 from sqlalchemy import (

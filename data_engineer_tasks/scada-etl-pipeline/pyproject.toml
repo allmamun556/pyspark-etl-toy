@@ -9,3 +9,17 @@ select = ["E", "F", "I", "W"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
+# Coverage is scoped to the pure-function modules this suite is designed to
+# exercise (extract/transform/validation/utils/config) - src/db and
+# src/load touch a live database and are deliberately validated instead by
+# `airflow dags test` against a real Postgres in CI, not by pytest. Scoping
+# coverage to what pytest can actually reach keeps the number honest: the
+# excluded modules aren't untested, they're tested a different way.
+addopts = """
+    --cov=src.extract --cov=src.transform --cov=src.validation
+    --cov=src.utils --cov=src.config
+    --cov-report=term-missing --cov-fail-under=85
+"""
+
+[tool.coverage.run]
+branch = true

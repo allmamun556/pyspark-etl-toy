@@ -13,6 +13,7 @@ Both write into their own tables (see migrations/versions/0002_*), so
 correlating them against scada_readings is a downstream (dbt/dashboard)
 concern, not this DAG's.
 """
+
 from __future__ import annotations
 
 import sys
@@ -150,7 +151,6 @@ with DAG(
     max_active_runs=1,
     tags=["external", "weather", "iot", "http-api"],
 ) as dag:
-
     extract_load_weather = PythonOperator(
         task_id="extract_load_weather",
         python_callable=_extract_load_weather,

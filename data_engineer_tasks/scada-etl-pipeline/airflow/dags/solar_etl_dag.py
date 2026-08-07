@@ -11,6 +11,7 @@ one fleet's schedule or SLA should ever touch the other's.
 Task graph:
     extract_transform_validate  >>  load  >>  update_watermarks_and_audit
 """
+
 from __future__ import annotations
 
 import sys
@@ -251,7 +252,6 @@ with DAG(
     max_active_runs=1,
     tags=["solar", "etl", "time-series"],
 ) as dag:
-
     extract_transform_validate = PythonOperator(
         task_id="extract_transform_validate",
         python_callable=_extract_transform_validate,

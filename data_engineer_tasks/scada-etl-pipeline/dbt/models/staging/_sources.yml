@@ -8,6 +8,17 @@ sources:
       - name: scada_readings
         description: One row per turbine per timestamp, already validated by the pipeline.
         loaded_at_field: ingested_at
+        # scada_etl_pipeline runs every 5 min - warn after missing 3 cycles,
+        # error after missing 6. Catches "the DAG silently stopped running"
+        # in a way row-level validation structurally can't: an absent
+        # pipeline produces zero bad rows, just zero rows.
+        freshness:
+          warn_after:
+            count: 15
+            period: minute
+          error_after:
+            count: 30
+            period: minute
       - name: scada_readings_rejects
         description: Rows that failed pipeline validation, with the failure reason.
       - name: pipeline_run_audit
@@ -23,6 +34,15 @@ sources:
       - name: solar_readings
         description: One row per solar plant per timestamp - simulated fleet, anchored to real irradiance.
         loaded_at_field: ingested_at
+        # Same reasoning and thresholds as scada_readings above -
+        # solar_etl_pipeline also runs every 5 min.
+        freshness:
+          warn_after:
+            count: 15
+            period: minute
+          error_after:
+            count: 30
+            period: minute
       - name: solar_readings_rejects
         description: Solar rows that failed pipeline validation, with the failure reason.
       - name: solar_extraction_watermark

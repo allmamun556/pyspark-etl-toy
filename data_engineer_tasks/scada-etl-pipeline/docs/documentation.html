@@ -670,8 +670,10 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
             <tr><td>Schema migrations</td><td>Alembic is the source of truth for schema (<code>migrations/versions/</code>); <code>sql/init.sql</code> mirrors it for zero-dependency local bootstrap.</td></tr>
             <tr><td>Bounded storage growth</td><td><code>scada_readings</code>/<code>solar_readings</code> are TimescaleDB hypertables with a 90-day retention policy — old chunks drop on TimescaleDB's own schedule instead of the tables growing forever (§03).</td></tr>
             <tr><td>Single source of truth for aggregates</td><td>The dashboard's per-turbine/per-plant stats read dbt's <code>marts.*</code> tables instead of re-deriving the same aggregation SQL a second time (§09).</td></tr>
-            <tr><td>Reproducibility</td><td><code>docker compose up --build -d</code> brings up TimescaleDB, all three DAGs, the dashboard, and a one-shot dbt build with no manual steps; every dependency set is pinned via a <code>pip-compile</code>-generated lockfile.</td></tr>
-            <tr><td>Testability</td><td>73 pytest cases across extract/transform/validation/alerting, all pure-function; <code>airflow dags test</code> runs the real DAGs end-to-end in CI (§12).</td></tr>
+            <tr><td>Reproducibility</td><td><code>docker compose up --build -d</code> brings up TimescaleDB, all three DAGs, the dashboard, and a one-shot dbt build with no manual steps; every dependency set is pinned via a <code>pip-compile</code>-generated lockfile; CI publishes built images to GHCR on every <code>master</code> push (§10).</td></tr>
+            <tr><td>Testability</td><td>73 pytest cases across extract/transform/validation/alerting (89% coverage, gated at 85% — §11), all pure-function; <code>airflow dags test</code> runs the real DAGs end-to-end in CI, and <code>scripts/verify_idempotency.py</code> proves the upsert claim against a real database (§12).</td></tr>
+            <tr><td>Silent-failure detection</td><td>dbt source freshness on <code>scada_readings</code>/<code>solar_readings</code> catches "the DAG stopped running" - zero bad rows, just zero rows - a failure mode row-level validation structurally can't see (§08).</td></tr>
+            <tr><td>Fast local feedback</td><td>Pre-commit hooks run the same <code>ruff check</code>/<code>ruff format</code> CI runs, before a push instead of after - scoped to this directory, since the repo is a monorepo (§10).</td></tr>
           </tbody>
         </table>
       </div>
@@ -1104,6 +1106,16 @@ rejected:   2026-07-31 11:38:27+00</pre>
 
       <h3>Test coverage</h3>
       <p>27 data tests across staging and marts — <code>not_null</code>, <code>unique</code>, and <code>accepted_values</code> on <code>status_code</code> (matching <code>SOLAR_VALID_STATUS_CODES</code>/<code>VALID_STATUS_CODES</code> in the Python validators, not duplicated by coincidence) and on audit <code>status</code>. Full <code>dbt build</code> run: <b>37/37 passing</b> (10 models + 27 tests).</p>
+
+      <h3>Source freshness</h3>
+      <p><code>scada_readings</code>/<code>solar_readings</code> also carry a <code>freshness</code> block in <code>_sources.yml</code> (<code>warn_after: 15 min</code>, <code>error_after: 30 min</code> — three and six missed 5-minute DAG cycles). This catches a failure mode row-level validation structurally can't: an absent pipeline produces zero <i>bad</i> rows, just zero rows. Run it: <code>dbt source freshness --profiles-dir .</code></p>
+
+      <h3>Docs site</h3>
+      <p><code>dbt docs generate</code> produces a self-contained static site — an interactive lineage graph and a column-level schema browser sourced from the same <code>description:</code> fields used throughout this repo's <code>.yml</code> files. CI publishes it to GitHub Pages on every push to <code>master</code>:</p>
+      <div class="callout">
+        <span class="lbl">Live</span>
+        <p><a href="https://allmamun556.github.io/pyspark-etl-toy/" target="_blank" rel="noopener">allmamun556.github.io/pyspark-etl-toy</a></p>
+      </div>
     </section>
 
     <!-- 09 DASHBOARD -->
@@ -1174,6 +1186,16 @@ rejected:   2026-07-31 11:38:27+00</pre>
         <p>Every <code>requirements*.txt</code> is generated from a corresponding <code>requirements*.in</code> via <code>uv pip compile</code> (a drop-in <code>pip-compile</code>), so every transitive dependency is pinned to an exact version, not just the direct ones. <code>apache-airflow</code> is deliberately excluded from the compiled set and pinned separately, since Airflow ships its own version-specific constraints file and compiling it alongside everything else risks a resolver conflict.</p>
       </div>
 
+      <div class="callout">
+        <span class="lbl">CD</span>
+        <p>On every push to <code>master</code>, CI also builds and pushes all three images to GitHub Container Registry — <code>ghcr.io/allmamun556/scada-etl-pipeline-{airflow,dashboard,dbt}</code>, tagged both <code>:latest</code> and <code>:&lt;commit-sha&gt;</code>. PR builds still build every image but never push - an unreviewed branch shouldn't be able to publish an artifact.</p>
+      </div>
+
+      <div class="callout warn">
+        <span class="lbl">Pre-commit hooks - monorepo gotcha</span>
+        <p><code>pip install pre-commit &amp;&amp; pre-commit install</code> runs the same <code>ruff check</code>/<code>ruff format</code> CI runs, before a push instead of after. Since this project lives inside a monorepo sharing one <code>.git</code> directory, every hook is scoped to <code>data_engineer_tasks/scada-etl-pipeline/</code> via a <code>files:</code> pattern in <code>.pre-commit-config.yaml</code> - confirmed necessary the hard way, since an unscoped first run reformatted 35 files belonging to other, unrelated projects in the same repo.</p>
+      </div>
+
       <h3>Bootstrap sequence</h3>
       <div class="code-panel">
         <span class="cap">quick start</span>
@@ -1210,6 +1232,25 @@ docker compose run --rm dbt build --profiles-dir .</pre>
       </table></div>
       <p style="font-size:12.5px;color:var(--muted);">On top of pytest, <code>airflow dags test</code> runs <code>scada_etl_pipeline</code> and <code>solar_etl_pipeline</code> for real in CI (§12) — actual task execution, not just DagBag/schema validation.</p>
 
+      <div class="callout">
+        <span class="lbl">Coverage</span>
+        <p><code>pyproject.toml</code> bakes <code>--cov</code> into pytest's default <code>addopts</code>, scoped to <code>extract</code>/<code>transform</code>/<code>validation</code>/<code>utils</code>/<code>config</code> - not all of <code>src/</code>. <code>src/db</code> and <code>src/load</code> are deliberately excluded: they're DB-touching code, validated by the live <code>airflow dags test</code> run instead of pytest, so folding them in would either be permanently 0% (misleading - they <i>are</i> tested, differently) or need a mocked database to inflate the number. <code>--cov-fail-under=85</code> makes this a real gate: <b>currently 89%</b>.</p>
+      </div>
+
+      <h3>Idempotency — <code>scripts/verify_idempotency.py</code></h3>
+      <p>The claim, repeated throughout this doc, that replaying a load never duplicates rows rests on one line of SQL (<code>ON CONFLICT (turbine_id, ts) DO UPDATE</code>) - this script exercises it against a real database instead of leaving it as a design assertion. Two scenarios: (1) load the same batch twice, assert the row count doesn't grow; (2) load two batches whose time windows partially overlap (simulating overlapping/retried DAG runs), assert the final count equals the deduplicated union, not the sum. Runs in CI (§12) right after the Alembic migration.</p>
+      <div class="code-panel">
+        <span class="cap">python scripts/verify_idempotency.py</span>
+        <pre>--- Scenario 1: replay the same batch twice ---
+  rows after 1st load: 50, after replay: 50
+  PASS
+--- Scenario 2: overlapping batches (simulated concurrent windows) ---
+  rows after overlapping loads: 50 (expected 50)
+  PASS
+
+All idempotency checks passed.</pre>
+      </div>
+
       <h3>Benchmark — <code>scripts/benchmark.py</code></h3>
       <p>What turns "improved pipeline efficiency by 40%" from a claim into a reproducible number: generates synthetic readings, times the naive row-by-row <code>INSERT</code> path against the optimized COPY+staged-UPSERT path, and prints ms/row and the throughput multiplier.</p>
       <div class="code-panel">
@@ -1238,15 +1279,21 @@ Improvement: NN.N% lower latency per row (N.Nx throughput)</pre>
       <div class="table-wrap"><table>
         <thead><tr><th>Job</th><th>What it validates</th></tr></thead>
         <tbody>
-          <tr><td><code>lint-and-test</code></td><td><code>ruff check .</code> + all 73 pytest cases (installs <code>requirements.txt</code> minus <code>apache-airflow</code> — nothing under test imports it, and it needs its own constraints file to install reliably)</td></tr>
-          <tr><td><code>migrations-and-dbt</code></td><td>Spins up a real <code>timescale/timescaledb:2.17.2-pg16</code> service container (plain <code>postgres:16-alpine</code> can't run migration <code>0004</code>, which needs the <code>timescaledb</code> extension), runs <code>alembic upgrade head</code> from empty, <code>dbt build</code>, then installs Airflow separately and runs <code>airflow dags test</code> for both simulated-fleet DAGs against that same database</td></tr>
-          <tr><td><code>docker-build</code></td><td>Builds all three Dockerfiles (Airflow, dashboard, dbt) with GitHub Actions layer caching, to catch Dockerfile rot without running the full stack</td></tr>
+          <tr><td><code>lint-and-test</code></td><td><code>ruff check .</code> + all 73 pytest cases with an 85%-coverage gate (§11) (installs <code>requirements.txt</code> minus <code>apache-airflow</code> — nothing under test imports it, and it needs its own constraints file to install reliably)</td></tr>
+          <tr><td><code>migrations-and-dbt</code></td><td>Spins up a real <code>timescale/timescaledb:2.17.2-pg16</code> service container (plain <code>postgres:16-alpine</code> can't run migration <code>0004</code>, which needs the <code>timescaledb</code> extension), runs <code>alembic upgrade head</code> from empty, <code>scripts/verify_idempotency.py</code>, <code>dbt build</code>, <code>dbt source freshness</code> + <code>dbt docs generate</code> (published below), then installs Airflow separately and runs <code>airflow dags test</code> for both simulated-fleet DAGs against that same database</td></tr>
+          <tr><td><code>docker-build</code></td><td>Builds all three Dockerfiles (Airflow, dashboard, dbt) with GitHub Actions layer caching; on <code>master</code> pushes only, also pushes them to GHCR (§10)</td></tr>
+          <tr><td><code>deploy-dbt-docs</code></td><td>On <code>master</code> pushes only: publishes the dbt docs site to GitHub Pages</td></tr>
         </tbody>
       </table></div>
 
       <div class="callout">
         <span class="lbl">Why airflow dags test, not just DagBag import validation</span>
         <p>A DAG that merely <i>parses</i> can still be wrong in ways that only show up when a task actually runs — an XCom key that doesn't match between push and pull, a reference-anchoring query that's fine syntactically but returns the wrong shape. <code>dags test</code> executes the real task callables (<code>extract_transform_validate</code> → <code>load</code> → <code>update_watermarks_and_audit</code>) against the job's freshly-migrated database, using an isolated SQLite metadata DB and <code>SequentialExecutor</code> (SQLite doesn't support Airflow's default <code>LocalExecutor</code>) so it needs nothing beyond what's already in the job.</p>
+      </div>
+
+      <div class="callout warn">
+        <span class="lbl">Another real gotcha, caught by the first actual CI run</span>
+        <p>Airflow was first installed straight into the job's shared Python environment (already populated by the dbt/alembic step), and CI immediately broke with <code>ImportError: cannot import name 'Sentinel' from 'typing_extensions'</code> — pip left an incompatible version in place instead of resolving to what Airflow's constraints wanted. Isolating Airflow into its own virtualenv fixed that, but surfaced the <i>next</i> layer of the same problem: installing the pipeline's own lockfile (<code>sqlalchemy==2.0.35</code>) into that venv upgraded SQLAlchemy out from under Airflow's ORM models, which are written for 1.4's declarative style and raise <code>ArgumentError</code> under 2.0's stricter Annotated Declarative mapping. Fixed by excluding <code>sqlalchemy</code> from the Airflow venv install — the same exclusion (and reason) <code>Dockerfile</code> already uses for the production image. Both fixes were verified locally (isolated venv + real Postgres + isolated SQLite Airflow metadata) before pushing again.</p>
       </div>
 
       <div class="callout warn">
@@ -1330,9 +1377,13 @@ Improvement: NN.N% lower latency per row (N.Nx throughput)</pre>
 ├── dashboard/{api/main.py, static/}  <span class="c"># stats routes read dbt marts</span>
 ├── migrations/versions/              <span class="c"># 0001_initial_schema … 0004_timescaledb_hypertables</span>
 ├── sql/init.sql                      <span class="c"># bootstrap DDL, mirrors Alembic</span>
-├── scripts/benchmark.py              <span class="c"># naive vs optimized load benchmark, self-cleaning</span>
+├── scripts/
+│   ├── benchmark.py                  <span class="c"># naive vs optimized load benchmark, self-cleaning</span>
+│   └── verify_idempotency.py         <span class="c"># replay + overlap dedup check, self-cleaning</span>
 ├── tests/                            <span class="c"># 73 cases, 9 files</span>
 ├── docker-compose.yml                <span class="c"># timescaledb + airflow + dashboard + dbt</span>
+├── .pre-commit-config.yaml           <span class="c"># ruff lint + format, scoped to this directory</span>
+├── pyproject.toml                    <span class="c"># ruff + pytest + coverage config (85% gate)</span>
 ├── requirements.in / -dashboard.in / -dbt.in    <span class="c"># direct deps</span>
 ├── requirements.txt / -dashboard.txt / -dbt.txt <span class="c"># pip-compile lockfiles</span>
 └── Dockerfile / Dockerfile.dashboard / Dockerfile.dbt</pre>
@@ -1384,6 +1435,8 @@ Improvement: NN.N% lower latency per row (N.Nx throughput)</pre>
         <li>Swap <code>scada_simulator.py</code> for a real OPC-UA/MQTT client or historian export — the rest of the pipeline is source-agnostic by construction.</li>
         <li>Extend <code>airflow dags test</code> in CI to cover <code>external_data_sources</code> too, by mocking the Open-Meteo/NOAA HTTP calls instead of skipping the DAG entirely — would catch wiring bugs in that DAG the same way §12 now does for the other two.</li>
         <li>Wire the Slack alert path to a real workspace webhook in the deployed environment and confirm a forced task failure actually lands a message — currently verified via mocked unit tests only (§06).</li>
+        <li>CI's <code>dbt source freshness</code> step only proves the config is valid, since the freshly-migrated CI database has no data to check freshness <i>of</i> (§08). The real check needs to run on a schedule against the live pipeline's data - wiring that up would make freshness an actual alertable gate instead of a config smoke-test.</li>
+        <li>GHCR images publish successfully but are private by default even on a public repo - visibility has to be flipped once, manually, in the repo's Packages settings before <code>docker pull</code> works for someone else.</li>
         <li>Pull additional NDBC stations, or Open-Meteo's forecast endpoint (not just <code>current</code>), to build a proper time series per external source instead of one point-in-time reading per DAG run.</li>
         <li>Switch <code>ambient_wind_daily_comparison</code> from a calendar-day grain to a rolling window (e.g. "last 2 hours") so the §07 anchoring effect is visible immediately instead of waiting for the daily mean to converge.</li>
         <li>Add a dbt test (or <code>dbt-expectations</code>) asserting the fleet/weather/buoy wind speeds stay within a plausible delta of each other — turns the comparison mart from observational into an alertable data-quality gate.</li>

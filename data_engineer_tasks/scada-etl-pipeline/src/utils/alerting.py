@@ -8,6 +8,7 @@ Structured logs and the audit tables are necessary but not sufficient for
 real observability; someone has to actually be notified when a run fails,
 not just have it be visible if they go looking.
 """
+
 from __future__ import annotations
 
 import requests

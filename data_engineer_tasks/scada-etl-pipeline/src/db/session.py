@@ -5,6 +5,7 @@ Best practice: one Engine per process (it owns a connection pool), created
 lazily so importing this module doesn't require a live DB (important for
 unit tests that never touch the database).
 """
+
 from contextlib import contextmanager
 from functools import lru_cache
 from typing import Iterator

@@ -6,6 +6,7 @@ fetch rather than a batch of hundreds, so there's no batch-level duplicate
 or completeness check here - just physical-plausibility bounds, same
 "reject with a reason, don't silently drop" philosophy as the main pipeline.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass

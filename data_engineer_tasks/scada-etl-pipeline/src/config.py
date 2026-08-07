@@ -6,6 +6,7 @@ in pipeline code. Everything here is overridable via environment variables
 (or a .env file locally), which keeps dev/staging/prod configuration
 identical in code and different only in environment.
 """
+
 from functools import lru_cache
 
 from pydantic_settings import BaseSettings, SettingsConfigDict

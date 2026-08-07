@@ -7,6 +7,7 @@ reject sink with a human-readable reason instead of being silently dropped —
 losing SCADA rows silently is exactly how availability/production reports
 end up quietly wrong.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass

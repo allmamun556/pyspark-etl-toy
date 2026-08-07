@@ -5,6 +5,7 @@ Pure functions only: given raw readings in, cleaned/enriched readings out.
 No I/O here (no DB, no network) — that's what makes this module trivially
 unit-testable and safe to run in parallel.
 """
+
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass

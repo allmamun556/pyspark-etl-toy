@@ -13,6 +13,7 @@ generate data, only operate on what this hands them.
 logic with no turbine/plant-specific behavior, so duplicating it here would
 just be drift risk for no benefit.
 """
+
 from __future__ import annotations
 
 import math
@@ -116,9 +117,7 @@ class SolarPlantSimulator:
         spread = self._rng.uniform(-0.1, 0.1)
         return max(0.15, min(implied + spread, 1.05))
 
-    def extract(
-        self, window_start: datetime, window_end: datetime
-    ) -> Iterator[RawSolarReading]:
+    def extract(self, window_start: datetime, window_end: datetime) -> Iterator[RawSolarReading]:
         """
         Yield raw readings for every plant at each configured interval
         within [window_start, window_end).
@@ -150,9 +149,7 @@ class SolarPlantSimulator:
         ambient_temp = 12 + 8 * max(0.0, math.sin(math.pi * ((ts.hour + ts.minute / 60) / 24)))
         panel_temp = ambient_temp + (NOCT_C - 20.0) / 800.0 * irradiance + self._rng.gauss(0, 1.5)
 
-        derate = max(
-            0.5, 1 - (TEMP_COEFFICIENT_PCT_PER_C / 100) * max(0.0, panel_temp - 25.0)
-        )
+        derate = max(0.5, 1 - (TEMP_COEFFICIENT_PCT_PER_C / 100) * max(0.0, panel_temp - 25.0))
         dc_power = (
             self.settings.solar_capacity_kwp
             * (irradiance / 1000.0)

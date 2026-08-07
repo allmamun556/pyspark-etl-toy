@@ -12,6 +12,7 @@ This is dramatically faster than row-by-row INSERTs (see scripts/benchmark.py)
 and is idempotent: replaying the same batch (e.g. after an Airflow retry)
 converges to the same end state instead of creating duplicates.
 """
+
 from __future__ import annotations
 
 import csv

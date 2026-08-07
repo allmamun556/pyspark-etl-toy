@@ -11,6 +11,7 @@ Usage:
 Requires a running Postgres instance reachable via the settings in .env
 (e.g. `docker compose up -d postgres`).
 """
+
 from __future__ import annotations
 
 import argparse
@@ -149,8 +150,10 @@ def main() -> None:
 
         naive_rows = min(args.rows, 50_000)  # naive path is too slow to run at full scale
         naive_readings = make_synthetic_readings(naive_rows, "NAIVE")
-        print(f"\nRunning NAIVE path (row-by-row INSERT) on {naive_rows:,} rows "
-              f"(capped — full-scale naive run would take too long)...")
+        print(
+            f"\nRunning NAIVE path (row-by-row INSERT) on {naive_rows:,} rows "
+            f"(capped — full-scale naive run would take too long)..."
+        )
         naive_time = run_naive(engine, naive_readings)
         naive_rate = naive_rows / naive_time
         print(f"  {naive_rows:,} rows in {naive_time:.2f}s  ({naive_rate:,.0f} rows/sec)")

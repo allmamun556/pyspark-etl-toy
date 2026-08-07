@@ -1,0 +1,26 @@
+# Runs the exact same checks CI runs (ruff lint + format), locally, before
+# a commit lands - so "would CI catch this" has an answer before pushing,
+# not after. Install once per clone with `pre-commit install`; runs
+# automatically on every `git commit` from then on.
+#
+# The whole codebase was already brought into ruff-format compliance in one
+# pass before this hook was added, specifically so it only ever flags NEW
+# violations going forward - not a wall of unrelated reformatting on
+# someone's first unrelated commit.
+#
+# IMPORTANT - this project lives inside a monorepo of unrelated projects
+# sharing one .git directory. Without the `files:` scoping below, these
+# hooks run against every Python/notebook file in the ENTIRE monorepo on
+# `--all-files` (or on any commit, if this config is ever installed at the
+# true git root) - confirmed the hard way: an unscoped first run of this
+# exact config reformatted 35 files belonging to other, unrelated projects.
+# Every hook is scoped to this directory specifically so that can't happen.
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.7.4
+    hooks:
+      - id: ruff
+        files: ^data_engineer_tasks/scada-etl-pipeline/
+        args: [--fix]
+      - id: ruff-format
+        files: ^data_engineer_tasks/scada-etl-pipeline/

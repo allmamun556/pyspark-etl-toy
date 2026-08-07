@@ -10,6 +10,7 @@ Fetching (HTTP + JSON parsing) is kept separate from parsing so unit tests
 can exercise `parse_current_weather` against a fixed JSON fixture without
 making a real network call.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass

@@ -5,6 +5,7 @@ shape (rows_extracted/loaded/rejected, duration, status) fits the solar DAG
 exactly as-is, distinguished by task_id, so the solar DAG imports that
 function directly from src.load.loaders instead of a copy living here.
 """
+
 from __future__ import annotations
 
 import csv

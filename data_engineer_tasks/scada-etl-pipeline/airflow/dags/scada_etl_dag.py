@@ -14,6 +14,7 @@ XCom serialization overhead for large batches); load and watermark updates
 are separate tasks because they're the parts worth retrying/observing
 independently.
 """
+
 from __future__ import annotations
 
 import sys
@@ -123,9 +124,7 @@ def _extract_transform_validate(**context) -> dict:
             for r in valid
         ],
     )
-    context["ti"].xcom_push(
-        key="failed_count", value=len(failed)
-    )
+    context["ti"].xcom_push(key="failed_count", value=len(failed))
     context["ti"].xcom_push(
         key="failed_readings",
         value=[
@@ -265,10 +264,9 @@ with DAG(
     schedule_interval=timedelta(minutes=5),
     start_date=days_ago(1),
     catchup=False,
-    max_active_runs=1,          # avoid overlapping runs racing on the same watermark
+    max_active_runs=1,  # avoid overlapping runs racing on the same watermark
     tags=["scada", "etl", "time-series"],
 ) as dag:
-
     extract_transform_validate = PythonOperator(
         task_id="extract_transform_validate",
         python_callable=_extract_transform_validate,

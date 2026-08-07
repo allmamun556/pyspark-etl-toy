@@ -3,6 +3,7 @@ Transform layer for the solar plant fleet. Mirrors transformers.py's shape
 exactly - pure functions, no I/O - reusing `normalize_status_code` from
 there since status-code cleanup isn't source-specific.
 """
+
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
