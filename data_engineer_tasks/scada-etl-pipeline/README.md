@@ -1247,3 +1247,616 @@ scada-etl-pipeline/
 - Add a solar equivalent of `ambient_wind_daily_comparison` comparing fleet
   irradiance against `weather_api_readings.shortwave_radiation_w_m2`
   directly, the same way wind speed is checked against reality today.
+
+---
+---
+
+# Deutsche Version
+
+> **Hinweis**: Dies ist die deutsche Übersetzung der obigen Dokumentation.
+> Code, SQL, YAML, Dateipfade, Tabellen-/Spaltennamen, Umgebungsvariablen
+> und Befehle bleiben unübersetzt, da es sich um tatsächliche
+> Systembezeichner handelt, nicht um englischen Fließtext. Bei
+> Detailfragen ist die englische Version oben maßgeblich.
+
+## Inhaltsverzeichnis (Deutsch)
+
+0. [Überblick](#0-überblick-de)
+1. [Architektur](#1-architektur-de)
+2. [Datenquellen](#2-datenquellen-de)
+3. [Schema-Referenz](#3-schema-referenz-de)
+4. [Pipeline-Interna](#4-pipeline-interna-de)
+5. [Datenqualitäts-Framework](#5-datenqualitäts-framework-de)
+6. [Orchestrierung (Airflow)](#6-orchestrierung-airflow-de)
+7. [Anbindung an echte Daten (Wind + Solar)](#7-anbindung-an-echte-daten-wind--solar-de)
+8. [Analyseschicht (dbt)](#8-analyseschicht-dbt-de)
+9. [Dashboard](#9-dashboard-de)
+10. [Deployment](#10-deployment-de)
+11. [Tests & Benchmark](#11-tests--benchmark-de)
+12. [CI/CD (GitHub Actions)](#12-cicd-github-actions-de)
+13. [Konfigurationsreferenz](#13-konfigurationsreferenz-de)
+14. [Repository-Struktur](#14-repository-struktur-de)
+15. [Design-Entscheidungen](#15-design-entscheidungen-de)
+16. [Roadmap / Erweiterungen](#16-roadmap--erweiterungen-de)
+
+---
+
+## 0. Überblick <a name="0-überblick-de"></a>
+
+### Problemstellung
+
+Stellenausschreibungen und Lebensläufe im Data-Engineering enthalten
+regelmäßig Sätze wie *"Entwarf und optimierte ETL-Pipelines für die
+großskalige Datenaufnahme und -transformation von SCADA- und
+Zeitreihendaten und verbesserte die Pipeline-Effizienz um 40 %."* Dieser
+Satz ist in dieser Form nicht überprüfbar — es gibt keinen Code zum
+Nachlesen, keine Zahl zum Nachvollziehen, und keine Möglichkeit
+festzustellen, ob die "40 %" aus einer echten Messung stammen. Echte
+SCADA-Telemetriedaten einzelner Windturbinen sind zudem Eigentum der
+Windpark-Betreiber und werden nirgendwo offen veröffentlicht — ein
+Portfolio-Projekt in diesem Bereich kann also nicht einfach, wie bei
+Einzelhandelsdaten möglich, einen öffentlichen Datensatz herunterladen.
+Die Daten müssen selbst erzeugt werden, nicht nur verarbeitet.
+
+Das Problem, das dieses Projekt löst: **ein produktionsreif gestaltetes
+SCADA-/Zeitreihen-ETL-System von Anfang bis Ende bauen, bei dem jede
+Behauptung, die ein solcher Lebenslaufsatz aufstellen würde, durch
+lauffähigen Code und eine reproduzierbare Zahl belegt ist** — keine
+Behauptung, kein Screenshot, kein Spielzeugskript, das nur den
+Erfolgsfall behandelt.
+
+### Ziele
+
+1. **Eine realistische Datenerfassungsdomäne nachbilden**, ohne Zugang zu
+   echter Hardware — ein physikalisch modellierter Windturbinen-Simulator
+   und ein zweiter, unabhängiger Solar-PV-Anlagen-Simulator, beide mit
+   echter Fehlerinjektion (festhängende Sensorwerte, Ausreißer-Spitzen),
+   damit die Datenqualitätsschicht echte Arbeit zu leisten hat.
+2. **Die Simulation in der Realität verankern**, statt sie auf reinem
+   Rauschen driften zu lassen — beide simulierten Flotten werden an echte,
+   live abrufbare, kostenlose externe Daten angebunden (siehe [§7](#7-anbindung-an-echte-daten-wind--solar-de)).
+3. **Den Durchsatz-Anspruch belegen, nicht nur behaupten** — ein
+   reproduzierbarer Benchmark, der einen naiven Zeile-für-Zeile-Ladepfad
+   gegen einen optimierten Batch-Pfad misst, mit einer echten Zahl statt
+   einer Behauptung ([§11](#11-tests--benchmark-de)).
+4. **Die Belange einer echten Produktionspipeline einbauen**, die ein
+   Spielzeugskript nicht hat: idempotente Wiederherstellung nach
+   Wiederholungen und überlappenden Zeitfenstern, Datenqualitäts-Gates vor
+   den kuratierten Tabellen, Beobachtbarkeit (strukturierte Logs,
+   Audit-Tabellen, Slack-Benachrichtigungen), begrenztes Speicherwachstum
+   (Aufbewahrungsrichtlinien) und eine CI, die die Pipeline tatsächlich
+   ausführt statt sie nur zu linten.
+5. **Alles vollständig einsehbar und lauffähig machen** — ein einziges
+   `docker compose up --build -d` bringt den gesamten Stack hoch, und
+   jede Designentscheidung ist mit ihrer Begründung dokumentiert, nicht
+   nur mit dem Was.
+
+### Methodik
+
+- **Geschichtete Architektur statt Monolith**: `extract/` → `transform/`
+  → `validation/` → `load/` sind unabhängige, einzeln testbare Module ohne
+  gegenseitige Imports interner Details ([§1](#1-architektur-de), [§4](#4-pipeline-interna-de)).
+- **Ehrlich simulieren**: jeder simulierte Wert entsteht aus einem
+  expliziten physikalischen Modell (kubische Windleistungskurve,
+  Klarhimmel-Solarkurve, NOCT-Panel-Erwärmung) mit dokumentierten
+  Vereinfachungen — keine Blackbox ([§2](#2-datenquellen-de)).
+- **Mit Airflow orchestrieren, nicht mit Cron**: drei DAGs, Wiederholungen
+  mit exponentiellem Backoff, SLA-Überwachung, Fehlerbenachrichtigung ([§6](#6-orchestrierung-airflow-de)).
+- **Bei jedem Schritt live verifizieren**: jede Änderung wurde während
+  der Entwicklung gegen ein echtes laufendes System (echtes Postgres,
+  echter Airflow-Scheduler, echter CI-Lauf) geprüft, bevor sie als
+  abgeschlossen galt — dabei wurden reale Fehler gefunden und behoben, die
+  ein rein lokaler Workflow ohne Live-Verifikation stillschweigend
+  ausgeliefert hätte (dokumentiert in [§12](#12-cicd-github-actions-de)).
+- **Mit pytest testen, was pytest erreichen kann; gegen eine echte
+  Datenbank testen, was eine echte Datenbank braucht**: 73
+  reine-Funktions-Unittests für Extract/Transform/Validation-Logik, plus
+  separate Live-Datenbank-Checks (`airflow dags test`,
+  `scripts/verify_idempotency.py`, `dbt build`) für alles, was
+  tatsächlich eine Datenbank benötigt — statt eine Datenbank zu mocken, um
+  eine Coverage-Zahl aufzublähen ([§11](#11-tests--benchmark-de)).
+- **Das Warum dokumentieren, nicht nur das Was**: jede nicht offensichtliche
+  Entscheidung nennt den Kompromiss, gegen den sie abgewogen wurde ([§15](#15-design-entscheidungen-de)),
+  und echte Vorfälle während der Entwicklung werden dokumentiert statt
+  verschwiegen.
+
+### Ergebnisse
+
+| Metrik | Ergebnis |
+|---|---|
+| Unit-Tests | 73/73 bestanden, 89 % Testabdeckung der abgedeckten Module (85 %-CI-Schwelle) |
+| dbt-Tests | 37/37 bestanden (10 Modelle + 27 Datentests) |
+| Live-DAG-Ausführung in CI | `scada_etl_pipeline` und `solar_etl_pipeline` laufen bei jedem Push vollständig gegen eine echte Datenbank |
+| Idempotenz | Gegen eine echte Datenbank verifiziert, nicht nur behauptet — sowohl Wiederholungs- als auch Überlappungsszenarien bestehen ([§11](#11-tests--benchmark-de)) |
+| Benchmark | Naives Zeile-für-Zeile-`INSERT` vs. optimiertes COPY+staged-UPSERT, selbst reproduzierbar mit `python scripts/benchmark.py` |
+| Datenquellen | 2 echte, live, kostenlose externe Quellen; 2 simulierte Flotten daran verankert, nicht auf Rauschen driftend |
+| CI/CD | 4 Jobs (Lint+Coverage, Migrationen+dbt+DAG-Ausführung, Docker-Build+GHCR-Push, Pages-Deploy), bei jedem Push grün |
+| Live-Artefakte | Dashboard (2 Seiten, je 4 Diagramme + 2 Tabellen), dbt-Docs-Site auf GitHub Pages, Docker-Images auf GHCR |
+| Während der Entwicklung gefundene und behobene reale Vorfälle | Ein CI-Abhängigkeitskonflikt (`typing_extensions`/`sqlalchemy` vs. Airflow), ein per isoliertem Nachtest widerlegter falscher XCom-Alarm, sowie eine versehentliche monorepo-weite Neuformatierung, die vor dem Commit abgefangen und rückgängig gemacht wurde — alles dokumentiert statt verschwiegen ([§12](#12-cicd-github-actions-de)) |
+
+Das System erfasst Windturbinen-SCADA- und Solar-PV-Anlagendaten jeweils
+im 5-Minuten-Takt, validiert sie gegen physikalische und statistische
+Regeln, **bevor** sie die kuratierten Tabellen erreichen, und lädt sie
+idempotent mit Batch-Durchsatz. Ein dritter, unabhängiger DAG holt alle 15
+Minuten echte Umgebungswetter- und Ozeanboje-Telemetrie ein — einerseits,
+um beiden simulierten Flotten etwas Externes und Wahres zu geben, an dem
+sie sich selbst überprüfen können, andererseits (seit [§7](#7-anbindung-an-echte-daten-wind--solar-de))
+um ihre Ausgabe daran zu verankern. dbt verwandelt die kuratierten
+Tabellen in getestete Analyse-Marts; ein kleines Dashboard macht den
+Zustand und die Ergebnisse des gesamten Systems ohne SQL-Client sichtbar.
+
+**Vier Quellen speisen das Warehouse**: zwei physikalisch-realistische
+simulierte Flotten (Windturbinen und Solar-PV-Anlagen) plus zwei
+**echte, live, kostenlose** externe Quellen ohne API-Schlüssel — die
+**Open-Meteo-HTTP-API** (Umgebungswetter + Solarstrahlung) und eine
+**NOAA-NDBC-Ozeanboje** (echte IoT-Hardware). Beide simulierten Flotten
+verankern sich an den echten Quellen, statt auf reinem Rauschen zu
+driften.
+
+Beispielausgabe einer laufenden Instanz (Ihre wird abweichen — dies sind
+Beispielwerte, keine dauerhaften Fakten):
+
+```text
+scada_readings:  22.306 Zeilen  (20 Turbinen)
+solar_readings:      72 Zeilen  (8 Anlagen)
+rejects (Wind):      54 Zeilen
+weather_api_readings: 20 Zeilen (inkl. echtem shortwave_radiation_w_m2)
+iot_buoy_readings:    19 Zeilen
+pytest:              73 / 73 bestanden
+```
+
+---
+
+## 1. Architektur <a name="1-architektur-de"></a>
+
+Das vollständige ASCII-Architekturdiagramm mit allen Tabellen- und
+Servicebezeichnern befindet sich in [§1 der englischen Version](#1-architecture)
+oben (Bezeichner wie `scada_etl_pipeline`, `TimescaleDB`, `marts.*` sind
+Systemnamen und bleiben identisch). Zusammengefasst: drei unabhängige
+Airflow-DAGs schreiben in eine TimescaleDB-Instanz. dbt liest die
+kuratierten Tabellen in getestete Analyse-Marts; das Dashboard liest für
+seine Kennzahlen die Marts und für alles andere direkt die kuratierten
+Tabellen. Nichts außer den DAGs schreibt in die Datenbank, und nichts
+außer der Datenbank ist gemeinsamer Zustand zwischen ihnen.
+
+**Angewandte Designprinzipien:**
+
+| Prinzip | Umsetzung |
+|---|---|
+| Trennung der Zuständigkeiten | `extract/`, `transform/`, `validation/`, `load/` sind unabhängige, einzeln testbare Module ohne gegenseitige interne Imports |
+| Idempotenz | Jeder Ladepfad ist ein `INSERT ... ON CONFLICT ... DO UPDATE`, sodass ein wiederholter DAG-Lauf konvergiert statt zu duplizieren |
+| Inkrementelle Extraktion | Beide simulierten Flotten führen pro Anlage einen Hochwasserstand (`extraction_watermark` / `solar_extraction_watermark`); jeder Lauf erzeugt nur Daten seit dieser Marke |
+| Datenqualität als erstklassiger Schritt | Sechs Dimensionen werden vor dem Laden geprüft — siehe [§5](#5-datenqualitäts-framework-de). Fehlgeschlagene Zeilen landen mit Begründung in Reject-Tabellen, nie stillschweigend verworfen |
+| Entkoppelte Fehlerdomänen | Der externe-Quellen-DAG ist getrennt von beiden simulierten Flotten-DAGs, damit ein Ausfall bei NOAA/Open-Meteo keine der beiden Pipelines mit Wiederholungsversuchen überflutet |
+| Beobachtbarkeit | Strukturiertes JSON-Logging, zwei Audit-Tabellen, Airflow-SLAs + exponentielles Backoff, Slack-Fehlerbenachrichtigungen (sicherer No-Op ohne Konfiguration) |
+| Konfiguration als Code | Jeder Schwellenwert, jede URL, jede Zugangsdaten ist ein `pydantic-settings`-Feld in `src/config.py`, überschreibbar per Umgebungsvariable |
+| Schema-Migrationen | Alembic ist die Quelle der Wahrheit für das Schema; `sql/init.sql` spiegelt es für ein abhängigkeitsfreies lokales Bootstrap |
+| Begrenztes Speicherwachstum | `scada_readings`/`solar_readings` sind TimescaleDB-Hypertables mit 90-Tage-Aufbewahrungsrichtlinie |
+| Single Source of Truth für Aggregate | Die Dashboard-Statistiken pro Turbine/Anlage lesen dbts `marts.*`-Tabellen statt dieselbe Aggregations-SQL doppelt zu implementieren |
+| Reproduzierbarkeit | `docker compose up --build -d` startet alle drei DAGs, das Dashboard und einen Einmal-dbt-Build ohne manuelle Schritte; jede Abhängigkeit ist über eine `pip-compile`-Lockdatei fixiert; CI veröffentlicht gebaute Images bei jedem `master`-Push auf GHCR |
+| Testbarkeit | 73 pytest-Fälle (89 % Abdeckung, 85 %-Gate); `airflow dags test` führt die echten DAGs Ende-zu-Ende in CI aus; `scripts/verify_idempotency.py` belegt den Upsert-Anspruch gegen eine echte Datenbank |
+
+---
+
+## 2. Datenquellen <a name="2-datenquellen-de"></a>
+
+### SCADA-Simulator — simuliert
+
+`src/extract/scada_simulator.py` ist das einzige Modul im Code, das weiß,
+"wie Daten ins System gelangen" — nichts nachgelagert erzeugt oder
+erfindet Daten, was den Simulator austauschbar macht gegen einen echten
+OPC-UA-/MQTT-Client, ohne sonst etwas anzufassen.
+
+- **Leistungskurve**: kubische Rampe zwischen Einschaltgeschwindigkeit
+  (3 m/s) und Nenngeschwindigkeit (12 m/s), Nennleistung (3.300 kW) bis
+  zur Abschaltgeschwindigkeit (25 m/s), darüber null.
+- **Winddrift**: Ornstein-Uhlenbeck-artiges Rauschen pro Turbine und Tick
+  (±0,4 m/s Schritt, begrenzt auf `[0, 28]`).
+- **Injizierte Fehler (~0,5 % der Ticks)**: ein "festhängender Sensor",
+  der 2–5 Ticks lang den letzten Wert wiederholt (Kommunikationsstörung),
+  und eine Leistungsspitze außerhalb des gültigen Bereichs, 1,2–1,8-fach
+  der Nennleistung (vereisungsbedingter Anemometerfehler).
+- **Referenzwind-Verankerung**: seit [§7](#7-anbindung-an-echte-daten-wind--solar-de)
+  wird die Windgeschwindigkeit der Flotte pro Lauf an die letzte echte
+  Open-Meteo-Messung verankert statt gleichverteilt aus `[4, 14]` gezogen.
+
+### Solar-Anlagen-Simulator — simuliert
+
+`src/extract/solar_simulator.py` — gleiche Begründung und Form wie der
+Wind-Simulator; simuliert eine Flotte von 8 PV-Anlagen (je 5 MWp DC /
+4,5 MW AC). Klarhimmel-Strahlungsmodell, NOCT-Panel-Erwärmung,
+Temperatur-Derating, Wechselrichter-Clipping, echte Null in der Nacht
+(kein rauschbedingter Beinahe-Null-Wert), injizierte Fehler
+(festhängender Strahlungssensor, Wechselrichter-Ausfall).
+
+### Open-Meteo — echt, HTTP-API
+
+`src/extract/weather_api_extractor.py` — ein einfaches HTTP-GET, keine
+Authentifizierung, aufgeteilt in `fetch_current_weather_raw()` (Netzwerk)
+und `parse_current_weather()` (rein), damit Tests den Parser gegen eine
+feste JSON-Fixture prüfen, ohne das Netzwerk zu berühren. Abfrageort:
+Bremerhaven, Deutschland (echter Nordsee-Windenergie-Standort).
+`shortwave_radiation` ist das Feld, das den Solar-Simulator verankert —
+ein einziger HTTP-Abruf speist die Referenzwerte beider Pipelines.
+
+### NOAA-NDBC-Boje 46050 — echt, IoT
+
+`src/extract/iot_buoy_extractor.py` — ruft NOAAs `realtime2`-Textfeed ab
+und parst die neueste (erste) Datenzeile. `MM` markiert einen fehlenden
+Sensorwert und wird zu `None`, nie zu Null geparst.
+
+Beide echten Extraktoren laufen in ihrem eigenen DAG
+(`external_data_sources`), getrennt von `scada_etl_pipeline` und
+`solar_etl_pipeline`, damit ein Ausfall bei NOAA oder Open-Meteo keine
+der simulierten Pipelines mit Wiederholungen überflutet. Das ist keine
+Theorie: während der Entwicklung lieferte Open-Meteo einen echten
+`503 Service Unavailable` — der DAG erfasste `status="failed"` korrekt
+(0 geladene Zeilen, kein falscher Erfolg), und Airflows eigener
+Wiederholungsmechanismus griff automatisch.
+
+---
+
+## 3. Schema-Referenz <a name="3-schema-referenz-de"></a>
+
+Dreizehn Tabellen im `public`-Schema, verwaltet von Alembic
+(`migrations/versions/0001` bis `0004`), gespiegelt in `sql/init.sql`.
+Tabellen-, Spalten- und Constraint-Namen bleiben unübersetzt (echte
+Systembezeichner) — Details siehe [§3 der englischen Version](#3-schema-reference).
+
+Zusammengefasst:
+
+- **`scada_readings`** — kuratiert, eine Zeile pro Turbine und Zeitstempel.
+  **TimescaleDB-Hypertable**, automatisch nach `ts` partitioniert, mit
+  90-Tage-Aufbewahrungsrichtlinie. Zusammengesetzter Primärschlüssel
+  `(id, ts)`, da TimescaleDB verlangt, dass jeder Unique-Index/Primärschlüssel
+  auf einer Hypertable die Partitionierungsspalte enthält. Unique auf
+  `(turbine_id, ts)` — das macht den Upsert idempotent.
+- **`solar_readings`** — ebenfalls eine Hypertable, identische Logik wie
+  oben, für Solaranlagen statt Turbinen.
+- **`scada_readings_rejects` / `solar_readings_rejects`** — Zeilen, die
+  die Validierung nicht bestanden haben, mit lesbarer Begründung.
+- **`extraction_watermark` / `solar_extraction_watermark`** — Hochwasserstand
+  pro Anlage für die inkrementelle Extraktion.
+- **`pipeline_run_audit`** — eine Zeile pro `scada_etl_pipeline`- **oder**
+  `solar_etl_pipeline`-Lauf, gemeinsam genutzt von beiden Flotten (gleiche
+  Form, `task_id` unterscheidet).
+- **`external_data_run_audit`** — spiegelt `pipeline_run_audit` für den
+  externen-Quellen-DAG.
+- **`weather_api_readings`** (echt) — unique auf `(latitude, longitude, ts)`,
+  inkl. `shortwave_radiation_w_m2`.
+- **`iot_buoy_readings`** (echt) — unique auf `(station_id, ts)`.
+
+---
+
+## 4. Pipeline-Interna <a name="4-pipeline-interna-de"></a>
+
+Vier unabhängige, so weit wie möglich reine Schichten. Nur `extract` und
+`load` haben I/O; `transform` und `validation` sind reine Funktionen über
+Dataclasses.
+
+```
+RawScadaReading → transform_reading() → TransformedReading
+                 → validate_batch() → valid[] / failed[]
+                 → load_batch_optimized() → scada_readings
+```
+
+**Transform — `src/transform/transformers.py`**: `normalize_status_code()`
+(Kleinschreibung, Trimmen, Leerzeichen zu Unterstrichen — defensiv gegen
+uneinheitliche Herstellerbezeichnungen), `flag_statistical_anomaly()`
+(Kreuzfeld-Konsistenzprüfung: Leistung ohne Rotation oder Rotation ohne
+Leistung ist physikalisch inkonsistent, auch wenn jedes Feld einzeln im
+gültigen Bereich liegt), `transform_reading()` (reine Abbildung,
+Großschreibung der Turbinen-ID, Zeitstempel).
+
+**Load — `src/load/loaders.py`**: `load_batch_optimized()` ist der
+Durchsatzpfad, den der Benchmark in [§11](#11-tests--benchmark-de) misst
+— COPY in eine UNLOGGED-Staging-Tabelle, dann ein einziges
+`INSERT ... SELECT ... ON CONFLICT ... DO UPDATE` in einer Transaktion,
+dann TRUNCATE der Staging-Tabelle. `load_batch_naive()` existiert nur,
+damit `scripts/benchmark.py` etwas zum Vergleichen hat — die
+Produktions-DAG ruft sie nie auf.
+
+**Solar-Flotte** — `solar_transformers.py` / `solar_validators.py` /
+`solar_loaders.py`: strukturell identisch zum Windpfad oben,
+wiederverwendet `normalize_status_code()`, da die Statuscode-Bereinigung
+nicht quellenspezifisch ist.
+
+---
+
+## 5. Datenqualitäts-Framework <a name="5-datenqualitäts-framework-de"></a>
+
+Jede der folgenden Dimensionen wird in `src/validation/validators.py`
+(SCADA), `solar_validators.py` (Solar) oder `external_validators.py`
+(Wetter/Boje) durchgesetzt. Jeder Fehler auf Zeilenebene landet mit
+konkreter Begründung in einer Reject-Tabelle, nie stillschweigend
+verworfen.
+
+| Dimension | Prüfung |
+|---|---|
+| Gültigkeit / Genauigkeit | Physikalische Grenzwerte: Windgeschwindigkeit, Leistung, Rotor-RPM, Gondeltemperatur, Pitch-Winkel — jeweils gegen einen konfigurierbaren Maximalwert |
+| Konsistenz | Kreuzfeld-Prüfung: Leistung bei nahezu null Rotation, oder Rotation bei null Leistung, schlägt fehl, obwohl jedes Feld einzeln im gültigen Bereich liegt |
+| Aktualität | Ein Zeitstempel mehr als `max_future_skew_seconds` (Standard 300 s) in der Zukunft wird als fehlerhafte Sensoruhr abgelehnt |
+| Eindeutigkeit | `find_batch_duplicates()` erkennt `(turbine_id, ts)`-Kollisionen innerhalb eines einzelnen Extraktions-Batches |
+| Vollständigkeit | `check_batch_completeness()` berechnet die erwartete Zeilenzahl aus Zeitfenster × Turbinenzahl × Intervall und protokolliert eine strukturierte Warnung bei Abweichung |
+| Schema / Pflichtfelder | Fehlende `turbine_id`, fehlendes `ts` oder unbekannter `status_code` schlagen explizit fehl |
+
+---
+
+## 6. Orchestrierung (Airflow) <a name="6-orchestrierung-airflow-de"></a>
+
+Drei DAGs, zwei Taktungen, drei Fehlerdomänen — bewusst getrennt, damit
+ein Ausfall in einem vorgelagerten System nicht den Zeitplan eines
+anderen DAGs mit Wiederholungen überflutet.
+
+- **`scada_etl_pipeline`** — alle 5 Minuten. Aufgabengraph:
+  `extract_transform_validate` → `load` → `update_watermarks_and_audit`.
+- **`solar_etl_pipeline`** — alle 5 Minuten, strukturell identisch, mit
+  `solar_extraction_watermark` statt `extraction_watermark`.
+- **`external_data_sources`** — alle 15 Minuten, zwei unabhängige
+  Aufgaben (`extract_load_weather`, `extract_load_buoy`).
+
+**Gemeinsame Wiederholungsrichtlinie**: `retries: 3`, `retry_delay: 2 Min`,
+exponentielles Backoff, `max_retry_delay: 15 Min`, `max_active_runs: 1`
+pro DAG, `catchup: False`.
+
+**Fehlerbenachrichtigung**: alle drei DAGs setzen
+`on_failure_callback: notify_dag_failure` (`src/utils/alerting.py`). Bei
+erschöpften Wiederholungen wird die DAG-ID, Task-ID, Lauf-ID und die
+Airflow-Log-URL an einen Slack-Incoming-Webhook gesendet. Ohne
+`SLACK_WEBHOOK_URL` (Standard) ist dies ein sicherer No-Op, protokolliert
+auf `INFO`-Ebene, kein Absturz.
+
+---
+
+## 7. Anbindung an echte Daten (Wind + Solar) <a name="7-anbindung-an-echte-daten-wind--solar-de"></a>
+
+Keiner der beiden Simulatoren liegt zufällig im selben Bereich wie die
+echten Quellen — jeder Lauf liest den letzten passenden echten Wert aus
+Postgres zurück und verankert seine Flotte daran.
+
+**Wind**: `_fetch_reference_wind_speed(conn)` liest die neueste Zeile aus
+`weather_api_readings`. Ist sie leer oder älter als
+`reference_wind_max_staleness_minutes` (Standard 180 Min), liefert die
+Funktion `None`, und der Simulator fällt auf sein ursprüngliches,
+unverankertes Verhalten zurück — die beiden DAGs bleiben vollständig
+entkoppelt.
+
+**Verifizierter Effekt**: live ausgelöst bei einer echten Wettermessung
+von 3,77 m/s landeten neue SCADA-Messwerte bei 1,75–6,04 m/s
+(Mittelwert 3,65), gegenüber dem alten unverankerten Bereich von 4–14 m/s.
+
+**Solar**: derselbe Mechanismus, verankert an
+`shortwave_radiation_w_m2` statt `wind_speed_ms`, ausgedrückt als
+Bewölkungsfaktor statt als Direktwert.
+
+---
+
+## 8. Analyseschicht (dbt) <a name="8-analyseschicht-dbt-de"></a>
+
+Ein kleines dbt-Projekt auf den kuratierten Tabellen — eigene
+Postgres-Schemas (`staging`, `marts`), sichtbar getrennt von `public`.
+
+```
+public.* → source() → staging.stg_* (Views) → ref() → marts.* (Tabellen)
+```
+
+**Marts**: `turbine_daily_summary`, `solar_daily_summary`,
+`pipeline_run_daily_summary`, `ambient_wind_daily_comparison`,
+`renewable_fleet_daily_summary` (der Auszahlungs-Mart: Wind- und
+Solar-Gesamtdurchschnittsleistung nebeneinander plus Gesamtsumme).
+
+**Tests**: 27 Datentests über Staging und Marts. Vollständiger
+`dbt build`: **37/37 bestanden** (10 Modelle + 27 Tests).
+
+**Quellenaktualität**: `scada_readings`/`solar_readings` tragen einen
+`freshness`-Block (`warn_after: 15 Min`, `error_after: 30 Min`) — erkennt
+"die Pipeline ist stillschweigend stehengeblieben", eine Fehlerart, die
+zeilenbasierte Validierung strukturell nicht erkennen kann.
+
+**Docs-Site**: `dbt docs generate` erzeugt eine eigenständige statische
+Site — ein interaktiver Lineage-Graph plus ein spaltenweiser
+Schema-Browser. Live veröffentlicht: **https://allmamun556.github.io/pyspark-etl-toy/dbt-docs/**
+
+---
+
+## 9. Dashboard <a name="9-dashboard-de"></a>
+
+`dashboard/api/main.py` (FastAPI) + `dashboard/static/` (Vanilla JS +
+Chart.js, kein Build-Schritt). Die meisten Routen lesen direkt das
+`public`-Schema; die beiden `/stats`-Routen lesen stattdessen dbts
+`marts.*`-Tabellen — eine einzige Quelle der Wahrheit statt einer zweiten,
+parallelen Aggregation.
+
+**Frontend — je vier Diagramme, zwei Tabellen, pro Flottenseite**:
+
+- KPI-Zeile, Flottenübersicht (Balken + Linie), Zeitreihe pro Turbine/Anlage
+- **Leistungskurve (Streudiagramm)** — Windgeschwindigkeit/Strahlung vs.
+  Leistung, ein Punkt pro Anlage, rot = anomal. Ersetzt eine frühere
+  "letzter Messwert pro Turbine"-Tabelle: ein Streudiagramm dieser beiden
+  Felder **ist** die klassische Windturbinen-Leistungskurve.
+- **Pipeline-Lauf-Gesundheit (Balken + Linie)** — geladene/abgelehnte
+  Zeilen pro Lauf plus Laufdauer, letzte 10 Läufe.
+- **Datenqualitätsereignisse** (Tabelle) — Anomalien und Rejects in einer
+  Tabelle zusammengeführt (Spalte `type` unterscheidet), damit insgesamt
+  nur zwei Tabellen pro Seite bleiben statt vier.
+- **Externe Datenquellen** — KPI-Karten + Tabelle der letzten Läufe.
+
+Erreichbar unter **http://localhost:3000** sobald der Stack läuft.
+
+---
+
+## 10. Deployment <a name="10-deployment-de"></a>
+
+Jeder Service mit eigenem Abhängigkeitsbaum bekommt sein eigenes
+Dockerfile. `postgres` läuft als `timescale/timescaledb:2.17.2-pg16`
+(kompatibler Ersatz für PostgreSQL 16 mit vorinstallierter
+`timescaledb`-Erweiterung). `dashboard` startet erst, nachdem `dbt`
+erfolgreich durchgelaufen ist, nicht nur, wenn Postgres gesund ist.
+
+**Reproduzierbare Installationen**: jede `requirements*.txt` wird per
+`uv pip compile` aus einer `requirements*.in` erzeugt — jede transitive
+Abhängigkeit ist exakt fixiert.
+
+**CD**: bei jedem Push auf `master` baut und veröffentlicht CI außerdem
+alle drei Images auf GitHub Container Registry
+(`ghcr.io/allmamun556/scada-etl-pipeline-{airflow,dashboard,dbt}`),
+getaggt mit `:latest` und `:<commit-sha>`.
+
+**Pre-Commit-Hooks**: `pip install pre-commit && pre-commit install`
+führt bei jedem Commit dieselben Prüfungen aus wie CI (`ruff check`,
+`ruff format`) — lokal skopiert auf dieses Verzeichnis, da es sich um ein
+Monorepo handelt.
+
+```bash
+git clone <ihre-repo-url> scada-etl-pipeline
+cd scada-etl-pipeline
+cp .env.example .env
+docker compose up --build -d
+```
+
+---
+
+## 11. Tests & Benchmark <a name="11-tests--benchmark-de"></a>
+
+73 reine-Funktions-Tests, keine Live-Datenbank- oder Netzwerkabhängigkeit
+— siehe [§11 der englischen Version](#11-testing--benchmark) für die
+Aufschlüsselung nach Datei. **Testabdeckung**: `pyproject.toml` bindet
+`--cov` in pytests Standard-`addopts` ein, skopiert auf die reinen
+Module (`extract`/`transform`/`validation`/`utils`/`config`) — `src/db`
+und `src/load` sind bewusst ausgenommen, da sie durch den Live-Lauf von
+`airflow dags test` statt durch pytest validiert werden.
+`--cov-fail-under=85` macht dies zu einem echten Gate: **aktuell 89 %**.
+
+**Idempotenz — `scripts/verify_idempotency.py`**: die überall in dieser
+Dokumentation wiederholte Behauptung, dass ein wiederholter Ladevorgang
+nie Zeilen dupliziert, beruht auf einer Zeile SQL
+(`ON CONFLICT (turbine_id, ts) DO UPDATE`) — dieses Skript überprüft sie
+tatsächlich gegen eine echte Datenbank statt sie als Designannahme stehen
+zu lassen.
+
+**Benchmark — `scripts/benchmark.py`**: das, was "40 % Effizienzsteigerung"
+von einer Behauptung zu einer reproduzierbaren Zahl macht. Erzeugt
+synthetische Messwerte, misst den naiven Zeile-für-Zeile-`INSERT`-Pfad
+gegen den optimierten COPY+staged-UPSERT-Pfad.
+
+---
+
+## 12. CI/CD (GitHub Actions) <a name="12-cicd-github-actions-de"></a>
+
+Live unter [github.com/allmamun556/pyspark-etl-toy/actions](https://github.com/allmamun556/pyspark-etl-toy/actions)
+— `.github/workflows/scada-etl-pipeline-ci.yml`.
+
+> **Eine echte Monorepo-Falle**: GitHub Actions entdeckt Workflow-Dateien
+> nur relativ zum **echten Repository-Root**. Die Workflow-Datei muss am
+> Root des Monorepos liegen, mit `paths:`-Filter, damit sie nur bei
+> Änderungen unter `data_engineer_tasks/scada-etl-pipeline/**` auslöst.
+
+**Vier Jobs**: `lint-and-test` (Ruff + 73 pytest-Fälle mit 85 %-Coverage-Gate),
+`migrations-and-dbt` (echtes TimescaleDB, Alembic-Migration,
+Idempotenz-Check, `dbt build`, Quellenaktualität, `dbt docs generate`,
+isolierte Airflow-Venv, `airflow dags test` für beide simulierten DAGs),
+`docker-build` (alle drei Images bauen; bei `master`-Pushes zusätzlich
+GHCR-Push), `deploy-dbt-docs` (bei `master`-Pushes: veröffentlicht diese
+volle Dokumentation **und** die dbt-Docs-Site gemeinsam auf GitHub Pages
+— siehe unten).
+
+> **Ein weiterer echter Vorfall, gefangen vom ersten echten CI-Lauf**:
+> Airflow wurde zunächst direkt in die gemeinsame Python-Umgebung des
+> Jobs installiert (bereits durch den dbt/alembic-Schritt befüllt), und
+> CI brach sofort mit `ImportError: cannot import name 'Sentinel' from
+> 'typing_extensions'` ab — pip beließ eine bereits installierte,
+> inkompatible Version, statt die von Airflows Constraints-Datei
+> gewünschte Version zu verwenden. Die Isolierung von Airflow in eine
+> eigene virtuelle Umgebung behob dies, brachte aber die nächste Schicht
+> desselben Problems zutage: die Installation des eigenen Lockfiles der
+> Pipeline (`sqlalchemy==2.0.35`) in diese Umgebung hob SQLAlchemy unter
+> Airflows eigenen ORM-Modellen an, die für den deklarativen Stil von 1.4
+> geschrieben sind. Behoben durch Ausschluss von `sqlalchemy` aus der
+> Airflow-Venv-Installation — dieselbe Ausnahme, die `Dockerfile` bereits
+> für das Produktions-Airflow-Image verwendet. Beide Fixes wurden lokal
+> verifiziert, bevor erneut gepusht wurde.
+
+**Veröffentlichte Doku**: GitHub Pages liefert genau ein Artefakt pro
+Deployment — CI stellt daher diese Dokumentation (als `index.html`) und
+die dbt-Docs-Site (unter `/dbt-docs/`) vor der Veröffentlichung in ein
+gemeinsames Verzeichnis:
+
+- Vollständige Dokumentation: **https://allmamun556.github.io/pyspark-etl-toy/**
+- dbt-Docs (Lineage + Schema-Browser): **https://allmamun556.github.io/pyspark-etl-toy/dbt-docs/**
+
+---
+
+## 13. Konfigurationsreferenz <a name="13-konfigurationsreferenz-de"></a>
+
+`src/config.py` — eine einzige `pydantic-settings`-Klasse, gecacht mit
+`@lru_cache`, liest aus Umgebungsvariablen oder einer lokalen `.env`.
+Enthält u. a. Verbindungsdaten, Flottengrößen (`turbine_count`,
+`solar_plant_count`), Validierungsschwellenwerte für beide Flotten,
+externe Quellen-Endpunkte, Anker-Frische-Schwellenwerte
+(`reference_wind_max_staleness_minutes`,
+`reference_irradiance_max_staleness_minutes`), `slack_webhook_url`
+(Standard `None` — sicherer No-Op) und `log_level`. Vollständige Liste:
+[§13 der englischen Version](#13-configuration-reference).
+
+---
+
+## 14. Repository-Struktur <a name="14-repository-struktur-de"></a>
+
+Dateipfade und Namen bleiben unübersetzt (echte Systembezeichner) —
+vollständiger Baum in [§14 der englischen Version](#14-repository-layout).
+Wichtig: die Workflow-Datei
+`.github/workflows/scada-etl-pipeline-ci.yml` liegt am echten
+Git-Repository-Root, eine Ebene über diesem Projekt, nicht in diesem
+Verzeichnisbaum.
+
+---
+
+## 15. Design-Entscheidungen <a name="15-design-entscheidungen-de"></a>
+
+- **Airflow statt Cron**: Wiederholungen mit Backoff, SLA-Alarmierung,
+  Backfill-Unterstützung und ein visueller DAG rechtfertigen den
+  zusätzlichen Betriebsaufwand, sobald mehr als ein paar voneinander
+  abhängige Jobs existieren.
+- **Batch-COPY + Staging-Tabelle statt zeilenweisem INSERT**: der größte
+  einzelne Hebel für den Durchsatz.
+- **Reject-Tabelle statt Verwerfen fehlerhafter Zeilen**: SCADA-Sensoren
+  fallen auf Arten aus, die wie echte Daten aussehen.
+- **Wasserzeichen-basierte inkrementelle Extraktion statt Vollreload**.
+- **Drei DAGs statt einem**: ein Ausfall bei NOAA oder Open-Meteo ist ein
+  echter, externer, unvorhersehbarer Fehlerfall.
+- **`pipeline_run_audit` teilen, aber nicht die Messwert-Tabellen**: Wind-
+  und Solar-Audit-Zeilen haben identische Form; die Messwert-/Reject-/
+  Wasserzeichen-Tabellen unterscheiden sich echt.
+- **Eigenes Image pro Service statt eines gemeinsamen**: Airflows
+  Basis-Image fixiert SQLAlchemy 1.4.x; Dashboard und dbt wollen aktuelle
+  Versionen.
+- **TimescaleDB statt manueller Partitionierung**.
+- **Dashboard liest dbt-Marts statt dieselbe Aggregation doppelt zu
+  implementieren**.
+- **Slack-Alarmierung über einen einfachen `on_failure_callback` statt
+  eines Airflow-Provider-Pakets**.
+
+---
+
+## 16. Roadmap / Erweiterungen <a name="16-roadmap--erweiterungen-de"></a>
+
+- Den Simulator in `src/extract/scada_simulator.py` durch einen echten
+  OPC-UA-/MQTT-Client oder einen Historian-Export ersetzen.
+- `airflow dags test` in CI auf `external_data_sources` ausweiten, durch
+  Mocken der Open-Meteo-/NOAA-HTTP-Aufrufe statt den DAG ganz zu
+  überspringen.
+- Den Slack-Alarmpfad an einen echten Workspace-Webhook anbinden und
+  einen erzwungenen Task-Fehler bestätigen.
+- `dbt source freshness` in CI validiert bisher nur die Konfiguration
+  gegen eine leere Datenbank — die echte Prüfung müsste geplant gegen die
+  Live-Pipeline-Daten laufen.
+- GHCR-Images sind standardmäßig **privat**, auch bei einem öffentlichen
+  Repository — die Sichtbarkeit muss einmalig manuell umgestellt werden.
+- Zusätzliche NDBC-Stationen oder Open-Meteos Forecast-Endpunkt einbinden.
+- `ambient_wind_daily_comparison` von einer Kalendertag-Granularität auf
+  ein gleitendes Fenster umstellen.
+- Einen dbt-Test (oder `dbt-expectations`) hinzufügen, der die
+  Wind-/Wetter-/Bojen-Geschwindigkeiten auf plausible Abweichung prüft.
+- Solars Klarhimmel-Modell nutzt feste UTC-Sonnenauf-/-untergangszeiten
+  statt echter Sonnenstandsberechnung (z. B. via `pvlib`).
+- Ein solares Äquivalent zu `ambient_wind_daily_comparison` hinzufügen.

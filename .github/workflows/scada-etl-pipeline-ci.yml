@@ -155,11 +155,12 @@ jobs:
       # dbt's generated site lives at /dbt-docs/ underneath it. Both are
       # fully self-contained (inline CSS/JS, no external asset paths), so
       # neither cares that it's being served from a subpath.
-      - name: Assemble combined Pages site (full docs + dbt docs)
+      - name: Assemble combined Pages site (full docs + German docs + dbt docs)
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: |
           mkdir -p /tmp/pages_site
           cp docs/documentation.html /tmp/pages_site/index.html
+          cp docs/documentation.de.html /tmp/pages_site/documentation.de.html
           cp -r dbt/target /tmp/pages_site/dbt-docs
 
       - name: Upload combined site as a Pages artifact
