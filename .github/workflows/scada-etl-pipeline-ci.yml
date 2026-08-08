@@ -148,11 +148,25 @@ jobs:
         working-directory: data_engineer_tasks/scada-etl-pipeline/dbt
         run: dbt docs generate --profiles-dir .
 
-      - name: Upload dbt docs site as a Pages artifact
+      # GitHub Pages (Actions-based) serves exactly one artifact per
+      # deployment, and this project has two separate static sites to
+      # publish - so they're assembled into one directory first:
+      # docs/documentation.html becomes the site root (index.html), and
+      # dbt's generated site lives at /dbt-docs/ underneath it. Both are
+      # fully self-contained (inline CSS/JS, no external asset paths), so
+      # neither cares that it's being served from a subpath.
+      - name: Assemble combined Pages site (full docs + dbt docs)
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        run: |
+          mkdir -p /tmp/pages_site
+          cp docs/documentation.html /tmp/pages_site/index.html
+          cp -r dbt/target /tmp/pages_site/dbt-docs
+
+      - name: Upload combined site as a Pages artifact
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         uses: actions/upload-pages-artifact@v3
         with:
-          path: data_engineer_tasks/scada-etl-pipeline/dbt/target
+          path: /tmp/pages_site
 
       # Airflow gets its own virtualenv rather than installing into the
       # job's shared site-packages: its constraints-pinned transitive deps
@@ -275,7 +289,7 @@ jobs:
           cache-to: type=gha,mode=max,scope=dbt
 
   deploy-dbt-docs:
-    name: Publish dbt docs to GitHub Pages
+    name: Publish docs site (full docs + dbt docs) to GitHub Pages
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     needs: migrations-and-dbt
     runs-on: ubuntu-latest

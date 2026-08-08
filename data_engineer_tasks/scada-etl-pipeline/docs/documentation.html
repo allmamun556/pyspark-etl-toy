@@ -1180,10 +1180,10 @@ rejected:   2026-07-31 11:38:27+00</pre>
       <p><code>scada_readings</code>/<code>solar_readings</code> also carry a <code>freshness</code> block in <code>_sources.yml</code> (<code>warn_after: 15 min</code>, <code>error_after: 30 min</code> — three and six missed 5-minute DAG cycles). This catches a failure mode row-level validation structurally can't: an absent pipeline produces zero <i>bad</i> rows, just zero rows. Run it: <code>dbt source freshness --profiles-dir .</code></p>
 
       <h3>Docs site</h3>
-      <p><code>dbt docs generate</code> produces a self-contained static site — an interactive lineage graph and a column-level schema browser sourced from the same <code>description:</code> fields used throughout this repo's <code>.yml</code> files. CI publishes it to GitHub Pages on every push to <code>master</code>:</p>
+      <p><code>dbt docs generate</code> produces a self-contained static site — an interactive lineage graph and a column-level schema browser sourced from the same <code>description:</code> fields used throughout this repo's <code>.yml</code> files. GitHub Pages serves one artifact per deployment, so CI assembles this doc (the page you're reading now) and the dbt docs site into one directory before publishing on every push to <code>master</code>: this doc becomes the site root, dbt's site lives at <code>/dbt-docs/</code> underneath it.</p>
       <div class="callout">
         <span class="lbl">Live</span>
-        <p><a href="https://allmamun556.github.io/pyspark-etl-toy/" target="_blank" rel="noopener">allmamun556.github.io/pyspark-etl-toy</a></p>
+        <p>Full docs: <a href="https://allmamun556.github.io/pyspark-etl-toy/" target="_blank" rel="noopener">allmamun556.github.io/pyspark-etl-toy</a><br>dbt docs: <a href="https://allmamun556.github.io/pyspark-etl-toy/dbt-docs/" target="_blank" rel="noopener">allmamun556.github.io/pyspark-etl-toy/dbt-docs/</a></p>
       </div>
     </section>
 
@@ -1353,7 +1353,7 @@ Improvement: NN.N% lower latency per row (N.Nx throughput)</pre>
           <tr><td><code>lint-and-test</code></td><td><code>ruff check .</code> + all 73 pytest cases with an 85%-coverage gate (§11) (installs <code>requirements.txt</code> minus <code>apache-airflow</code> — nothing under test imports it, and it needs its own constraints file to install reliably)</td></tr>
           <tr><td><code>migrations-and-dbt</code></td><td>Spins up a real <code>timescale/timescaledb:2.17.2-pg16</code> service container (plain <code>postgres:16-alpine</code> can't run migration <code>0004</code>, which needs the <code>timescaledb</code> extension), runs <code>alembic upgrade head</code> from empty, <code>scripts/verify_idempotency.py</code>, <code>dbt build</code>, <code>dbt source freshness</code> + <code>dbt docs generate</code> (published below), then installs Airflow separately and runs <code>airflow dags test</code> for both simulated-fleet DAGs against that same database</td></tr>
           <tr><td><code>docker-build</code></td><td>Builds all three Dockerfiles (Airflow, dashboard, dbt) with GitHub Actions layer caching; on <code>master</code> pushes only, also pushes them to GHCR (§10)</td></tr>
-          <tr><td><code>deploy-dbt-docs</code></td><td>On <code>master</code> pushes only: publishes the dbt docs site to GitHub Pages</td></tr>
+          <tr><td><code>deploy-dbt-docs</code></td><td>On <code>master</code> pushes only: publishes this full doc + the dbt docs site to GitHub Pages, assembled into one directory (§08)</td></tr>
         </tbody>
       </table></div>
 

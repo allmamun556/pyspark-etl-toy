@@ -24,7 +24,9 @@ row-by-row ingestion path against the optimized batch path in this repo, so the
 
 A full HTML reference doc (self-contained, opens in any browser, no server
 needed) also lives at [`docs/documentation.html`](docs/documentation.html) —
-this README is the text-first equivalent.
+this README is the text-first equivalent. Published live at
+**https://allmamun556.github.io/pyspark-etl-toy/**, alongside the dbt docs
+lineage/schema browser at **/dbt-docs/** ([§8](#8-analytics-layer-dbt), [§12](#12-cicd-github-actions)).
 
 ---
 
@@ -766,7 +768,14 @@ an interactive lineage graph (`public.scada_readings → stg_scada_readings →
 turbine_daily_summary → renewable_fleet_daily_summary`) plus a column-level
 schema browser sourced from the same `description:` fields used throughout
 this repo's `.yml` files. CI publishes it to GitHub Pages on every push to
-`master`: **https://allmamun556.github.io/pyspark-etl-toy/**
+`master`, alongside the full HTML reference doc — GitHub Pages serves one
+artifact per deployment, so both are assembled into one directory first
+(`docs/documentation.html` → site root, dbt's generated site → `/dbt-docs/`
+underneath it; both are fully self-contained, so neither cares which path
+it's served from):
+
+- **Full reference doc**: https://allmamun556.github.io/pyspark-etl-toy/
+- **dbt docs (lineage + schema browser)**: https://allmamun556.github.io/pyspark-etl-toy/dbt-docs/
 
 Run it locally: `docker compose run --rm dbt build --profiles-dir .`
 
@@ -995,7 +1004,7 @@ touches this project.
 | `lint-and-test` | `ruff check .` + all 73 pytest cases with an 85%-coverage gate ([§11](#11-testing--benchmark)) (installs `requirements.txt` minus `apache-airflow`, since nothing under test imports it and it needs its own constraints file to install reliably) |
 | `migrations-and-dbt` | Spins up a real `timescale/timescaledb:2.17.2-pg16` service container (plain `postgres:16-alpine` can't run migration `0004`, which needs the `timescaledb` extension), runs `alembic upgrade head` against it from empty, `scripts/verify_idempotency.py`, `dbt build`, `dbt source freshness` + `dbt docs generate` (published to Pages below), then installs Airflow separately and runs `airflow dags test scada_etl_pipeline` + `airflow dags test solar_etl_pipeline` against that same database — real task execution, not just schema validation |
 | `docker-build` | Builds all three Dockerfiles (Airflow, dashboard, dbt) with GitHub Actions layer caching; on `master` pushes only, also pushes them to GHCR ([§10](#10-deployment)) |
-| `deploy-dbt-docs` | On `master` pushes only: publishes the dbt docs site generated above to GitHub Pages — **https://allmamun556.github.io/pyspark-etl-toy/** |
+| `deploy-dbt-docs` | On `master` pushes only: publishes the full HTML reference doc + the dbt docs site generated above to GitHub Pages — **https://allmamun556.github.io/pyspark-etl-toy/** (docs) and **/dbt-docs/** (lineage + schema browser) |
 
 **Why `airflow dags test` and not just DagBag import validation**: a DAG
 that merely *parses* can still be wrong in ways that only show up when a
