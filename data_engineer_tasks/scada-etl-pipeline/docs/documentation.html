@@ -466,6 +466,75 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); }
         you can reproduce, not an assertion.
       </p>
 
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="width:26%">Looking for a specific topic?</th><th>Where</th></tr></thead>
+          <tbody>
+            <tr><td>System / backend architecture</td><td>§01 Architecture, §04 Pipeline internals, §06 Orchestration</td></tr>
+            <tr><td>Database design (schema, keys, hypertables, migrations)</td><td>§03 Schema reference</td></tr>
+            <tr><td>Frontend / dashboard services</td><td>§09 Dashboard</td></tr>
+            <tr><td>Data quality &amp; validation</td><td>§05 Data quality</td></tr>
+            <tr><td>Analytics / data modeling</td><td>§08 Analytics (dbt)</td></tr>
+            <tr><td>Testing, benchmark, and results</td><td>§11 Testing &amp; benchmark</td></tr>
+            <tr><td>Deployment &amp; CI/CD</td><td>§10 Deployment, §12 CI/CD</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Problem statement</h3>
+      <p>
+        Data-engineer job postings and resumes routinely claim things like <i>"designed and
+        optimized ETL pipelines handling large-scale data ingestion and transformation for
+        SCADA and time-series data, improving pipeline efficiency by 40%."</i> That sentence
+        is unverifiable as written — no code to read, no number to reproduce, no way to tell
+        whether "40%" came from a real measurement. Real per-turbine SCADA telemetry is also
+        proprietary to wind-farm operators and isn't published anywhere openly, so this
+        domain can't just download a public dataset the way a retail-sales portfolio project
+        could — the data itself has to be built, not just processed.
+      </p>
+      <p>
+        The problem this project sets out to solve: build a production-shaped SCADA/time-series
+        ETL system, end to end, where every claim a resume line like that one would make is
+        backed by code that runs and a number that reproduces — not an assertion, a screenshot,
+        or a toy script that only handles the happy path.
+      </p>
+
+      <h3>Goals</h3>
+      <ul>
+        <li><b>Reproduce a realistic ingestion domain</b> without real hardware — a physically modeled wind-turbine simulator and an independent solar-plant simulator, both with genuine sensor fault injection so the data quality layer has real work to do.</li>
+        <li><b>Ground the simulation in reality</b> rather than let it drift on pure noise — anchor both simulated fleets to real, live, free external data (§07).</li>
+        <li><b>Prove the throughput claim</b>, not assert it — a reproducible benchmark comparing naive vs. optimized load paths, with a real number (§11).</li>
+        <li><b>Build in real production concerns</b> a toy script skips: idempotent recovery from retries/overlapping windows, data-quality gates before curated tables, observability (logs, audit tables, Slack alerts), bounded storage growth, and CI that executes the pipeline rather than just linting it.</li>
+        <li><b>Make it fully inspectable and runnable by anyone</b> — one <code>docker compose up --build -d</code>, every decision documented with its reasoning.</li>
+      </ul>
+
+      <h3>Methodology</h3>
+      <ul>
+        <li><b>Layered architecture, not a monolith</b> — <code>extract/</code> → <code>transform/</code> → <code>validation/</code> → <code>load/</code>, independent and unit-testable, no cross-imports of internals (§01, §04).</li>
+        <li><b>Simulate, but simulate honestly</b> — every value comes from an explicit physical model (cubic wind power curve, clear-sky solar curve, NOCT panel heating) with its simplifications documented, not a black box (§02).</li>
+        <li><b>Orchestrate with Airflow, not cron</b> — three DAGs, retries with exponential backoff, SLA tracking, failure alerting (§06).</li>
+        <li><b>Verify live, at every step</b> — every change checked against a real running system (live Postgres, live Airflow, live CI) before being called done; this caught real bugs a local-only workflow would have shipped silently (§12's CI incidents, documented as they happened).</li>
+        <li><b>Test what pytest can reach with pytest; test what needs a live database against one</b> — 73 pure-function unit tests, plus separate live-database checks (<code>airflow dags test</code>, <code>verify_idempotency.py</code>, <code>dbt build</code>) for what genuinely needs a database, rather than mocking one to inflate a coverage number (§11).</li>
+        <li><b>Document the why, not just the what</b> — every non-obvious decision states its tradeoff (§15); real incidents are documented, not smoothed over.</li>
+      </ul>
+
+      <h3>Results</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Metric</th><th>Result</th></tr></thead>
+          <tbody>
+            <tr><td>Unit tests</td><td>73/73 passing, 89% coverage on the modules they cover (85% CI gate)</td></tr>
+            <tr><td>dbt tests</td><td>37/37 passing (10 models + 27 data tests)</td></tr>
+            <tr><td>Live DAG execution in CI</td><td>Both simulated-fleet DAGs run end-to-end against a real database on every push</td></tr>
+            <tr><td>Idempotency</td><td>Verified against a real database (replay + overlapping-window scenarios), not just asserted</td></tr>
+            <tr><td>Benchmark</td><td>Naive vs. optimized load path, reproducible via <code>python scripts/benchmark.py</code></td></tr>
+            <tr><td>CI/CD</td><td>4 jobs (lint+coverage, migrations+dbt+DAG execution, Docker build+GHCR push, Pages deploy), all green</td></tr>
+            <tr><td>Live artifacts</td><td>Dashboard (2 pages, 4 charts + 2 tables each), dbt docs on GitHub Pages, images on GHCR</td></tr>
+            <tr><td>Real incidents caught during development</td><td>A CI dependency conflict, a stale-XCom false alarm ruled out via re-testing, and a monorepo-wide accidental reformat caught and reverted before it was committed — documented in place, not hidden (§12)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
       <p>
         The system ingests wind-turbine SCADA (Supervisory Control and Data Acquisition)
         and solar PV plant readings on a 5-minute cadence each, validates them against

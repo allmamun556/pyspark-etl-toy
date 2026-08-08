@@ -48,9 +48,112 @@ this README is the text-first equivalent.
 15. [Design tradeoffs](#15-design-tradeoffs-things-id-say-in-an-interview)
 16. [Roadmap](#16-roadmap--extending-this)
 
+**Looking for a specific topic?**
+
+| Topic | Where |
+|---|---|
+| Problem statement, goals, methodology, results | [§0](#0-overview), below |
+| System / backend architecture | [§1](#1-architecture), [§4](#4-pipeline-internals), [§6](#6-orchestration-airflow) |
+| Database design (schema, keys, hypertables, migrations) | [§3](#3-schema-reference) |
+| Frontend / dashboard services | [§9](#9-dashboard) |
+| Data quality & validation | [§5](#5-data-quality-framework) |
+| Analytics / data modeling | [§8](#8-analytics-layer-dbt) |
+| Testing, benchmark, and results | [§11](#11-testing--benchmark) |
+| Deployment & CI/CD | [§10](#10-deployment), [§12](#12-cicd-github-actions) |
+| Every config value | [§13](#13-configuration-reference) |
+
 ---
 
 ## 0. Overview
+
+### Problem statement
+
+Data-engineer job postings and resumes routinely claim things like
+*"designed and optimized ETL pipelines handling large-scale data ingestion
+and transformation for SCADA and time-series data, improving pipeline
+efficiency by 40%."* That sentence is unverifiable as written — there's no
+code to read, no number to reproduce, and no way to tell whether "40%"
+came from a real measurement or was picked because it sounds credible. Real
+per-turbine SCADA telemetry is also proprietary to wind-farm operators and
+isn't published anywhere openly, so a portfolio project in this domain
+can't just download a public dataset the way it could for, say, retail
+sales data — the data itself has to be built, not just processed.
+
+The problem this project sets out to solve: **build a production-shaped
+SCADA/time-series ETL system, end to end, where every claim a resume line
+like that one would make is backed by code that runs and a number that
+reproduces** — not an assertion, a screenshot, or a toy script that only
+handles the happy path.
+
+### Goals
+
+1. **Reproduce a realistic ingestion domain** without access to real
+   hardware — a physically modeled wind-turbine SCADA simulator and a
+   second, independent solar-PV-plant simulator, each with genuine sensor
+   fault injection (stuck values, out-of-range spikes) so the data quality
+   layer has real work to do, not clean data with nothing to catch.
+2. **Ground the simulation in reality** rather than let it drift on pure
+   noise — anchor both simulated fleets to genuinely real, live, free
+   external data (Open-Meteo weather API, a NOAA NDBC ocean buoy) ([§7](#7-real-data-anchoring-wind--solar)).
+3. **Prove the throughput claim**, not assert it — a reproducible benchmark
+   comparing a naive row-by-row load path against an optimized batch path,
+   with a real number either backing or contradicting "40% faster" ([§11](#11-testing--benchmark)).
+4. **Build in the concerns a production pipeline actually has** and a toy
+   script doesn't: idempotent recovery from retries and overlapping windows,
+   data-quality gates before data reaches curated tables, observability
+   (structured logs, audit tables, Slack alerting), bounded storage growth
+   (retention policies), and CI that actually executes the pipeline rather
+   than just linting it.
+5. **Make it fully inspectable and runnable by anyone** — `docker compose up
+   --build -d` and the whole stack (database, orchestrator, transform
+   layer, analytics layer, dashboard) comes up with no manual setup, and
+   every design decision is documented with the reasoning behind it, not
+   just the what.
+
+### Methodology
+
+- **Layered architecture, not a monolith**: `extract/` → `transform/` →
+  `validation/` → `load/` are independent, unit-testable modules with no
+  cross-imports of internals ([§1](#1-architecture), [§4](#4-pipeline-internals)).
+- **Simulate, but simulate honestly**: every simulated value is generated
+  by an explicit physical model (a cubic wind power curve, a clear-sky
+  solar irradiance curve, NOCT panel heating) with its assumptions and
+  simplifications documented, not a black box or a hardcoded fixture
+  ([§2](#2-data-sources)).
+- **Orchestrate with Airflow, not cron**: three DAGs, retries with
+  exponential backoff, SLA tracking, and failure alerting — because a
+  scheduled shell script doesn't give you any of that for free ([§6](#6-orchestration-airflow)).
+- **Verify live, at every step, not just at the end**: throughout this
+  project's development, every change was checked against a real running
+  system (a live Postgres, a live Airflow scheduler, a live CI run) before
+  being called done — this surfaced and fixed real bugs a purely local, no
+  verification workflow would have shipped silently (documented as they
+  happened in [§12](#12-cicd-github-actions)'s CI gotchas).
+- **Test what pytest can reach with pytest; test what needs a live database
+  against a live database**: 73 pure-function unit tests for
+  extract/transform/validation logic, plus separate live-database checks
+  (`airflow dags test`, `scripts/verify_idempotency.py`, `dbt build`) for
+  everything that genuinely needs one — rather than mocking a database to
+  inflate a coverage number ([§11](#11-testing--benchmark)).
+- **Document the why, not just the what**: every non-obvious decision in
+  this README states the tradeoff it was weighed against ([§15](#15-design-tradeoffs-things-id-say-in-an-interview)),
+  and real incidents hit during development are documented rather than
+  smoothed over, because the reasoning is more useful to a reader than a
+  claim that nothing ever went wrong.
+
+### Results
+
+| Metric | Result |
+|---|---|
+| Unit tests | 73/73 passing, 89% coverage on the modules they cover (85% CI gate) |
+| dbt tests | 37/37 passing (10 models + 27 data tests) |
+| Live DAG execution in CI | `scada_etl_pipeline` and `solar_etl_pipeline` run end-to-end against a real database on every push |
+| Idempotency | Verified against a real database, not just asserted — replay and overlapping-window scenarios both hold ([§11](#11-testing--benchmark)) |
+| Benchmark | Naive row-by-row `INSERT` vs. optimized COPY+staged-UPSERT, run yourself with `python scripts/benchmark.py` ([§11](#11-testing--benchmark)) |
+| Data sources | 2 genuinely real, live, free external sources; 2 simulated fleets anchored to them, not drifting on noise |
+| CI/CD | 4 jobs (lint+coverage, migrations+dbt+DAG execution, Docker build+GHCR push, Pages deploy), all green on every push |
+| Live artifacts | Dashboard (2 pages, 4 charts + 2 tables each), dbt docs site published to GitHub Pages, Docker images published to GHCR |
+| Real incidents caught and fixed during development | A CI dependency conflict (`typing_extensions`/`sqlalchemy` vs. Airflow), a stale-XCom false alarm ruled out via isolated re-testing, and a monorepo-wide accidental reformat caught and reverted before it was ever committed — all documented in place rather than hidden ([§12](#12-cicd-github-actions)) |
 
 The system ingests wind-turbine SCADA and solar PV plant readings on a
 5-minute cadence each, validates them against physical and statistical
